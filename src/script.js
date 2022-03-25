@@ -141,14 +141,43 @@ class App {
 
                 this.group.scale.set(0.6, 0.6, 0.6)
                 this.group.position.y = -2
+                this.group.rotation.y = -Math.PI * 0.5
             }
         )
         this.scene.add( this.group )
+    }
+    // Grass
+    grass() {
+        const grassBuffer = new THREE.BufferGeometry()
+        const count = 3
+
+        /**
+         * TRIANGLE
+         */ 
+        // start coordinates
+        const positions = new Float32Array( count * 3 )
+        // push empty coordinates to buffer
+        const bufferPositionsAttribute = new THREE.BufferAttribute(positions, 3)
+        // set vertices coordinates
+        const triangleVerticesCoordinates = [
+            new THREE.Vector3( 1, 1, 0 ),
+            new THREE.Vector3( 0, -1, 0 ),
+            new THREE.Vector3( 2, -1, 0 ),
+        ]
+        // apply vertices coordinates to buffer array
+        for (let i = 0; i < count; i++) {
+            const { x, y, z } = triangleVerticesCoordinates[i]
+            bufferPositionsAttribute.setXYZ(i, x, y, z)
+        }
+        
     }
     // use geometry handler
     geometryHandler() {
         this.loadMaterials()
         this.model()
+
+        // generate grass
+        this.grass()
     }
 
 
@@ -200,7 +229,7 @@ class App {
         this.camera.lookAt(0, 0, 0)
 
         // update blade
-        this.group.rotation.y = elapsedTime
+        // this.group.rotation.y = elapsedTime
 
         const parallaxX = this.cursor.x * 0.75
         const parallaxY = - this.cursor.y * 0.75
