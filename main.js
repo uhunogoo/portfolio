@@ -1,11 +1,20 @@
 import './style.css'
+
 import * as THREE from 'three'
-import gsap from 'gsap'
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-
-gsap.registerPlugin(ScrollTrigger)
-
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+
+// Post processing
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
+
+// debug
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+
+import vertexShader from './asstes/shaders/vertexShader.glsl?raw'
+import fragmentShader from './asstes/shaders/fragmentShader.glsl?raw'
+
+
 
 /**
  * Contants
@@ -24,6 +33,9 @@ class App {
             whiteColor: '#e0cdcd',
             blueColor: '#2d2d2d',
             clearColor: '#FF5733'
+        }
+        this.customUniform = {
+            uTime: { value: 0 }
         }
         this.sizes = {
             width: document.documentElement.clientWidth,
@@ -66,7 +78,10 @@ class App {
 
         // Base camera
         this.camera = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.camera.position.z = 6
+        this.camera.position.z = 4
+        this.camera.position.y = 1.5
+        this.camera.position.x = 4
+        this.camera.lookAt( 0, 0, 0 )
         this.cameraGroup.add(this.camera)
     }
 
@@ -83,11 +98,30 @@ class App {
        this.renderer.setSize(this.sizes.width, this.sizes.height)
        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }
+    /**
+     * Enviromantal map
+     */
+    envMap() {
+        const cubeTextureLoader = new THREE.CubeTextureLoader()
+        const environmentMap = cubeTextureLoader.load([
+            '/asstes/textures/px.png?url',
+            '/asstes/textures/nx.png?url',
+            '/asstes/textures/py.png?url',
+            '/asstes/textures/ny.png?url',
+            '/asstes/textures/pz.png?url',
+            '/asstes/textures/nz.png?url'
+        ])
+        console.log(environmentMap)
+
+        this.scene.background = environmentMap
+    }
+
     // use inits handler
     initHandler() {
         this.initLight()
         this.initCamera()
         this.initRenderer()
+        this.envMap()
     }
 
 
@@ -115,13 +149,24 @@ class App {
             metalness: 0.1,
             side: THREE.DoubleSide,
         })
+        this.grassMaterial = new THREE.ShaderMaterial({
+            uniforms: this.customUniform,
+            transparent: true,
+            side: THREE.DoubleSide,
+            // blending: THREE.AdditiveBlending,
+            vertexShader,
+            fragmentShader,
+        })
+        
     }
 
     // Model
     model() {
         this.group = new THREE.Group()
+        
         this.gltfLoader.load(
-            'knife-2.glb',
+            // swordModel,
+			'/asstes/geometry/knife-2.glb?url',
             (model) => {
                 const garda = model.scene.children.find( child => child.name === 'garda')
                 const knife = model.scene.children.find( child => child.name === 'knife')
@@ -148,33 +193,53 @@ class App {
     }
     // Grass
     grass() {
-        const grassBuffer = new THREE.BufferGeometry()
-        const count = 3
-
+        const countXY = {
+            x: 210,
+            y: 210,
+        }
+        const groundReference = new THREE.PlaneBufferGeometry( 8, 8, countXY.x, countXY.y)
+        const count = groundReference.attributes.position.count
+        groundReference.rotateX(Math.PI * 0.5)
+        groundReference.translate(0, 0, 0)
         /**
          * TRIANGLE
          */ 
         // start coordinates
-        const positions = new Float32Array( count * 3 )
-        // push empty coordinates to buffer
-        const bufferPositionsAttribute = new THREE.BufferAttribute(positions, 3)
-        // set vertices coordinates
-        const triangleVerticesCoordinates = [
-            new THREE.Vector3( 1, 1, 0 ),
-            new THREE.Vector3( 0, -1, 0 ),
-            new THREE.Vector3( 2, -1, 0 ),
-        ]
-        // apply vertices coordinates to buffer array
-        for (let i = 0; i < count; i++) {
-            const { x, y, z } = triangleVerticesCoordinates[i]
-            bufferPositionsAttribute.setXYZ(i, x, y, z)
+        const grass = new THREE.PlaneBufferGeometry(0.007, 0.25, 1, 3)
+        grass.translate( 1, 0.5, 1 );
+        const instancedGrassMesh = new THREE.InstancedMesh( grass, this.grassMaterial, count );
+        
+        const dummy = new THREE.Object3D()
+        
+        for ( let i = 0 ; i < count; i++ ) {
+
+            dummy.position.set(
+                groundReference.attributes.position.getX(i),
+                groundReference.attributes.position.getY(i),
+                groundReference.attributes.position.getZ(i)
+            )
+            dummy.scale.setScalar( 0.5 + Math.random() * 0.5 );
+            dummy.rotation.y = Math.random() * Math.PI * 0.5
+            dummy.updateMatrix()
+            instancedGrassMesh.setMatrixAt( i, dummy.matrix )
+        
         }
         
+        instancedGrassMesh.instanceMatrix.needsUpdate = true;
+
+        const groundMesh = new THREE.Mesh(
+            groundReference,
+            new THREE.MeshBasicMaterial({color: '#004400', side: THREE.DoubleSide})
+        )
+
+        this.scene.add( instancedGrassMesh, groundMesh )
+        
     }
+
     // use geometry handler
     geometryHandler() {
         this.loadMaterials()
-        this.model()
+        // this.model()
 
         // generate grass
         this.grass()
@@ -213,10 +278,58 @@ class App {
         })
     }
 
+    effectComposerFunction() {
+        this.effectComposer = new EffectComposer(this.renderer)
+        this.effectComposer.setSize(this.sizes.width, this.sizes.height)
+        this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+
+        const renderPass = new RenderPass(this.scene, this.camera)
+        this.effectComposer.addPass(renderPass)
+
+        // bokeh
+        const bokehPass = new BokehPass( this.scene, this.camera, {
+            focus: 60,
+            aperture: 6,
+            maxblur: 0.01,
+
+            width: this.sizes.width,
+            height: this.sizes.height
+        })
+
+
+        const postprocessing = {}
+        postprocessing.bokeh = bokehPass
+        const effectController = {
+            focus: 60,
+            aperture: 6,
+            maxblur: 0.01
+        }    
+        const matChanger = function ( ) {
+            postprocessing.bokeh.uniforms[ 'focus' ].value = effectController.focus
+            postprocessing.bokeh.uniforms[ 'aperture' ].value = effectController.aperture * 0.00001
+            postprocessing.bokeh.uniforms[ 'maxblur' ].value = effectController.maxblur
+        }
+
+        const gui = new GUI();
+        gui.add( effectController, 'focus').step(0.001).min(0).max(80).onChange( matChanger )
+        gui.add( effectController, 'aperture' ).step(0.001).min(0).max(10).onChange( matChanger )
+        gui.add( effectController, 'maxblur').step(0.001).min(0).max(2).onChange( matChanger )
+        gui.close()
+
+        matChanger()
+
+        this.effectComposer.addPass( bokehPass )
+    }
+
     // Use events handler
     eventsHandler() {
         this.resizeEvent()
         this.mouseEvent()
+
+        // effect composer
+        this.effectComposerFunction()
+
         this.tick()
     }
 
@@ -225,19 +338,21 @@ class App {
         const deltaTime = elapsedTime - this.previousTime
         this.previousTime = elapsedTime
 
+        this.customUniform.uTime.value = elapsedTime
         // Animate camera
-        this.camera.lookAt(0, 0, 0)
+        // this.camera.lookAt(0, 0, 0)
 
         // update blade
         // this.group.rotation.y = elapsedTime
 
-        const parallaxX = this.cursor.x * 0.75
-        const parallaxY = - this.cursor.y * 0.75
-        this.cameraGroup.position.x += (parallaxX - this.cameraGroup.position.x) * 5 * deltaTime
-        this.cameraGroup.position.y += (parallaxY - this.cameraGroup.position.y) * 5 * deltaTime
+        const parallaxX = this.cursor.x *1.25
+        const parallaxY = - this.cursor.y * 1.25
+        this.cameraGroup.position.x += (parallaxX - this.cameraGroup.position.x) * 3 * deltaTime
+        this.cameraGroup.position.y += (parallaxY - this.cameraGroup.position.y) * 3 * deltaTime
 
         // Render
         this.renderer.render(this.scene, this.camera)
+        this.effectComposer.render()
 
         // Call tick again on the next frame
         window.requestAnimationFrame(this.tick.bind(this))
