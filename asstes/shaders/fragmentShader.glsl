@@ -9,6 +9,7 @@ void main() {
     float noise = clamp(vNoise, 0.8, 1.0);
     
     vec3 baseColor = vec3( 0.41, 1.0, 0.5 );
+    vec3 secondColor = vec3( 1.0, 0.82, 0.43 );
     float clarity = ( vUv.y * 0.8 ) + 0.2;
 
     float mask = smoothstep( 1., 1.0, pow( abs( (1.0 - st.x) + (1.0 - st.y) / 2.0) + .5, 1.0));
@@ -17,5 +18,7 @@ void main() {
     float grassGradient = abs( st.x - 0.5 ) * 2.0 + 0.5;
 	grassGradient = 1.0 - clamp( grassGradient, 0.01, 1.0 );
 
-    gl_FragColor = vec4( (baseColor * clarity * noise - (grassGradient * 0.3)) - vStaticNoise * 0.2, 1.0);
+    vec3 mixColor = mix( secondColor * (clamp(0.02 * vStaticNoise / st.y + vStaticNoise, 0.0, 1.0)), baseColor - noise * 0.2, clarity );
+
+    gl_FragColor = vec4( (mixColor - (grassGradient * 0.08)) - vStaticNoise * 0.2, 1.0);
 }
