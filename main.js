@@ -224,11 +224,10 @@ class App {
         const dummy = new THREE.Object3D()
         
         for ( let i = 0 ; i < count; i++ ) {
-
             dummy.position.set(
-                groundReference.attributes.position.getX(i) * Math.random(),
+                groundReference.attributes.position.getX(i) + (Math.random() - 0.5),
                 0,
-                groundReference.attributes.position.getZ(i) * Math.random()
+                groundReference.attributes.position.getZ(i) + (Math.random() - 0.5)
             )
             dummy.scale.setScalar( 0.5 + Math.random() * 0.5 );
             dummy.rotation.y = Math.random() * Math.PI * 0.5

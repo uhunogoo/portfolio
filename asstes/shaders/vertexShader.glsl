@@ -74,7 +74,7 @@ void main() {
     mvPosition.y *= 1.0 + staticNoise * 0.4;
     mvPosition.z -= dispPower * 0.1 + noise * 0.1 * uv.y;
     
-    mvPosition.y *= 1.0 + 1.0 - smoothstep( 0.0, 4.0, length( mvPosition.xz * 0.5) ) * 2.0;
+    mvPosition.y *= 1.0 + 1.0 - smoothstep( 0.0, 4.0, length( mvPosition.xz * 0.5) ) * noise * 2.0;
 
     //
     
