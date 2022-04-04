@@ -69,11 +69,13 @@ void main() {
     // here the displacement is made stronger on the blades tips.
     float dispPower = 1. - cos( uv.y * 3.1416 * 0.5 );
     
-    // float displacement = noise * ( 0.3 * dispPower );
-    // mvPosition.z += sin(t + uv.y * 4.0) * 0.01;
+    float displacement = noise * ( 0.3 * dispPower );
+    mvPosition.z += sin(t + uv.y * 4.0) * 0.01;
     mvPosition.y *= 1.0 + staticNoise * 0.4;
     mvPosition.z -= dispPower * 0.1 + noise * 0.1 * uv.y;
     
+    mvPosition.y *= 1.0 + 1.0 - smoothstep( 0.0, 4.0, length( mvPosition.xz * 0.5) ) * 2.0;
+
     //
     
     vec4 modelViewPosition = modelViewMatrix * mvPosition;

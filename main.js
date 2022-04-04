@@ -3,13 +3,21 @@ import './style.css'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
+
+// controls
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
 // Post processing
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js'
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js'
+
+// shader pass
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 
 // debug
-import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js';
+import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
 import vertexShader from './asstes/shaders/vertexShader.glsl?raw'
 import fragmentShader from './asstes/shaders/fragmentShader.glsl?raw'
@@ -81,8 +89,13 @@ class App {
         this.camera.position.z = 4
         this.camera.position.y = 1.5
         this.camera.position.x = 4
-        this.camera.lookAt( 0, 0, 0 )
+        // this.camera.lookAt( 0, 0, 0 )
         this.cameraGroup.add(this.camera)
+
+
+        // Controls
+        this.controls = new OrbitControls(this.camera, canvas)
+        this.controls.enableDamping = true
     }
 
     /**
@@ -92,7 +105,7 @@ class App {
         this.renderer = new THREE.WebGLRenderer({
            canvas: canvas,
            alpha: true,
-           antialias: true
+           antialias: true,
        })
     //    this.renderer.outputEncoding = THREE.sRGBEncoding
        this.renderer.setSize(this.sizes.width, this.sizes.height)
@@ -121,7 +134,7 @@ class App {
         this.initLight()
         this.initCamera()
         this.initRenderer()
-        this.envMap()
+        // this.envMap()
     }
 
 
@@ -153,7 +166,6 @@ class App {
             uniforms: this.customUniform,
             transparent: true,
             side: THREE.DoubleSide,
-            // blending: THREE.AdditiveBlending,
             vertexShader,
             fragmentShader,
         })
@@ -200,13 +212,13 @@ class App {
         const groundReference = new THREE.PlaneBufferGeometry( 8, 8, countXY.x, countXY.y)
         const count = groundReference.attributes.position.count
         groundReference.rotateX(Math.PI * 0.5)
-        groundReference.translate(0, 0, 0)
+        // groundReference.translate(, 0, -3)
         /**
          * TRIANGLE
          */ 
         // start coordinates
         const grass = new THREE.PlaneBufferGeometry(0.007, 0.25, 1, 3)
-        grass.translate( 1, 0.5, 1 );
+        grass.translate( 0, 0.125, 0 );
         const instancedGrassMesh = new THREE.InstancedMesh( grass, this.grassMaterial, count );
         
         const dummy = new THREE.Object3D()
@@ -214,9 +226,9 @@ class App {
         for ( let i = 0 ; i < count; i++ ) {
 
             dummy.position.set(
-                groundReference.attributes.position.getX(i),
-                groundReference.attributes.position.getY(i),
-                groundReference.attributes.position.getZ(i)
+                groundReference.attributes.position.getX(i) * Math.random(),
+                0,
+                groundReference.attributes.position.getZ(i) * Math.random()
             )
             dummy.scale.setScalar( 0.5 + Math.random() * 0.5 );
             dummy.rotation.y = Math.random() * Math.PI * 0.5
@@ -264,6 +276,8 @@ class App {
                 // Update renderer
                 this.renderer.setSize(this.sizes.width, this.sizes.height)
                 this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+                // this.effectComposer.setSize(this.sizes.width, this.sizes.height)
             }
         })
     }
@@ -279,7 +293,20 @@ class App {
     }
 
     effectComposerFunction() {
-        this.effectComposer = new EffectComposer(this.renderer)
+        // if( this.renderer.getPixelRatio() === 2 ) 
+        // {
+        //     const smaaPass = new SMAAPass()
+        //     this.effectComposer.addPass( smaaPass )
+        // }
+
+        const renderTarget = new THREE.WebGLMultisampleRenderTarget( 800, 600, {
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter,
+            format: THREE.RGBAFormat,
+            encoding: THREE.sRGBEncoding,
+        })
+
+        this.effectComposer = new EffectComposer(this.renderer, renderTarget)
         this.effectComposer.setSize(this.sizes.width, this.sizes.height)
         this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
@@ -318,8 +345,40 @@ class App {
         gui.close()
 
         matChanger()
+        
+        
+        // shader PASS
+        const alphaShader = {
+            uniforms: {
+                tDiffuse: { value: null },
+                u_normal: { value: null }
+            },
+            vertexShader: `
+                varying vec2 vUv; 
+                void main() {
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 
-        this.effectComposer.addPass( bokehPass )
+                    vUv = uv;
+                }
+            `,
+            fragmentShader: `
+                uniform sampler2D tDiffuse;
+                // uniform sampler2D u_normal;
+                
+                varying vec2 vUv; 
+
+                void main() {
+                    vec2 st = vUv;
+
+                    vec4 texture = texture2D( tDiffuse, st );
+
+                    gl_FragColor = vec4(texture);
+                }
+            `
+        }
+        const displacementPass = new ShaderPass( alphaShader )
+        this.effectComposer.addPass( displacementPass )
+
     }
 
     // Use events handler
@@ -328,7 +387,7 @@ class App {
         this.mouseEvent()
 
         // effect composer
-        this.effectComposerFunction()
+        // this.effectComposerFunction()
 
         this.tick()
     }
@@ -345,14 +404,17 @@ class App {
         // update blade
         // this.group.rotation.y = elapsedTime
 
-        const parallaxX = this.cursor.x *1.25
-        const parallaxY = - this.cursor.y * 1.25
-        this.cameraGroup.position.x += (parallaxX - this.cameraGroup.position.x) * 3 * deltaTime
-        this.cameraGroup.position.y += (parallaxY - this.cameraGroup.position.y) * 3 * deltaTime
+        // const parallaxX = this.cursor.x *1.25
+        // const parallaxY = - this.cursor.y * 1.25
+        // this.cameraGroup.position.x += (parallaxX - this.cameraGroup.position.x) * 3 * deltaTime
+        // this.cameraGroup.position.y += (parallaxY - this.cameraGroup.position.y) * 3 * deltaTime
 
         // Render
         this.renderer.render(this.scene, this.camera)
-        this.effectComposer.render()
+        // this.effectComposer.render()
+
+        // Update controls
+        this.controls.update()
 
         // Call tick again on the next frame
         window.requestAnimationFrame(this.tick.bind(this))

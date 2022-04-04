@@ -14,9 +14,8 @@ void main() {
     float mask = smoothstep( 1., 1.0, pow( abs( (1.0 - st.x) + (1.0 - st.y) / 2.0) + .5, 1.0));
     mask *= smoothstep(1., 1., pow( abs( (st.x) + (1.0-st.y) / 2.0) + .5, 1.0));
 
-    float grassGradient = abs( st.x - 0.5 ) * 2.0 + .5;
-	grassGradient = 1.0 - clamp( grassGradient, 0.0, 1.0 );
+    float grassGradient = abs( st.x - 0.5 ) * 2.0 + 0.5;
+	grassGradient = 1.0 - clamp( grassGradient, 0.01, 1.0 );
 
-    // gl_FragColor = vec4( baseColor * clarity * noise, 1.0 );
     gl_FragColor = vec4( (baseColor * clarity * noise - (grassGradient * 0.3)) - vStaticNoise * 0.2, 1.0);
 }
