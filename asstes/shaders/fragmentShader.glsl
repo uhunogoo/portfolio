@@ -18,7 +18,9 @@ void main() {
     float grassGradient = abs( st.x - 0.5 ) * 2.0 + 0.5;
 	grassGradient = 1.0 - clamp( grassGradient, 0.01, 1.0 );
 
-    vec3 mixColor = mix( secondColor * (clamp(0.02 * vStaticNoise / st.y + vStaticNoise, 0.0, 1.0)), baseColor - noise * 0.2, clarity );
+    vec3 darkGreen = mix(  vec3(0.35), vec3(clamp(0.05 * vStaticNoise / st.y + vStaticNoise, 0.0, 1.0)), vStaticNoise ); 
 
-    gl_FragColor = vec4( (mixColor - (grassGradient * 0.08)) - vStaticNoise * 0.2, 1.0);
+    vec3 mixColor = mix( secondColor * darkGreen, baseColor - noise * 0.1, clarity );
+
+    gl_FragColor = vec4( (mixColor - (grassGradient * 0.08)) - (1.0 - vStaticNoise) * 0.12, 1.0);
 }

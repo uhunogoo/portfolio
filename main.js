@@ -68,13 +68,13 @@ class App {
      * Lights
      */
     initLight() {
-        const light1 = new THREE.PointLight( 0xffffff, 1, 10 )
-        light1.position.set( 0, 1, 6 )
-        const light2 = new THREE.DirectionalLight( 0xffffff, 0.5 )
+        const light1 = new THREE.PointLight( 0xffffff, 1, 40, 22 )
+        light1.position.set( 0, 1, 8 )
+        const light2 = new THREE.DirectionalLight( 0xffffff, 1 )
         light2.position.set( 4, 2, 2 )
         
-        const ambientLight = new THREE.AmbientLight('#ffffff', 0.5)
-        this.scene.add(light1, light2, ambientLight)
+        const ambientLight = new THREE.AmbientLight('#ffffff', 1)
+        this.scene.add(light1, ambientLight)
     }
 
     /**
@@ -85,11 +85,11 @@ class App {
         this.scene.add(this.cameraGroup)
 
         // Base camera
-        this.camera = new THREE.PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.camera.position.z = 4
-        this.camera.position.y = 1.5
-        this.camera.position.x = 4
-        // this.camera.lookAt( 0, 0, 0 )
+        this.camera = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
+        this.camera.position.z = 5
+        this.camera.position.y = 1
+        this.camera.position.x = 5
+        
         this.cameraGroup.add(this.camera)
 
 
@@ -145,22 +145,26 @@ class App {
     loadMaterials() {
         // Material
         this.bottleMaterial = new THREE.MeshStandardMaterial({
-            color: this.parameters.blueColor,
-            roughness: 0.35,
-            metalness: 0.9
+            roughness: 1,
+            roughnessMap: this.textureLoader.load( '/asstes/textures/Metal_metallicRoughness.png?url' ),
+            normalMap: this.textureLoader.load( '/asstes/textures/Metal_normal.png?url' ),
+            map: this.textureLoader.load( '/asstes/textures/Metal_baseColor.png?url' ),
+            metalness: 0
         })
 
         this.dozatorColor = new THREE.MeshStandardMaterial({
-            color: this.parameters.clearColor,
-            roughness: 0.8,
-            metalness: 0.8,
+            roughness: 1,
+            metalness: 0.2,
+            roughnessMap: this.textureLoader.load( '/asstes/textures/Wood_metallicRoughness.png?url' ),
+            map: this.textureLoader.load( '/asstes/textures/Wood_baseColor.jpg?url' ),
         })
 
         this.blackMaterial = new THREE.MeshStandardMaterial({
             color: this.parameters.blackMaterialColor,
-            roughness: 0.2,
-            metalness: 0.1,
-            side: THREE.DoubleSide,
+            roughness: 0.6,
+            metalness: 0.6,
+            roughnessMap: this.textureLoader.load( '/asstes/textures/Wood_metallicRoughness.png?url' ),
+            // side: THREE.DoubleSide,
         })
         this.grassMaterial = new THREE.ShaderMaterial({
             uniforms: this.customUniform,
@@ -196,8 +200,11 @@ class App {
 
                 this.group.add(knife, handle, garda)
 
-                this.group.scale.set(0.6, 0.6, 0.6)
-                this.group.position.y = -2
+                this.group.scale.set(0.45, 0.45, 0.45)
+                this.group.position.y = 0.6
+                // this.group.position.y = -1.55
+                // this.group.position.z = 2.3
+                // this.group.position.x = 2.3
                 this.group.rotation.y = -Math.PI * 0.5
             }
         )
@@ -206,19 +213,18 @@ class App {
     // Grass
     grass() {
         const countXY = {
-            x: 210,
-            y: 210,
+            x: 400,
+            y: 400,
         }
-        const groundReference = new THREE.PlaneBufferGeometry( 8, 8, countXY.x, countXY.y)
+        const groundReference = new THREE.PlaneBufferGeometry( 10, 10, countXY.x, countXY.y)
         const count = groundReference.attributes.position.count
         groundReference.rotateX(Math.PI * 0.5)
-        // groundReference.translate(, 0, -3)
         /**
          * TRIANGLE
          */ 
         // start coordinates
-        const grass = new THREE.PlaneBufferGeometry(0.007, 0.25, 1, 3)
-        grass.translate( 0, 0.125, 0 );
+        const grass = new THREE.PlaneBufferGeometry(0.02, 0.08, 1, 3)
+        grass.translate( 0, 0.04, 0 );
         const instancedGrassMesh = new THREE.InstancedMesh( grass, this.grassMaterial, count );
         
         const dummy = new THREE.Object3D()
@@ -238,10 +244,24 @@ class App {
         
         instancedGrassMesh.instanceMatrix.needsUpdate = true;
 
+        const groundMaterial = new THREE.MeshBasicMaterial({color: '#004400', side: THREE.DoubleSide})
         const groundMesh = new THREE.Mesh(
             groundReference,
-            new THREE.MeshBasicMaterial({color: '#004400', side: THREE.DoubleSide})
+            groundMaterial
         )
+
+        // ground deformation
+        groundMaterial.onBeforeCompile = (shader) =>
+        {
+            shader.vertexShader = shader.vertexShader.replace(
+                '#include <begin_vertex>',
+                `
+                    #include <begin_vertex>
+                    // transformed.y += 3.0;
+                    transformed.y += (1.0 - smoothstep( 0.0, 2.5, length( transformed.xz * 0.5) )) * 1.25;
+                `
+            )
+        }
 
         this.scene.add( instancedGrassMesh, groundMesh )
         
@@ -250,7 +270,7 @@ class App {
     // use geometry handler
     geometryHandler() {
         this.loadMaterials()
-        // this.model()
+        this.model()
 
         // generate grass
         this.grass()
@@ -398,7 +418,7 @@ class App {
 
         this.customUniform.uTime.value = elapsedTime
         // Animate camera
-        // this.camera.lookAt(0, 0, 0)
+        // this.camera.lookAt(0, 1.5, 0)
 
         // update blade
         // this.group.rotation.y = elapsedTime
