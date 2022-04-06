@@ -62,21 +62,22 @@ void main() {
     
     // DISPLACEMENT
     
+    mvPosition.y += (1.0 - smoothstep( 0.0, 2.5, length( mvPosition.xz * 0.5) )) * 1.25;
     float noise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) + vec2(0.0, t ) ) + cnoise( (mvPosition.xz / vec2(4.0) + vec2(0.0, t * 0.3 ) )));
     noise = pow(noise * 0.5 + 0.5, 2.) * 2.;
     float staticNoise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) ) + cnoise( (mvPosition.xz * vec2(1.0, 0.5) )));
     
     // here the displacement is made stronger on the blades tips.
-    float dispPower = 1.0;
+    float dispPower = 0.3 /  length(uv.y * 2.0);
     
     float displacement = noise * ( 0.3 * dispPower );
-    mvPosition.z += sin(t + uv.y * 4.0) * 0.01;
-    mvPosition.y *= 1.0 + staticNoise * 0.4;
-    mvPosition.z -= dispPower * 0.1 + noise * 0.1 * uv.y;
+    // mvPosition.z += sin(t + uv.y * 4.0) * 0.01;
+    // mvPosition.y *= 1.0 + staticNoise * 0.4;
+    mvPosition.z -= uv.y * 0.15 * noise;
+    mvPosition.x -= uv.y * 0.05 * sin(noise * 3.0);
     
-    mvPosition.y *= 1.0 + 1.0 - clamp(smoothstep( 0.0, 4.0, length( mvPosition.xz * 0.5) ) * noise * 2.0, 0.0, 1.0);
+    // mvPosition.y *= 1.0 + 1.0 - clamp(smoothstep( 0.0, 4.0, length( mvPosition.xz * 0.5) ) * noise * 2.0, 0.0, 1.0);
 
-    mvPosition.y += (1.0 - smoothstep( 0.0, 2.5, length( mvPosition.xz * 0.5) )) * 1.25;
 
     //
     

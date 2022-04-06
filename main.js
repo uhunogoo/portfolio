@@ -43,8 +43,11 @@ class App {
             clearColor: '#FF5733'
         }
         this.customUniform = {
-            uTime: { value: 0 }
+            uTime: { value: 0 },
+            uColor1: { value: new THREE.Color('#38a380') },
+            uColor2: { value: new THREE.Color('#664600') },
         }
+        console.log(this.customUniform.uColor1.value)
         this.sizes = {
             width: document.documentElement.clientWidth,
             height: window.innerHeight
@@ -68,7 +71,7 @@ class App {
      * Lights
      */
     initLight() {
-        const light1 = new THREE.PointLight( 0xffffff, 1, 40, 22 )
+        const light1 = new THREE.PointLight( 0xffffff, 1, 40, 1 )
         light1.position.set( 0, 1, 8 )
         const light2 = new THREE.DirectionalLight( 0xffffff, 1 )
         light2.position.set( 4, 2, 2 )
@@ -96,6 +99,10 @@ class App {
         // Controls
         this.controls = new OrbitControls(this.camera, canvas)
         this.controls.enableDamping = true
+
+        // Fog
+        // const fog = new THREE.Fog('#262837', 1, 5)
+        // this.scene.fog = fog
     }
 
     /**
@@ -145,12 +152,15 @@ class App {
     loadMaterials() {
         // Material
         this.bottleMaterial = new THREE.MeshStandardMaterial({
-            roughness: 1,
+            color: '#e5e5e5',
+            roughness: 0.7,
             roughnessMap: this.textureLoader.load( '/asstes/textures/Metal_metallicRoughness.png?url' ),
             normalMap: this.textureLoader.load( '/asstes/textures/Metal_normal.png?url' ),
-            map: this.textureLoader.load( '/asstes/textures/Metal_baseColor.png?url' ),
-            metalness: 0
+            // map: this.textureLoader.load( '/asstes/textures/Metal_baseColor.png?url' ),
+            metalness: 0.7
         })
+        this.bottleMaterial.generateMipmaps = false
+        this.bottleMaterial.minFilter = THREE.NearestFilter
 
         this.dozatorColor = new THREE.MeshStandardMaterial({
             roughness: 1,
@@ -200,8 +210,8 @@ class App {
 
                 this.group.add(knife, handle, garda)
 
-                this.group.scale.set(0.45, 0.45, 0.45)
-                this.group.position.y = 0.6
+                this.group.scale.set(0.3, 0.3, 0.3)
+                this.group.position.y = 1
                 // this.group.position.y = -1.55
                 // this.group.position.z = 2.3
                 // this.group.position.x = 2.3
@@ -223,19 +233,21 @@ class App {
          * TRIANGLE
          */ 
         // start coordinates
-        const grass = new THREE.PlaneBufferGeometry(0.02, 0.08, 1, 3)
-        grass.translate( 0, 0.04, 0 );
+        // const grass = new THREE.PlaneBufferGeometry(0.02, 0.25, 1, 3)
+        const grass = new THREE.PlaneBufferGeometry(0.02, 0.25, 1, 1)
+        grass.translate( 0, 0.125, 0 );
         const instancedGrassMesh = new THREE.InstancedMesh( grass, this.grassMaterial, count );
         
         const dummy = new THREE.Object3D()
         
         for ( let i = 0 ; i < count; i++ ) {
+            const scale = 0.5 + Math.random() * 0.5
             dummy.position.set(
                 groundReference.attributes.position.getX(i) + (Math.random() - 0.5),
                 0,
                 groundReference.attributes.position.getZ(i) + (Math.random() - 0.5)
             )
-            dummy.scale.setScalar( 0.5 + Math.random() * 0.5 );
+            dummy.scale.setScalar( scale );
             dummy.rotation.y = Math.random() * Math.PI * 0.5
             dummy.updateMatrix()
             instancedGrassMesh.setMatrixAt( i, dummy.matrix )
@@ -250,6 +262,19 @@ class App {
             groundMaterial
         )
 
+        // debug
+        // customUniform
+        const gui = new GUI();
+        gui.addColor( this.customUniform.uColor1, 'value').onChange( () => {
+            this.grassMaterial.uniforms.uColor1.value = this.customUniform.uColor1.value
+        })
+        gui.addColor( this.customUniform.uColor2, 'value').onChange( () => {
+            this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
+        })
+        // gui.add( effectController, 'aperture' ).step(0.001).min(0).max(10).onChange( matChanger )
+        // gui.add( effectController, 'maxblur').step(0.001).min(0).max(2).onChange( matChanger )
+        gui.close()
+
         // ground deformation
         groundMaterial.onBeforeCompile = (shader) =>
         {
@@ -257,8 +282,7 @@ class App {
                 '#include <begin_vertex>',
                 `
                     #include <begin_vertex>
-                    // transformed.y += 3.0;
-                    transformed.y += (1.0 - smoothstep( 0.0, 2.5, length( transformed.xz * 0.5) )) * 1.25;
+                    transformed.y = (1.0 - smoothstep( 0.0, 2.5, length( transformed.xz * 0.5) )) * 1.25;
                 `
             )
         }
