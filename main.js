@@ -19,8 +19,11 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 // debug
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
-import vertexShader from './asstes/shaders/vertexShader.glsl?raw'
-import fragmentShader from './asstes/shaders/fragmentShader.glsl?raw'
+import vertexShader from './asstes/shaders/grass/vertexShader.glsl?raw'
+import fragmentShader from './asstes/shaders/grass/fragmentShader.glsl?raw'
+
+import swordVertexShader from './asstes/shaders/sword/vertexShader.glsl?raw'
+import swordFragmentShader from './asstes/shaders/sword/fragmentShader.glsl?raw'
 
 
 
@@ -46,6 +49,10 @@ class App {
             uTime: { value: 0 },
             uColor1: { value: new THREE.Color('#38a380') },
             uColor2: { value: new THREE.Color('#664600') },
+        }
+        this.swordUniform = {
+            uTime: { value: 0 },
+            uPixelRatio: { value: 0 }
         }
         console.log(this.customUniform.uColor1.value)
         this.sizes = {
@@ -291,13 +298,38 @@ class App {
         
     }
 
+    particlesArondSword() {
+        // set pixelRatio
+        this.swordUniform.uPixelRatio.value = this.renderer.getPixelRatio()
+        // console.log();
+
+        // generate particles around the sword
+        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 4, 10)
+        const material = new THREE.ShaderMaterial({
+            uniforms: this.swordUniform,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            vertexShader: swordVertexShader,
+            fragmentShader: swordFragmentShader
+        })
+
+        const mesh = new THREE.Points( geometry, material )
+        mesh.position.y = 1.7
+        this.scene.add(mesh)
+
+    }
+
     // use geometry handler
     geometryHandler() {
         this.loadMaterials()
+        // sword
         this.model()
+        this.particlesArondSword()
 
         // generate grass
         this.grass()
+        
     }
 
 
@@ -441,6 +473,7 @@ class App {
         this.previousTime = elapsedTime
 
         this.customUniform.uTime.value = elapsedTime
+        this.swordUniform.uTime.value = elapsedTime
         // Animate camera
         // this.camera.lookAt(0, 1.5, 0)
 
