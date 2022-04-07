@@ -19,11 +19,15 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 // debug
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 
+// Grass shaders
 import vertexShader from './asstes/shaders/grass/vertexShader.glsl?raw'
 import fragmentShader from './asstes/shaders/grass/fragmentShader.glsl?raw'
 
-import swordVertexShader from './asstes/shaders/sword/vertexShader.glsl?raw'
-import swordFragmentShader from './asstes/shaders/sword/fragmentShader.glsl?raw'
+// Sword shaders
+import swordParticlesVertex from './asstes/shaders/sword/particlesVertex.glsl?raw'
+import swordParticlesFragment from './asstes/shaders/sword/particlesFragment.glsl?raw'
+import swordFireVertex from './asstes/shaders/sword/fireVertex.glsl?raw'
+import swordFireFragment from './asstes/shaders/sword/fireFragment.glsl?raw'
 
 
 
@@ -96,9 +100,14 @@ class App {
 
         // Base camera
         this.camera = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.camera.position.z = 5
-        this.camera.position.y = 1
-        this.camera.position.x = 5
+        // this.camera.position.z = 5
+        // this.camera.position.y = 1
+        // this.camera.position.x = 5
+        this.camera.position.z = 3
+        this.camera.position.y = 2
+        this.camera.position.x = 3
+
+        this.camera.lookAt(0, 1.5, 0)
         
         this.cameraGroup.add(this.camera)
 
@@ -299,24 +308,39 @@ class App {
     }
 
     particlesArondSword() {
-        // set pixelRatio
+        // Set pixelRatio
         this.swordUniform.uPixelRatio.value = this.renderer.getPixelRatio()
-        // console.log();
+        
+        // Shape around te sword
+        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 10, 10)
 
-        // generate particles around the sword
-        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 4, 10)
-        const material = new THREE.ShaderMaterial({
+        // Generate particles around the sword
+        const swordParticlesMaterial = new THREE.ShaderMaterial({
             uniforms: this.swordUniform,
             transparent: true,
             depthWrite: false,
             blending: THREE.AdditiveBlending,
-            vertexShader: swordVertexShader,
-            fragmentShader: swordFragmentShader
+            vertexShader: swordParticlesVertex,
+            fragmentShader: swordParticlesFragment
         })
+        
+        const particlesMesh = new THREE.Points( geometry, swordParticlesMaterial )
+        particlesMesh.position.y = 1.7
+        
+        // Generate fire around the sword
+        // const fireGeometry
+        const swordFireMaterial = new THREE.ShaderMaterial({
+            uniforms: this.swordUniform,
+            transparent: true,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+            vertexShader: swordFireVertex,
+            fragmentShader: swordFireFragment
+        })
+        const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
+        fireMesh.position.y = 1.7
 
-        const mesh = new THREE.Points( geometry, material )
-        mesh.position.y = 1.7
-        this.scene.add(mesh)
+        this.scene.add(particlesMesh, fireMesh)
 
     }
 

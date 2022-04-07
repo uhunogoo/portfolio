@@ -48,7 +48,12 @@ float cnoise(vec2 P){
   return 2.3 * n_xy;
 }
 
-//	
+// rotation
+mat2 get2dRotateMatrix(float _angle)
+{
+    return mat2(cos(_angle), - sin(_angle), sin(_angle), cos(_angle));
+}
+
 
 void main() {
 
@@ -63,7 +68,7 @@ void main() {
     // DISPLACEMENT
     
     mvPosition.y += (1.0 - smoothstep( 0.0, 2.5, length( mvPosition.xz * 0.5) )) * 1.25;
-    float noise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) + vec2(0.0, t ) ) + cnoise( (mvPosition.xz / vec2(4.0) + vec2(0.0, t * 0.3 ) )));
+    float noise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) * get2dRotateMatrix(uTime * 0.2) + vec2(0.0, t ) ) + cnoise( (mvPosition.xz / vec2(4.0) + vec2(0.0, t * 0.3 ) )));
     noise = pow(noise * 0.5 + 0.5, 2.) * 2.;
     float staticNoise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) ) + cnoise( (mvPosition.xz * vec2(1.0, 0.5) )));
     
@@ -71,12 +76,9 @@ void main() {
     float dispPower = 0.3 /  length(uv.y * 2.0);
     
     float displacement = noise * ( 0.3 * dispPower );
-    // mvPosition.z += sin(t + uv.y * 4.0) * 0.01;
-    // mvPosition.y *= 1.0 + staticNoise * 0.4;
     mvPosition.z -= uv.y * 0.15 * noise;
     mvPosition.x -= uv.y * 0.05 * sin(noise * 3.0);
-    
-    // mvPosition.y *= 1.0 + 1.0 - clamp(smoothstep( 0.0, 4.0, length( mvPosition.xz * 0.5) ) * noise * 2.0, 0.0, 1.0);
+
 
 
     //
