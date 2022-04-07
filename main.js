@@ -333,12 +333,13 @@ class App {
             uniforms: this.swordUniform,
             transparent: true,
             depthWrite: false,
+            side: THREE.DoubleSide,
             blending: THREE.AdditiveBlending,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
         })
         const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
-        fireMesh.position.y = 1.7
+        fireMesh.position.y = 1.65
 
         this.scene.add(particlesMesh, fireMesh)
 
@@ -499,7 +500,7 @@ class App {
         this.customUniform.uTime.value = elapsedTime
         this.swordUniform.uTime.value = elapsedTime
         // Animate camera
-        // this.camera.lookAt(0, 1.5, 0)
+        this.camera.lookAt(0, 1.5, 0)
 
         // update blade
         // this.group.rotation.y = elapsedTime

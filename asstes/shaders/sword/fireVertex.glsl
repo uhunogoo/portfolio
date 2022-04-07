@@ -3,6 +3,7 @@ uniform float uTime;
 // varying
 varying vec2 vUv;
 varying vec3 vPosition;
+varying vec3 vNormal;
 
 // Functions
 mat2 get2dRotateMatrix(float _angle)
@@ -13,7 +14,6 @@ mat2 get2dRotateMatrix(float _angle)
 void main() {
   float t = uTime;
   vec4 st = vec4( position, 1.0 );
-
 
   vec4 modelViewPosition = modelViewMatrix * st;
   vec4 projectionPosition = projectionMatrix * modelViewPosition;
@@ -26,4 +26,5 @@ void main() {
   // varying
   vUv = uv;
   vPosition = st.xyz;
+  vNormal = normal;
 }
