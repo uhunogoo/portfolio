@@ -25,10 +25,11 @@ void main() {
 
     vec3 darkGreen = mix(  vec3(0.35), vec3(clamp(0.5 * vStaticNoise / st.y + vStaticNoise, 0.0, 1.0)), vStaticNoise ); 
     vec3 mixColor = mix( secondColor * darkGreen, baseColor - noise * 0.1, clarity );
+    float shadow = dot(vec3(st, 1.0), vec3(0.4, 1.0, 0.0) );
 
-    gl_FragColor = vec4( (mixColor - (grassGradient * 0.08)) - (1.0 - vStaticNoise) * 0.12, 1.0);
+    gl_FragColor = vec4( (mixColor * shadow - (grassGradient * 0.08)) - (1.0 - vStaticNoise) * 0.12 , 1.0);
     
     
     
-    gl_FragColor = vec4( vec3(dot(vec3(st, 1.0), vec3(0.0, 2.0, 0.0) )), 1.0);
+    // gl_FragColor = vec4( vec3(dot(vec3(st, 0.0), vec3(0.1, 1.0, 0.0) )), 1.0);
 }

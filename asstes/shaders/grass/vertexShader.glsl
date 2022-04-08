@@ -77,12 +77,19 @@ void main() {
     float dispPower = 0.3 / length(uv.y * 2.0) - 0.6;
     
     float displacement = noise * ( 0.3 * dispPower );
-	// mvPosition.xz *= (1.0 + (1.0 + sin(uTime)) / 2.0);
-    // mvPosition.z -= uv.y * 0.15 * noise;
-    // mvPosition.x -= uv.y * 0.05 * sin(noise * 3.0);
+	float spirale = 0.05 / mvPosition.y - 0.1;
+	spirale = 1.0;
+    
+	float grassNormal = dot( vec3( normalize(mvPosition.xyz) ), vec3(0.0, 1.0, 0.0) );
+	float disp = grassNormal * 0.15 * uv.y * mvPosition.y;
+	float dispArea = 1.0 - smoothstep(0.0, 0.5, length(mvPosition.xz * 0.5));
+	disp *= sin(uTime * 4.0 + disp * 15.0);
+	disp *= dispArea;
+    mvPosition.xz *= 1.0 + disp;
 
-
-
+	// mvPosition.z += mix(sin(uTime + noise) * 0.1 * uv.y, 0.0, dispArea  );
+	
+    
 
     
     vec4 modelViewPosition = modelViewMatrix * mvPosition;
