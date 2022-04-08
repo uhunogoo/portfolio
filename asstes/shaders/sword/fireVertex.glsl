@@ -15,6 +15,8 @@ void main() {
   float t = uTime;
   vec4 st = vec4( position, 1.0 );
 
+  st.xz *= 1.0 + ((1.0 + sin(uTime * 10.0 + st.y * 60.0)) / 2.0) * 0.1;
+
   vec4 modelViewPosition = modelViewMatrix * st;
   vec4 projectionPosition = projectionMatrix * modelViewPosition;
 

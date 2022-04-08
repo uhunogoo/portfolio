@@ -3,6 +3,7 @@ uniform float uPixelRatio;
 
 // varying
 varying vec2 vUv;
+varying vec3 vPosition;
 
 
 mat2 get2dRotateMatrix(float _angle)
@@ -33,4 +34,5 @@ void main() {
 
   // varying
   vUv = uv;
+  vPosition = st.xyz;
 }

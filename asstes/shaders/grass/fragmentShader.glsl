@@ -1,6 +1,7 @@
 varying vec2 vUv;
 varying float vNoise;
 varying float vStaticNoise;
+varying vec3 vNormal;
 
 uniform vec3 uColor1;
 uniform vec3 uColor2;
@@ -26,4 +27,8 @@ void main() {
     vec3 mixColor = mix( secondColor * darkGreen, baseColor - noise * 0.1, clarity );
 
     gl_FragColor = vec4( (mixColor - (grassGradient * 0.08)) - (1.0 - vStaticNoise) * 0.12, 1.0);
+    
+    
+    
+    gl_FragColor = vec4( vec3(dot(vec3(st, 1.0), vec3(0.0, 2.0, 0.0) )), 1.0);
 }
