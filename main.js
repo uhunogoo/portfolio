@@ -51,8 +51,8 @@ class App {
         }
         this.customUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#38a380') },
-            uColor2: { value: new THREE.Color('#664600') },
+            uColor1: { value: new THREE.Color('#32b859') },
+            uColor2: { value: new THREE.Color('#63ca4e') },
         }
         this.swordUniform = {
             uTime: { value: 0 },
@@ -172,7 +172,6 @@ class App {
             roughness: 0.7,
             roughnessMap: this.textureLoader.load( '/asstes/textures/Metal_metallicRoughness.png?url' ),
             normalMap: this.textureLoader.load( '/asstes/textures/Metal_normal.png?url' ),
-            // map: this.textureLoader.load( '/asstes/textures/Metal_baseColor.png?url' ),
             metalness: 0.7
         })
         this.bottleMaterial.generateMipmaps = false
@@ -239,8 +238,8 @@ class App {
     // Grass
     grass() {
         const countXY = {
-            x: 400,
-            y: 400,
+            x: 250,
+            y: 250,
         }
         const groundReference = new THREE.PlaneBufferGeometry( 10, 10, countXY.x, countXY.y)
         const count = groundReference.attributes.position.count
@@ -250,7 +249,7 @@ class App {
          */ 
         // start coordinates
         // const grass = new THREE.PlaneBufferGeometry(0.02, 0.25, 1, 3)
-        const grass = new THREE.PlaneBufferGeometry(0.02, 0.25, 1, 1)
+        const grass = new THREE.PlaneBufferGeometry(0.02, 0.25, 1, 2)
         grass.translate( 0, 0.125, 0 );
         const instancedGrassMesh = new THREE.InstancedMesh( grass, this.grassMaterial, count );
         
@@ -259,12 +258,12 @@ class App {
         for ( let i = 0 ; i < count; i++ ) {
             const scale = 0.5 + Math.random() * 0.5
             dummy.position.set(
-                groundReference.attributes.position.getX(i) + (Math.random() - 0.5),
+                (Math.random() - 0.5) * 10,
                 0,
-                groundReference.attributes.position.getZ(i) + (Math.random() - 0.5)
+                (Math.random() - 0.5) * 10
             )
-            dummy.scale.setScalar( scale );
-            dummy.rotation.y = Math.random() * Math.PI * 0.5
+            // dummy.scale.setScalar( scale );
+            dummy.rotation.y = Math.random() * Math.PI
             dummy.updateMatrix()
             instancedGrassMesh.setMatrixAt( i, dummy.matrix )
         

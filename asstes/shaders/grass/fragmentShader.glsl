@@ -2,6 +2,7 @@ varying vec2 vUv;
 varying float vNoise;
 varying float vStaticNoise;
 varying vec3 vNormal;
+varying vec3 vPosition;
 
 uniform vec3 uColor1;
 uniform vec3 uColor2;
@@ -14,22 +15,23 @@ void main() {
     
     vec3 baseColor = uColor1;
     vec3 secondColor = uColor2;
+    vec3 light = vec3(1.0, 0.8667, 0.0078);
     float clarity = ( vUv.y * 0.8 ) + 0.2;
-
-    float mask = smoothstep( 1., 1.0, pow( abs( (1.0 - st.x) + (1.0 - st.y) / 2.0) + .5, 1.0));
-    mask *= smoothstep(1., 1., pow( abs( (st.x) + (1.0-st.y) / 2.0) + .5, 1.0));
 
     float grassGradient = abs( st.x - 0.5 ) * 2.0 + 0.5;
 	grassGradient = 1.0 - clamp( grassGradient, 0.01, 1.0 );
 
+    float shadow = dot(vec3(st, 1.0), vec3(0.0, 1.0, 0.0) );
+    shadow = clamp(shadow, 0.0, 1.0);
+    float sun = dot(vec3(vec2(1.0) - st, -1.0), vec3(0.0, 7.0, 0.0) );
+    sun = clamp(sun, 0.0, 1.0);
 
-    vec3 darkGreen = mix(  vec3(0.35), vec3(clamp(0.5 * vStaticNoise / st.y + vStaticNoise, 0.0, 1.0)), vStaticNoise ); 
-    vec3 mixColor = mix( secondColor * darkGreen, baseColor - noise * 0.1, clarity );
-    float shadow = dot(vec3(st, 1.0), vec3(0.4, 1.0, 0.0) );
-
-    gl_FragColor = vec4( (mixColor * shadow - (grassGradient * 0.08)) - (1.0 - vStaticNoise) * 0.12 , 1.0);
+    // baseColor
+    baseColor *= mix(0.6, 1.1, vPosition.y);
+    vec3 finalColor = mix( vec3(0.23, 0.23, 0.23), baseColor, shadow );
+    finalColor = mix( finalColor, uColor2, (1.0 - sun) * 0.2 + vStaticNoise );
     
     
-    
-    // gl_FragColor = vec4( vec3(dot(vec3(st, 0.0), vec3(0.1, 1.0, 0.0) )), 1.0);
+    gl_FragColor = vec4( finalColor + vNoise * 6.0, 1.0);
+    // gl_FragColor = vec4( vec3(), 1.0);
 }

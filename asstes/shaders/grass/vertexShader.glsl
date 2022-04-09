@@ -5,6 +5,7 @@ varying vec2 vUv;
 varying float vNoise;
 varying float vStaticNoise;
 varying vec3 vNormal;
+varying vec3 vPosition;
 
 //	Classic Perlin 3D Noise 
 //	by Stefan Gustavson
@@ -61,41 +62,42 @@ void main() {
     vUv = uv;
     float t = uTime;
     
-    // VERTEX POSITION
-    
+    // Base position
     vec4 mvPosition = vec4( position, 1.0 );
     mvPosition = instanceMatrix * mvPosition;
     
-    // DISPLACEMENT
-    
+    // Noise
     mvPosition.y += (1.0 - smoothstep( 0.0, 2.5, length( mvPosition.xz * 0.5) )) * 1.25;
     float noise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) + vec2(0.0, t ) ) + cnoise( (mvPosition.xz / vec2(4.0) + vec2(0.0, t * 0.3 ) )));
     noise = pow(noise * 0.5 + 0.5, 2.) * 2.;
-    float staticNoise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) ) + cnoise( (mvPosition.xz * vec2(1.0, 0.5) )));
+    float staticNoise = cnoise( (mvPosition.xz * vec2(100.0, 200.0) ) + cnoise( (mvPosition.xz * vec2(1.0, 0.5) )));
     
-    // here the displacement is made stronger on the blades tips.
-    float dispPower = 0.3 / length(uv.y * 2.0) - 0.6;
-    
-    float displacement = noise * ( 0.3 * dispPower );
-	float spirale = 0.05 / mvPosition.y - 0.1;
-	spirale = 1.0;
-    
+    // here the displacement is made stronger on the blades tips    
 	float grassNormal = dot( vec3( normalize(mvPosition.xyz) ), vec3(0.0, 1.0, 0.0) );
 	float disp = grassNormal * 0.15 * uv.y * mvPosition.y;
-	float dispArea = 1.0 - smoothstep(0.0, 0.5, length(mvPosition.xz * 0.5));
-	disp *= sin(uTime * 4.0 + disp * 15.0);
+	float dispArea = 1.0 - smoothstep(0.0, .9, length(mvPosition.xz * 0.5));
+	disp *= (1.0 + sin(uTime * 8.0 + disp * 50.0)) / 5.0;
 	disp *= dispArea;
-    mvPosition.xz *= 1.0 + disp;
+	float stepY = floor(uv.y * 3.0) / 3.0;
 
-	// mvPosition.z += mix(sin(uTime + noise) * 0.1 * uv.y, 0.0, dispArea  );
-	
-    
+	// radial
+	vec2 rotateUV = vec2(mvPosition.x * 0.5, mvPosition.z * 0.5);
+	rotateUV *= get2dRotateMatrix(noise / 8.0 - 1.0 + mvPosition.y * 1.07 );
+	float angle = atan( rotateUV.x, rotateUV.y ) / ( 3.1456 * 2.0 ) + 0.5;
 
+	// static random rotation
+	mvPosition.xz *= mix( 1.0, 1.0 + stepY * 0.02, (((1.0 + sin(angle * 50.0)) / 2.0)));
+	// Noise spirale
+	mvPosition.x += noise * stepY * 0.05;
+	// Move from center
+    mvPosition.y /= 1.0 + sin(disp * 4.0 ) * .1;
+    mvPosition.xz *= 1.0 + disp * sin( angle * 50.0 ) * stepY * 1.6;
     
     vec4 modelViewPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * modelViewPosition;
 
-    vNoise = noise;
+    vNoise = disp;
     vStaticNoise = staticNoise;
     vNormal = normal;
+    vPosition = mvPosition.xyz;
 }
