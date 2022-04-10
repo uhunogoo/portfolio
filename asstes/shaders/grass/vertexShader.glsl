@@ -67,7 +67,7 @@ void main() {
     mvPosition = instanceMatrix * mvPosition;
     
     // Noise
-    mvPosition.y += (1.0 - smoothstep( 0.0, 2.5, length( mvPosition.xz * 0.5) )) * 1.25;
+    mvPosition.y += (1.0 - smoothstep( 0.0, 3.5, length( mvPosition.xz * 0.5) )) * 1.5;
     float noise = cnoise( (mvPosition.xz * vec2(1.0, 0.5) + vec2(0.0, t ) ) + cnoise( (mvPosition.xz / vec2(4.0) + vec2(0.0, t * 0.3 ) )));
     noise = pow(noise * 0.5 + 0.5, 2.) * 2.;
     float staticNoise = cnoise( (mvPosition.xz * vec2(100.0, 200.0) ) + cnoise( (mvPosition.xz * vec2(1.0, 0.5) )));
@@ -86,12 +86,11 @@ void main() {
 	float angle = atan( rotateUV.x, rotateUV.y ) / ( 3.1456 * 2.0 ) + 0.5;
 
 	// static random rotation
-	mvPosition.xz *= mix( 1.0, 1.0 + stepY * 0.02, (((1.0 + sin(angle * 50.0)) / 2.0)));
+	mvPosition.xz += mix( 0.0, stepY * 0.02, dispArea * (((1.0 + sin(angle * 50.0)) / 2.0)));
 	// Noise spirale
-	mvPosition.x += noise * stepY * 0.05;
+	mvPosition.x += noise * stepY * 0.05 * (1.0 - dispArea);
 	// Move from center
-    mvPosition.y /= 1.0 + sin(disp * 4.0 ) * .1;
-    mvPosition.xz *= 1.0 + disp * sin( angle * 50.0 ) * stepY * 1.6;
+	mvPosition.xz *= mix(1.0, 1.0 + ((1.0 + cos( angle * 50.0 )) / 2.0) * disp * stepY * 4.6, dispArea);
     
     vec4 modelViewPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * modelViewPosition;

@@ -32,6 +32,5 @@ void main() {
     finalColor = mix( finalColor, uColor2, (1.0 - sun) * 0.2 + vStaticNoise );
     
     
-    gl_FragColor = vec4( finalColor + vNoise * 6.0, 1.0);
-    // gl_FragColor = vec4( vec3(), 1.0);
+    gl_FragColor = vec4( finalColor + abs(cos(vNoise * 50.0) * vNoise * 6.0), 1.0); 
 }

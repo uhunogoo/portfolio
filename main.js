@@ -104,17 +104,17 @@ class App {
         // this.camera.position.y = 1
         // this.camera.position.x = 5
         this.camera.position.z = 3
-        this.camera.position.y = 2
+        this.camera.position.y = 3
         this.camera.position.x = 3
 
-        this.camera.lookAt(0, 1.5, 0)
+        this.camera.lookAt(0, 2, 0)
         
-        this.cameraGroup.add(this.camera)
+        this.scene.add(this.camera)
 
 
         // Controls
-        this.controls = new OrbitControls(this.camera, canvas)
-        this.controls.enableDamping = true
+        // this.controls = new OrbitControls(this.camera, canvas)
+        // this.controls.enableDamping = true
 
         // Fog
         // const fog = new THREE.Fog('#262837', 1, 5)
@@ -155,7 +155,6 @@ class App {
     // use inits handler
     initHandler() {
         this.initLight()
-        this.initCamera()
         this.initRenderer()
         // this.envMap()
     }
@@ -226,7 +225,7 @@ class App {
                 this.group.add(knife, handle, garda)
 
                 this.group.scale.set(0.3, 0.3, 0.3)
-                this.group.position.y = 1
+                this.group.position.y = 1.5
                 // this.group.position.y = -1.55
                 // this.group.position.z = 2.3
                 // this.group.position.x = 2.3
@@ -238,8 +237,8 @@ class App {
     // Grass
     grass() {
         const countXY = {
-            x: 250,
-            y: 250,
+            x: 280,
+            y: 280,
         }
         const groundReference = new THREE.PlaneBufferGeometry( 10, 10, countXY.x, countXY.y)
         const count = groundReference.attributes.position.count
@@ -297,7 +296,7 @@ class App {
                 '#include <begin_vertex>',
                 `
                     #include <begin_vertex>
-                    transformed.y = (1.0 - smoothstep( 0.0, 2.5, length( transformed.xz * 0.5) )) * 1.25;
+                    transformed.y = (1.0 - smoothstep( 0.0, 3.5, length( transformed.xz * 0.5) )) * 1.5;
                 `
             )
         }
@@ -324,7 +323,7 @@ class App {
         })
         
         const particlesMesh = new THREE.Points( geometry, swordParticlesMaterial )
-        particlesMesh.position.y = 1.7
+        particlesMesh.position.y = 1.95
         
         // Generate fire around the sword
         // const fireGeometry
@@ -338,7 +337,7 @@ class App {
             fragmentShader: swordFireFragment
         })
         const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
-        fireMesh.position.y = 1.65
+        fireMesh.position.y = 1.95
 
         this.scene.add(particlesMesh, fireMesh)
 
@@ -353,6 +352,9 @@ class App {
 
         // generate grass
         this.grass()
+
+        
+        this.initCamera()
         
     }
 
@@ -499,10 +501,11 @@ class App {
         this.customUniform.uTime.value = elapsedTime
         this.swordUniform.uTime.value = elapsedTime
         // Animate camera
-        this.camera.lookAt(0, 1.5, 0)
+        // this.camera.lookAt(0, 1.5, 0)
 
         // update blade
-        // this.group.rotation.y = elapsedTime
+        this.group.position.y += Math.sin(elapsedTime * 8.0) * 0.0025
+        this.group.rotation.y = (elapsedTime * 2.0)
 
         // const parallaxX = this.cursor.x *1.25
         // const parallaxY = - this.cursor.y * 1.25
@@ -514,7 +517,7 @@ class App {
         // this.effectComposer.render()
 
         // Update controls
-        this.controls.update()
+        // this.controls.update()
 
         // Call tick again on the next frame
         window.requestAnimationFrame(this.tick.bind(this))
