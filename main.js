@@ -168,10 +168,10 @@ class App {
         // Material
         this.bottleMaterial = new THREE.MeshStandardMaterial({
             color: '#e5e5e5',
-            roughness: 0.7,
+            roughness: 1,
             roughnessMap: this.textureLoader.load( '/asstes/textures/Metal_metallicRoughness.png?url' ),
             normalMap: this.textureLoader.load( '/asstes/textures/Metal_normal.png?url' ),
-            metalness: 0.7
+            metalness: 0.4
         })
         this.bottleMaterial.generateMipmaps = false
         this.bottleMaterial.minFilter = THREE.NearestFilter
@@ -184,10 +184,11 @@ class App {
         })
 
         this.blackMaterial = new THREE.MeshStandardMaterial({
-            color: this.parameters.blackMaterialColor,
             roughness: 0.6,
             metalness: 0.6,
-            roughnessMap: this.textureLoader.load( '/asstes/textures/Wood_metallicRoughness.png?url' ),
+            map: this.textureLoader.load( '/asstes/textures/Gold_baseColor.png?url' ),
+            roughnessMap: this.textureLoader.load( '/asstes/textures/Gold_metallicRoughness.png?url' ),
+            normalMap: this.textureLoader.load( '/asstes/textures/Gold_normal.png?url' ),
             // side: THREE.DoubleSide,
         })
         this.grassMaterial = new THREE.ShaderMaterial({
@@ -208,8 +209,8 @@ class App {
             // swordModel,
 			'/asstes/geometry/knife-2.glb?url',
             (model) => {
-                const garda = model.scene.children.find( child => child.name === 'garda')
-                const knife = model.scene.children.find( child => child.name === 'knife')
+                const garda = model.scene.children.find( child => child.name === 'golden')
+                const knife = model.scene.children.find( child => child.name === 'rock')
                 const handle = model.scene.children.find( child => child.name === 'handle')
                 
                 // compute normals
@@ -225,7 +226,7 @@ class App {
                 this.group.add(knife, handle, garda)
 
                 this.group.scale.set(0.3, 0.3, 0.3)
-                this.group.position.y = 1.5
+                this.group.position.y = 1.8
                 // this.group.position.y = -1.55
                 // this.group.position.z = 2.3
                 // this.group.position.x = 2.3
@@ -310,7 +311,7 @@ class App {
         this.swordUniform.uPixelRatio.value = this.renderer.getPixelRatio()
         
         // Shape around te sword
-        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 10, 10)
+        const geometry = new THREE.CylinderBufferGeometry(0.5, 0.15, 0.5, 10, 10)
 
         // Generate particles around the sword
         const swordParticlesMaterial = new THREE.ShaderMaterial({
