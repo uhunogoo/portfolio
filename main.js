@@ -333,7 +333,7 @@ class App {
             transparent: true,
             depthWrite: false,
             side: THREE.DoubleSide,
-            blending: THREE.AdditiveBlending,
+            // blending: THREE.BlendingDstFactor,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
         })
