@@ -113,8 +113,8 @@ class App {
 
 
         // Controls
-        // this.controls = new OrbitControls(this.camera, canvas)
-        // this.controls.enableDamping = true
+        this.controls = new OrbitControls(this.camera, canvas)
+        this.controls.enableDamping = true
 
         // Fog
         // const fog = new THREE.Fog('#262837', 1, 5)
@@ -311,7 +311,7 @@ class App {
         this.swordUniform.uPixelRatio.value = this.renderer.getPixelRatio()
         
         // Shape around te sword
-        const geometry = new THREE.CylinderBufferGeometry(0.5, 0.15, 0.5, 10, 10)
+        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 10, 10)
 
         // Generate particles around the sword
         const swordParticlesMaterial = new THREE.ShaderMaterial({
@@ -518,7 +518,7 @@ class App {
         // this.effectComposer.render()
 
         // Update controls
-        // this.controls.update()
+        this.controls.update()
 
         // Call tick again on the next frame
         window.requestAnimationFrame(this.tick.bind(this))

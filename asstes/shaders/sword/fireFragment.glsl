@@ -95,28 +95,38 @@ void main() {
 
 
     vec3 noiseP = position;
-    float newTime = uTime * 3.0;
+    float newTime = uTime * 6.0;
 
-    float noise = cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) + cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) ) + cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) ) );
-    float absNoise = 1.0 - abs(noise);
     
     vec2 rotatedUV = st * get2dRotateMatrix( st.y * 0.2 );
 
     float strength =  mod(rotatedUV.x * 10.0, 1.0);
     strength = length(strength - 0.5) * (1.0 - st.y);
+  
+
+    // float noise = cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) + cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) ) + cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) ) );
+    vec2 noiseCoord = vec2( strength + st.x * 20.0, noiseP.y) * vec2(2.0, 10.0) - vec2(newTime * 1.5, newTime);
+    float noise = cnoise( vec3( noiseCoord, 0) + cnoise( vec3( noiseCoord, 0) ) + cnoise( vec3( noiseCoord, 0) ) );
+    float absNoise = 1.0 - abs(noise);
+
 
     float fire = smoothstep( 0.2, 0.5, strength * 4.0 + absNoise - 1.0 );
     fire += 1.0 - smoothstep(0.1, 1.0, st.y * 4.0 + noise - 1.0);
+
+    float activePath = ( 1.0 + sin(smoothstep(0.1, 1.0, strength * 4.0 + absNoise - 1.0) * 6.0)) / 2.0;
+    activePath *= strength;
 
     // calmped
     fire = clamp(fire, 0.0, 1.0);
 
     // collor
     vec3 blue = vec3(0.2706, 0.3882, 0.9608);
-    vec3 mixedColor = mix(vec3(1.0, 1.0, 1.0), blue, fire - strength * 0.3);
+    vec3 mixedColor = mix(vec3(1.0, 1.0, 1.0), blue, fire - strength * 0.3 );
+    mixedColor = mix(mixedColor, vec3(0.0, 0.9608, 0.9608), activePath * noise * 20.0 );
 
     // final
     vec3 mask = vec3( fire);
 
     gl_FragColor = vec4( mixedColor, side * fire);
+    // gl_FragColor = vec4( vec3( noise + activePath ), side);
 }
