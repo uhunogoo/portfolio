@@ -58,7 +58,8 @@ class App {
             uTime: { value: 0 },
             uPixelRatio: { value: 0 }
         }
-        console.log(this.customUniform.uColor1.value)
+        this.fireUniform = {}
+
         this.sizes = {
             width: document.documentElement.clientWidth,
             height: window.innerHeight
@@ -66,6 +67,7 @@ class App {
         this.cursor = new THREE.Vector2(0, 0)
         this.clock = new THREE.Clock()
         this.previousTime = 0
+        this.gui = new GUI()
 
         // THREE DEFAULTS
         this.scene = new THREE.Scene()
@@ -277,18 +279,19 @@ class App {
             groundMaterial
         )
 
-        // debug
+        /**
+         * Debug
+         */ 
         // customUniform
-        const gui = new GUI();
-        gui.addColor( this.customUniform.uColor1, 'value').onChange( () => {
+        this.gui.addColor( this.customUniform.uColor1, 'value').onChange( () => {
             this.grassMaterial.uniforms.uColor1.value = this.customUniform.uColor1.value
         })
-        gui.addColor( this.customUniform.uColor2, 'value').onChange( () => {
+        this.gui.addColor( this.customUniform.uColor2, 'value').onChange( () => {
             this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
         })
         // gui.add( effectController, 'aperture' ).step(0.001).min(0).max(10).onChange( matChanger )
         // gui.add( effectController, 'maxblur').step(0.001).min(0).max(2).onChange( matChanger )
-        gui.close()
+        // gui.close()
 
         // ground deformation
         groundMaterial.onBeforeCompile = (shader) =>
@@ -307,8 +310,19 @@ class App {
     }
 
     particlesArondSword() {
+        /**
+         * UNIFORMS
+         */ 
         // Set pixelRatio
         this.swordUniform.uPixelRatio.value = this.renderer.getPixelRatio()
+        // fire uniforms parameters
+        this.fireUniform = {
+            uTime: { value: 0 },
+            uColor1: { value: new THREE.Color('#1e00ff') },
+            uColor2: { value: new THREE.Color('#00bfff') },
+            uColor3: { value: new THREE.Color('#f5d0d0') },
+        }
+
         
         // Shape around te sword
         const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 10, 10)
@@ -329,11 +343,10 @@ class App {
         // Generate fire around the sword
         // const fireGeometry
         const swordFireMaterial = new THREE.ShaderMaterial({
-            uniforms: this.swordUniform,
+            uniforms: this.fireUniform,
             transparent: true,
             depthWrite: false,
             side: THREE.DoubleSide,
-            // blending: THREE.BlendingDstFactor,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
         })
@@ -342,6 +355,23 @@ class App {
 
         this.scene.add(particlesMesh, fireMesh)
 
+        /**
+         * Debug fire shader
+         */
+        //  const gui = new GUI();
+        //  console.log(gui);
+         this.gui.addColor( this.fireUniform.uColor1, 'value').name('fireColor 1').onChange( () => {
+             this.fireUniform.uColor1.value = this.fireUniform.uColor1.value
+         })
+         this.gui.addColor( this.fireUniform.uColor2, 'value').name('fireColor 2').onChange( () => {
+             this.fireUniform.uColor2.value = this.fireUniform.uColor2.value
+         })
+         this.gui.addColor( this.fireUniform.uColor3, 'value').name('fireColor 3').onChange( () => {
+             this.fireUniform.uColor3.value = this.fireUniform.uColor3.value
+         })
+        //  gui.addColor( this.fireUniform.uColor2, 'value').onChange( () => {
+        //      this.fireUniform.uniforms.uColor2.value = this.fireUniform.uColor2.value
+        //  })
     }
 
     // use geometry handler
@@ -353,7 +383,6 @@ class App {
 
         // generate grass
         this.grass()
-
         
         this.initCamera()
         
@@ -366,7 +395,7 @@ class App {
     resizeEvent() {
         window.addEventListener('resize', () =>
         {
-            if (this.sizes.width !== document.documentElement.clientWidth) {
+            // if (this.sizes.width !== document.documentElement.clientWidth) {
                 // Update sizes
                 this.sizes.width = document.documentElement.clientWidth
                 this.sizes.height = window.innerHeight
@@ -380,7 +409,7 @@ class App {
                 this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
                 // this.effectComposer.setSize(this.sizes.width, this.sizes.height)
-            }
+            // }
         })
     }
 
@@ -501,6 +530,7 @@ class App {
 
         this.customUniform.uTime.value = elapsedTime
         this.swordUniform.uTime.value = elapsedTime
+        this.fireUniform.uTime.value = elapsedTime
         // Animate camera
         // this.camera.lookAt(0, 1.5, 0)
 

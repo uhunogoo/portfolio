@@ -4,6 +4,9 @@ varying vec3 vNormal;
 
 
 uniform float uTime;
+uniform vec3 uColor1;
+uniform vec3 uColor2;
+uniform vec3 uColor3;
 
 //	Classic Perlin 3D Noise 
 //	by Stefan Gustavson
@@ -120,9 +123,11 @@ void main() {
     fire = clamp(fire, 0.0, 1.0);
 
     // collor
-    vec3 blue = vec3(0.8431, 0.9922, 0.0);
-    vec3 mixedColor = mix(vec3(1.0, 0.0, 0.0), blue, fire - strength * 0.3 );
-    mixedColor = mix(mixedColor, vec3(0.9608, 0.8196, 0.8196), activePath * noise * 20.0 );
+    vec3 color_1 = uColor1;
+    vec3 color_2 = uColor2;
+    vec3 color_3 = uColor3;
+    vec3 mixedColor = mix( color_1, color_2, fire - strength * 0.3 );
+    mixedColor = mix( mixedColor, color_3, activePath * noise * 10.0 );
 
     // final
     vec3 mask = vec3( fire);
