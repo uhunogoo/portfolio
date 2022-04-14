@@ -12,6 +12,12 @@ export default class Fire {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.sizes = this.experience.sizes
+        this.debug = this.experience.debug
+
+        // Debug
+        if (this.debug.active) {
+            this.debugFolder = this.debug.ui.addFolder('fire')
+        }
         
         // Setup
         this.fireUniform = {
@@ -59,23 +65,18 @@ export default class Fire {
 
         this.scene.add(particlesMesh, fireMesh)
 
-        /**
-         * Debug fire shader
-         */
-        //  const gui = new GUI();
-        //  console.log(gui);
-            // this.gui.addColor( this.fireUniform.uColor1, 'value').name('fireColor 1').onChange( () => {
-            //     this.fireUniform.uColor1.value = this.fireUniform.uColor1.value
-            // })
-            // this.gui.addColor( this.fireUniform.uColor2, 'value').name('fireColor 2').onChange( () => {
-            //     this.fireUniform.uColor2.value = this.fireUniform.uColor2.value
-            // })
-            // this.gui.addColor( this.fireUniform.uColor3, 'value').name('fireColor 3').onChange( () => {
-            //     this.fireUniform.uColor3.value = this.fireUniform.uColor3.value
-            // })
-        //  gui.addColor( this.fireUniform.uColor2, 'value').onChange( () => {
-        //      this.fireUniform.uniforms.uColor2.value = this.fireUniform.uColor2.value
-        //  })
+        // Debug shader material
+        if (this.debug.active) {
+            this.debugFolder.addColor( this.fireUniform.uColor1, 'value').name('fireColor 1').onChange( () => {
+                this.fireUniform.uColor1.value = this.fireUniform.uColor1.value
+            })
+            this.debugFolder.addColor( this.fireUniform.uColor2, 'value').name('fireColor 2').onChange( () => {
+                this.fireUniform.uColor2.value = this.fireUniform.uColor2.value
+            })
+            this.debugFolder.addColor( this.fireUniform.uColor3, 'value').name('fireColor 3').onChange( () => {
+                this.fireUniform.uColor3.value = this.fireUniform.uColor3.value
+            })
+        }
     }
     update() {
         this.particlesUniform.uTime.value = this.experience.time.elapsed / 1000

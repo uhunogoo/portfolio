@@ -1,5 +1,5 @@
 import Experience from '../Experience'
-import Enviroment from './Environment'
+import Environment from './Environment'
 import Fire from './Fire'
 import Grass from './Grass'
 import Sword from './Sword'
@@ -17,7 +17,7 @@ export default class World {
             this.sword = new Sword()
             this.fire = new Fire()
 
-            this.environment = new Enviroment()
+            this.environment = new Environment()
         })
     }
     update() {

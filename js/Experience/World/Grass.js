@@ -11,6 +11,12 @@ export default class Grass {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
+        this.debug = this.experience.debug
+
+        // Debug
+        if (this.debug.active) {
+            this.debugFolder = this.debug.ui.addFolder('Grass')
+        }
         
         this.customUniform = {
             uTime: { value: 0 },
@@ -28,6 +34,21 @@ export default class Grass {
             vertexShader,
             fragmentShader,
         })
+
+        if (this.debug.active) {
+            this.debugFolder
+                .addColor( this.customUniform.uColor1, 'value')
+                .name('color1')
+                .onChange( () => {
+                    this.grassMaterial.uniforms.uColor1.value = this.customUniform.uColor1.value
+                })
+            this.debugFolder
+                .addColor( this.customUniform.uColor2, 'value')
+                .name('color2')
+                .onChange( () => {
+                    this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
+                })
+        }
     }
     createGrass() {
         const countXY = {
@@ -66,20 +87,7 @@ export default class Grass {
             groundReference,
             groundMaterial
         )
-
-        /**
-         * Debug
-         */ 
-        // customUniform
-        // this.gui.addColor( this.customUniform.uColor1, 'value').onChange( () => {
-        //     this.grassMaterial.uniforms.uColor1.value = this.customUniform.uColor1.value
-        // })
-        // this.gui.addColor( this.customUniform.uColor2, 'value').onChange( () => {
-        //     this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
-        // })
-        // gui.add( effectController, 'aperture' ).step(0.001).min(0).max(10).onChange( matChanger )
-        // gui.add( effectController, 'maxblur').step(0.001).min(0).max(2).onChange( matChanger )
-        // gui.close()
+        
 
         // ground deformation
         groundMaterial.onBeforeCompile = (shader) => {
