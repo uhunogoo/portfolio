@@ -52,10 +52,10 @@ export default class Grass {
     }
     createGrass() {
         const countXY = {
-            x: 280,
-            y: 280,
+            x: 200,
+            y: 200,
         }
-        const groundReference = new THREE.PlaneBufferGeometry( 10, 10, countXY.x, countXY.y)
+        const groundReference = new THREE.PlaneBufferGeometry( 8, 8, countXY.x, countXY.y)
         const count = groundReference.attributes.position.count
         groundReference.rotateX(Math.PI * 0.5)
  
@@ -69,9 +69,9 @@ export default class Grass {
         for ( let i = 0 ; i < count; i++ ) {
             const scale = 0.5 + Math.random() * 0.5
             dummy.position.set(
-                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 8,
                 0,
-                (Math.random() - 0.5) * 10
+                (Math.random() - 0.5) * 8
             )
             // dummy.scale.setScalar( scale );
             dummy.rotation.y = Math.random() * Math.PI

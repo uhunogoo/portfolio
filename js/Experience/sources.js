@@ -41,6 +41,6 @@ export default [
     {
         name: 'swordModel',
         type: 'gltfLoader',
-        path: '/asstes/geometry/knife-2.glb?url'
+        path: '/asstes/geometry/knife.glb?url'
     },
 ]

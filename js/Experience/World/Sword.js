@@ -14,15 +14,40 @@ export default class Sword {
         this.animation()
     }
     loadMaterials() {
+        // Wood
+        this.resources.items.woodTexture.encoding = THREE.sRGBEncoding
+        this.resources.items.woodTexture.repeat.set(0.25, 0.25)
+        this.resources.items.woodTexture.wrapS = THREE.RepeatWrapping
+        this.resources.items.woodTexture.wrapT = THREE.RepeatWrapping
+        
+        this.resources.items.woodTextureRoughness.repeat.set(0.25, 0.25)
+        this.resources.items.woodTextureRoughness.wrapS = THREE.RepeatWrapping
+        this.resources.items.woodTextureRoughness.wrapT = THREE.RepeatWrapping
+        
+        
+        // Gold
+        this.resources.items.goldTexture.encoding = THREE.sRGBEncoding
+        this.resources.items.goldTexture.repeat.set(0.25, 0.25)
+        this.resources.items.goldTexture.wrapS = THREE.RepeatWrapping
+        this.resources.items.goldTexture.wrapT = THREE.RepeatWrapping
+        
+        this.resources.items.goldTextureNormal.repeat.set(0.25, 0.25)
+        this.resources.items.goldTextureNormal.wrapS = THREE.RepeatWrapping
+        this.resources.items.goldTextureNormal.wrapT = THREE.RepeatWrapping
+        
+       this.resources.items.goldTextureRoughness.repeat.set(0.25, 0.25)
+       this.resources.items.goldTextureRoughness.wrapS = THREE.RepeatWrapping
+       this.resources.items.goldTextureRoughness.wrapT = THREE.RepeatWrapping
+
+
+        // Create materials
         this.metalMaterial = new THREE.MeshStandardMaterial({
             color: '#e5e5e5',
             roughness: 1,
             roughnessMap: this.resources.items.metalTextureRoughness,
             normalMap: this.resources.items.metalTextureNormal,
-            metalness: 0.4
+            metalness: 0.1
         })
-        this.metalMaterial.generateMipmaps = false
-        this.metalMaterial.minFilter = THREE.NearestFilter
 
         this.woodMaterial = new THREE.MeshStandardMaterial({
             roughness: 1,
@@ -49,30 +74,45 @@ export default class Sword {
         const knife = this.sword.scene.children.find( child => child.name === 'rock')
         const handle = this.sword.scene.children.find( child => child.name === 'handle')
         
+        // normals
+        // garda.geometry.computeVertexNormals()
+        // knife.geometry.computeVertexNormals()
+        // handle.geometry.computeVertexNormals()
+
         // Apply materials to geometry
         garda.material = this.goldMaterial.clone()
         knife.material = this.metalMaterial.clone()
         handle.material = this.woodMaterial.clone()
 
+        garda.castShadow = true
+        garda.receiveShadow = true
+        knife.castShadow = true
+        knife.receiveShadow = true
+        handle.castShadow = true
+        handle.receiveShadow = true
+
         // Group parameters
         this.group.add(knife, handle, garda)
         this.group.scale.set(0.3, 0.3, 0.3)
-        this.group.position.y = 1.8
+        this.group.position.y = 2
 
 
         this.scene.add( this.group )
     }
     animation() {
+        gsap.set(this.group.position, {y: '-=0.1'})
         const tl = gsap.timeline({
             repeat: -1,
-            yoyo: true,
             defaults: {
-                ease: 'power1.inOut',
-                duration: 0.4,
+                ease: 'power3.inOut',
+                duration: 0.8,
             }
         })
         tl.to(this.group.position, {
-            y: '+=0.12'
+            keyframes:{
+                "50%":{y: '+=0.1', ease:"sine"},
+                "100%":{y: '-=0.1', ease:"sine"},
+            },
         })
     }
 }

@@ -66,26 +66,13 @@ export default class Stones {
         this.scene.add( this.stonesGroup )
     }
     animation() {
-        // const tl = gsap.timeline()
-        gsap.to(this.stonesGroup.rotation, {
-            y: -Math.PI *2,
+        const rotation = gsap.to(this.stonesGroup.rotation, {
+            y: Math.PI *2,
             repeat: -1,
             duration: 1.5,
-            ease: 'none'
+            ease: 'none',
         })
         
         const eachStonePosition = this.stonesGroup.children.map( el => el.position )
-        gsap.to(eachStonePosition, {
-            z: '*=0.9',
-            x: '*=0.9',
-            repeat: -1,
-            yoyo: true,
-            duration: .5,
-            ease: 'back.inOut',
-            stagger: {
-                amount: 0.8,
-                each: 0.2
-            }
-        })
     }
 }
