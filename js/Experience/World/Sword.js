@@ -35,15 +35,31 @@ export default class Sword {
         this.resources.items.goldTextureNormal.wrapS = THREE.RepeatWrapping
         this.resources.items.goldTextureNormal.wrapT = THREE.RepeatWrapping
         
-       this.resources.items.goldTextureRoughness.repeat.set(0.25, 0.25)
-       this.resources.items.goldTextureRoughness.wrapS = THREE.RepeatWrapping
-       this.resources.items.goldTextureRoughness.wrapT = THREE.RepeatWrapping
+        this.resources.items.goldTextureRoughness.repeat.set(0.25, 0.25)
+        this.resources.items.goldTextureRoughness.wrapS = THREE.RepeatWrapping
+        this.resources.items.goldTextureRoughness.wrapT = THREE.RepeatWrapping
+
+        // Metal
+        this.resources.items.metalTexture.encoding = THREE.sRGBEncoding
+        this.resources.items.metalTexture.repeat.set(1.12, 1.12)
+        this.resources.items.metalTexture.wrapS = THREE.RepeatWrapping
+        this.resources.items.metalTexture.wrapT = THREE.RepeatWrapping
+        
+        this.resources.items.metalTextureNormal.repeat.set(1.12, 1.12)
+        this.resources.items.metalTextureNormal.wrapS = THREE.RepeatWrapping
+        this.resources.items.metalTextureNormal.wrapT = THREE.RepeatWrapping
+        
+        this.resources.items.metalTextureRoughness.repeat.set(1.12, 1.12)
+        this.resources.items.metalTextureRoughness.wrapS = THREE.RepeatWrapping
+        this.resources.items.metalTextureRoughness.wrapT = THREE.RepeatWrapping
 
 
         // Create materials
         this.metalMaterial = new THREE.MeshStandardMaterial({
             color: '#e5e5e5',
             roughness: 1,
+            map: this.resources.items.metalTexture,
+            metalnessMap: this.resources.items.metalTextureMetalness,
             roughnessMap: this.resources.items.metalTextureRoughness,
             normalMap: this.resources.items.metalTextureNormal,
             metalness: 0.1
@@ -73,11 +89,6 @@ export default class Sword {
         const garda = this.sword.scene.children.find( child => child.name === 'golden')
         const knife = this.sword.scene.children.find( child => child.name === 'rock')
         const handle = this.sword.scene.children.find( child => child.name === 'handle')
-        
-        // normals
-        // garda.geometry.computeVertexNormals()
-        // knife.geometry.computeVertexNormals()
-        // handle.geometry.computeVertexNormals()
 
         // Apply materials to geometry
         garda.material = this.goldMaterial.clone()
@@ -95,6 +106,7 @@ export default class Sword {
         this.group.add(knife, handle, garda)
         this.group.scale.set(0.3, 0.3, 0.3)
         this.group.position.y = 2
+        this.group.rotation.y = Math.PI
 
 
         this.scene.add( this.group )

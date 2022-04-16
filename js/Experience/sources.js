@@ -1,14 +1,29 @@
 export default [
     // METAL
     {
+        name: 'metalTexture',
+        type: 'texture',
+        path: '/asstes/textures/metal/metal.jpg?url'
+    },
+    {
         name: 'metalTextureRoughness',
         type: 'texture',
-        path: '/asstes/textures/Metal_metallicRoughness.png?url'
+        path: '/asstes/textures/metal/metal_roughness.jpg?url'
     },
     {
         name: 'metalTextureNormal',
         type: 'texture',
-        path: '/asstes/textures/Metal_normal.png?url'
+        path: '/asstes/textures/metal/metal_normal.jpg?url'
+    },
+    {
+        name: 'metalTextureMetalness>',
+        type: 'texture',
+        path: '/asstes/textures/metal/metal_metalness.jpg?url'
+    },
+    {
+        name: 'metalTextureDisplacement>',
+        type: 'texture',
+        path: '/asstes/textures/metal/metal_displacement.jpg?url'
     },
     // WOOD
     {
@@ -37,10 +52,15 @@ export default [
         type: 'texture',
         path: '/asstes/textures/Gold_normal.png?url'
     },
-    // MODEL
+    // MODELS
     {
         name: 'swordModel',
         type: 'gltfLoader',
         path: '/asstes/geometry/knife.glb?url'
+    },
+    {
+        name: 'stoneModel',
+        type: 'gltfLoader',
+        path: '/asstes/geometry/stone.glb?url'
     },
 ]

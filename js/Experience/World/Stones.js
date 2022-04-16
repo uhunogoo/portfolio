@@ -12,7 +12,7 @@ export default class Stones {
 
         // Setup
         this.stonesParameters = {
-            count: 6,
+            count: 5,
             radius: 0.6,
             theta: Math.PI * 0.5,
             yPosition: 2
@@ -35,8 +35,8 @@ export default class Stones {
     createStones() {
         this.stonesGroup = new THREE.Group()
 
-        const stoneGeometry = new THREE.BoxBufferGeometry(1, 1.5, 0.5)
-        const stoneMaterial = new THREE.MeshBasicMaterial()
+        const stoneGeometry = this.resources.items.stoneModel.scene.children.find( child => child.name === 'stone').geometry
+        const stoneMaterial = new THREE.MeshStandardMaterial()
 
         const {count, yPosition} = this.stonesParameters
     
@@ -51,7 +51,7 @@ export default class Stones {
             const geometry = stoneGeometry.clone()
             const material = stoneMaterial.clone()
             const stoneMesh = new THREE.Mesh( geometry, material )
-            stoneMesh.scale.set(0.2, 0.2, 0.2)
+            stoneMesh.scale.set(0.15, 0.15, 0.15)
             // aply positions but flip z and y values
             stoneMesh.position.set(
                 positions[i3 + 0] * -1,
