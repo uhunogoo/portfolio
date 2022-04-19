@@ -1,11 +1,6 @@
 export default [
     // METAL
     {
-        name: 'metalTexture',
-        type: 'texture',
-        path: '/asstes/textures/metal/metal.jpg?url'
-    },
-    {
         name: 'metalTextureRoughness',
         type: 'texture',
         path: '/asstes/textures/metal/metal_roughness.jpg?url'
@@ -14,11 +9,6 @@ export default [
         name: 'metalTextureNormal',
         type: 'texture',
         path: '/asstes/textures/metal/metal_normal.jpg?url'
-    },
-    {
-        name: 'metalTextureMetalness>',
-        type: 'texture',
-        path: '/asstes/textures/metal/metal_metalness.jpg?url'
     },
     {
         name: 'metalTextureDisplacement>',

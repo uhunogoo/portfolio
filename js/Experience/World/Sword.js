@@ -39,12 +39,7 @@ export default class Sword {
         this.resources.items.goldTextureRoughness.wrapS = THREE.RepeatWrapping
         this.resources.items.goldTextureRoughness.wrapT = THREE.RepeatWrapping
 
-        // Metal
-        this.resources.items.metalTexture.encoding = THREE.sRGBEncoding
-        this.resources.items.metalTexture.repeat.set(1.12, 1.12)
-        this.resources.items.metalTexture.wrapS = THREE.RepeatWrapping
-        this.resources.items.metalTexture.wrapT = THREE.RepeatWrapping
-        
+        // Metal        
         this.resources.items.metalTextureNormal.repeat.set(1.12, 1.12)
         this.resources.items.metalTextureNormal.wrapS = THREE.RepeatWrapping
         this.resources.items.metalTextureNormal.wrapT = THREE.RepeatWrapping
@@ -58,8 +53,6 @@ export default class Sword {
         this.metalMaterial = new THREE.MeshStandardMaterial({
             color: '#e5e5e5',
             roughness: 1,
-            map: this.resources.items.metalTexture,
-            metalnessMap: this.resources.items.metalTextureMetalness,
             roughnessMap: this.resources.items.metalTextureRoughness,
             normalMap: this.resources.items.metalTextureNormal,
             metalness: 0.1

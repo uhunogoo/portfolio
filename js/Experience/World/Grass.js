@@ -16,6 +16,7 @@ export default class Grass {
         // Debug
         if (this.debug.active) {
             this.debugFolder = this.debug.ui.addFolder('Grass')
+            this.debugFolder.close()
         }
         
         this.customUniform = {

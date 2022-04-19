@@ -32,6 +32,6 @@ export default class Camera {
     }
     update() {
         this.controls.update()
-        // this.instance.lookAt(0, 2, 0)
+        this.instance.lookAt(0, 2, 0)
     }
 }

@@ -13,7 +13,8 @@ export default class Renderer {
 
         // Debug
         if (this.debug.active) {
-            this.debugFolder = this.debug.ui.addFolder('renderer')
+            this.debugFolder = this.debug.ui.addFolder('Renderer')
+            this.debugFolder.close()
         }
 
         this.setInstance()

@@ -17,10 +17,12 @@ export default class Stones {
             theta: Math.PI * 0.5,
             yPosition: 2
         }
+        this.parameters = {}
 
         // Debug
         if (this.debug.active) {
-            this.debugFolder = this.debug.ui.addFolder('Grass')
+            this.debugFolder = this.debug.ui.addFolder('Stones')
+            // this.debugFolder.close()
         }
         this.generateCircularShape()
         this.createStones()
@@ -33,10 +35,11 @@ export default class Stones {
         this.stepAngle = (Math.PI * 2) / count
     }
     createStones() {
+        this.parameters.color = 0x2d2d2d
         this.stonesGroup = new THREE.Group()
 
         const stoneGeometry = this.resources.items.stoneModel.scene.children.find( child => child.name === 'stone').geometry
-        const stoneMaterial = new THREE.MeshStandardMaterial()
+        const stoneMaterial = new THREE.MeshStandardMaterial({ color: this.parameters.color })
 
         const {count, yPosition} = this.stonesParameters
     
@@ -51,7 +54,7 @@ export default class Stones {
             const geometry = stoneGeometry.clone()
             const material = stoneMaterial.clone()
             const stoneMesh = new THREE.Mesh( geometry, material )
-            stoneMesh.scale.set(0.15, 0.15, 0.15)
+
             // aply positions but flip z and y values
             stoneMesh.position.set(
                 positions[i3 + 0] * -1,
@@ -59,20 +62,38 @@ export default class Stones {
                 positions[i3 + 1]
             )
             stoneMesh.rotation.y = this.stepAngle * (i - 1)
+            stoneMesh.scale.set(0.12, 0.12, 0.12)
+
             this.stonesGroup.add( stoneMesh )
 
         }
         this.stonesGroup.position.y = yPosition
         this.scene.add( this.stonesGroup )
+
+        // Debug shader material
+        if (this.debug.active) {
+            this.debugFolder.addColor( this.parameters, 'color').name('stonesColor').onChange( () => {
+                this.stonesGroup.children.forEach(stone => stone.material.color.set(this.parameters.color) )
+            })
+        }
     }
     animation() {
-        const rotation = gsap.to(this.stonesGroup.rotation, {
+        gsap.to(this.stonesGroup.rotation, {
             y: Math.PI *2,
-            repeat: -1,
-            duration: 1.5,
+            duration: 2,
             ease: 'none',
+            repeat: -1
         })
         
-        const eachStonePosition = this.stonesGroup.children.map( el => el.position )
+        
+        gsap.to(this.stonesGroup.position, {
+            keyframes:{
+                "50%":{y: '+=0.05', ease:"sine"},
+                "100%":{y: '-=0.05', ease:"sine"},
+            },
+            repeat: -1,
+            ease: 'none',
+            duration: 1.2
+        })
     }
 }

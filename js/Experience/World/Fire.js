@@ -16,7 +16,8 @@ export default class Fire {
 
         // Debug
         if (this.debug.active) {
-            this.debugFolder = this.debug.ui.addFolder('fire')
+            this.debugFolder = this.debug.ui.addFolder('Fire')
+            this.debugFolder.close()
         }
         
         // Setup
