@@ -14,6 +14,22 @@ html, body {
   height: 100vh;
   text-align: center;
 }
+.loader {
+  background: #2d2d2d;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 100px;
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+.loader span::after {
+  content: '%';
+}
 
 .webgl
 {

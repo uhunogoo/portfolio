@@ -6,6 +6,7 @@ import Camera from './Camera'
 import Renderer from './Renderer'
 import World from './World/World'
 import Resources from './Utils/Resources'
+import Preload from './Preload'
 import sources from './sources'
 
 // Debug
@@ -31,6 +32,7 @@ export default class Experience {
         this.time = new Time()
         this.scene = new THREE.Scene()
         this.resources = new Resources(sources)
+        this.preload = new Preload()
         this.camera = new Camera()
         this.renderer = new Renderer()
         this.world = new World()
