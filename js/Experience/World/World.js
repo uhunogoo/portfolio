@@ -2,8 +2,9 @@ import Experience from '../Experience'
 import Environment from './Environment'
 import Fire from './Fire'
 import Grass from './Grass'
-import Stones from './Stones'
+import Stones from './Runes'
 import Sword from './Sword'
+import Skybox from './Skybox'
 
 export default class World {
     constructor() {
@@ -14,11 +15,12 @@ export default class World {
         // Wait for environment
         this.resources.on('ready', () => {
             // Setup
+            this.sky = new Skybox()
             this.grass = new Grass()
             this.sword = new Sword()
             this.fire = new Fire()
             this.stones = new Stones()
-
+            
             this.environment = new Environment()
         })
     }
