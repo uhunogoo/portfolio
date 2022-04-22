@@ -1,4 +1,10 @@
 export default [
+    //  Runes
+    {
+        name: 'runesTexture',
+        type: 'texture',
+        path: '/asstes/textures/runes/runes.jpg?url'
+    },
     // METAL
     {
         name: 'metalTextureRoughness',
@@ -48,9 +54,9 @@ export default [
         type: 'gltfLoader',
         path: '/asstes/geometry/knife.glb?url'
     },
-    {
-        name: 'stoneModel',
-        type: 'gltfLoader',
-        path: '/asstes/geometry/stone.glb?url'
-    },
+    // {
+    //     name: 'stoneModel',
+    //     type: 'gltfLoader',
+    //     path: '/asstes/geometry/stone.glb?url'
+    // },
 ]
