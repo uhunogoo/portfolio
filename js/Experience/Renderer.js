@@ -29,7 +29,7 @@ export default class Renderer {
 
         // this.instance.physicallyCorrectLights = true
         this.instance.outputEncoding = THREE.sRGBEncoding
-        this.instance.toneMapping = THREE.ACESFilmicToneMapping
+        // this.instance.toneMapping = THREE.ACESFilmicToneMapping
         this.instance.toneMappingExposure = 0.5
 
         // 	renderer.outputEncoding = THREE.sRGBEncoding;

@@ -24,19 +24,20 @@ export default class Skybox {
         // Add Sky
         const that = this
         const sky = new Sky()
-        sky.scale.setScalar( 40)
+        sky.scale.setScalar( 10)
         this.scene.add( sky )
 
         const sun = new THREE.Vector3()
 
         /// GUI
         const effectController = {
-            turbidity: 17.29,
-            rayleigh: 0.706,
-            mieCoefficient: 0.008,
-            mieDirectionalG: 0.98,
-            elevation: 23,
-            azimuth: 118,
+            turbidity: 2,
+            rayleigh: 0.33,
+            mieCoefficient: 0.005,
+            mieDirectionalG: 0.8,
+            luminance: 1.1,
+            elevation: 90,
+            azimuth: 180,
             exposure: this.renderer.instance.toneMappingExposure
         }
 
@@ -49,14 +50,16 @@ export default class Skybox {
 
             const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation )
             const theta = THREE.MathUtils.degToRad( effectController.azimuth )
-
+            console.log(sky.material.fragment)
             sun.setFromSphericalCoords( 1, phi, theta )
 
             uniforms[ 'sunPosition' ].value.copy( sun )
 
             that.renderer.instance.toneMappingExposure = effectController.exposure
         }
+        
         guiChanged()
+
         if (this.debug.active) {
             this.debugFolder.add( effectController, 'turbidity').min(0).max(20).step(0.001).onChange( guiChanged )
             this.debugFolder.add( effectController, 'rayleigh').min(0).max(4).step(0.001).onChange( guiChanged )
@@ -65,7 +68,6 @@ export default class Skybox {
             this.debugFolder.add( effectController, 'elevation').min(0).max(90).step(0.001).onChange( guiChanged )
             this.debugFolder.add( effectController, 'azimuth').min(-180).max(180).step(0.001).onChange( guiChanged )
             this.debugFolder.add( effectController, 'exposure').min(0).max(2).step(0.001).onChange( guiChanged )
-
         }
     }
 }

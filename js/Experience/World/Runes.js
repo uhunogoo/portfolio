@@ -30,7 +30,7 @@ export default class Stones {
         runeTexture.minFilter = THREE.LinearFilter
 
         const shape = new THREE.PlaneBufferGeometry( this.parameters.radius, this.parameters.radius )
-        const shapeMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide , map: runeTexture, transparent: true })
+        const shapeMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide , map: runeTexture, transparent: true, depthWrite: false })
         shapeMaterial.onBeforeCompile = (shader) => {
             shader.uniforms.uCircle = { value: new THREE.Vector2(0, 0) }
             shader.fragmentShader = shader.fragmentShader.replace(
