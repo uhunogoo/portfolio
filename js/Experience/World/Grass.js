@@ -54,18 +54,48 @@ export default class Grass {
     createGrass() {
         const size = 10
         const countXY = {
-            x: 440,
-            y: 440,
+            x: 300,
+            y: 300,
         }
 
         const groundReference = new THREE.PlaneBufferGeometry( size, size, countXY.x, countXY.y)
         const count = groundReference.attributes.position.count
         groundReference.rotateX(Math.PI * 0.5)
- 
-        // start coordinates
-        const grass = new THREE.PlaneBufferGeometry(0.02, 0.25, 1, 2)
-        grass.translate( 0, 0.125, 0 );
-        const instancedGrassMesh = new THREE.InstancedMesh( grass, this.grassMaterial, count );
+
+        const poisnts = new Float32Array([
+            -0.01, 0, 0,
+            0.01, 0, 0,
+            
+            0.01, 0.125, 0,
+            -0.01, 0.125, 0,
+
+            0, 0.25, 0,
+        ])
+        const uv = new Float32Array([
+            0.0, 0.0,
+            1.0, 0.0,
+
+            1.0, 0.5,
+            0.0, 0.5,
+            
+            0.5, 1.0
+        ])
+        const indeces = [
+            0, 1, 2, 
+            2, 0, 3,
+            3, 2, 4,
+            4, 3, 5,
+        ]
+
+        const grassBufferGeometry = new THREE.BufferGeometry()
+        grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(poisnts, 3))
+        grassBufferGeometry.setIndex( indeces )
+        grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+
+
+
+
+        const instancedGrassMesh = new THREE.InstancedMesh( grassBufferGeometry, this.grassMaterial, count );
         
         const dummy = new THREE.Object3D()
         
@@ -76,7 +106,7 @@ export default class Grass {
                 0,
                 (Math.random() - 0.5) * size
             )
-            // dummy.scale.setScalar( scale );
+            dummy.scale.setScalar( scale + 0.4 );
             dummy.rotation.y = Math.random() * Math.PI
             dummy.updateMatrix()
             instancedGrassMesh.setMatrixAt( i, dummy.matrix )
