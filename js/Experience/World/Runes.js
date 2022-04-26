@@ -67,7 +67,7 @@ export default class Stones {
     }
     animation() { 
         gsap.to(this.runeMesh.rotation, {
-            z: Math.PI * 2,
+            z: -Math.PI * 2,
             repeat: -1,
             ease: 'none',
             duration: 8

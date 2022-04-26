@@ -51,9 +51,9 @@ export default class Sword {
 
         // Create materials
         this.metalMaterial = new THREE.MeshStandardMaterial({
-            color: '#ffffff',
+            color: '#e5e5e5',
             roughness: 1,
-            roughnessMap: this.resources.items.metalTextureRoughness,
+            // roughnessMap: this.resources.items.metalTextureRoughness,
             normalMap: this.resources.items.metalTextureNormal,
             metalness: 0.0
         })
