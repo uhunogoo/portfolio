@@ -31,5 +31,8 @@ export default class World {
         if(this.fire) {
             this.fire.update()
         }
+        if(this.sky) {
+            this.sky.update()
+        }
     }
 }

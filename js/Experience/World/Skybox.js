@@ -22,17 +22,18 @@ export default class Skybox {
     }
     createSky() {
         const debug = {
-            fogColor: '#262837',
-            fogNear: 1,
-            fogFar: 60,
-            skyColor: '#ffffff'
+            fogColor: '#76e8fe',
+            fogNear: 2.5,
+            fogFar: 23,
+            skyColor: '#0008ff'
         }
-        const fog = new THREE.Fog(debug.fogColor, debug.fogNear, debug.fogFar)
-        this.scene.fog = fog
+        console.log()
+        this.fog = new THREE.Fog(debug.fogColor, this.camera.instance.position.z, debug.fogFar)
+        this.scene.fog = this.fog
         
         // Add Sky
         const skyGeometry = new THREE.SphereBufferGeometry(15, 40, 40)
-        const skyMaterial = new THREE.MeshStandardMaterial({color: debug.clearColor, side: THREE.DoubleSide})
+        const skyMaterial = new THREE.MeshBasicMaterial({color: debug.skyColor, side: THREE.DoubleSide})
         const skyMesh = new THREE.Mesh( skyGeometry, skyMaterial )
         
         this.scene.add( skyMesh )
@@ -47,13 +48,7 @@ export default class Skybox {
                     this.scene.fog.color = new THREE.Color(debug.fogColor)
                 })
             this.debugFolder
-                .add( fog, 'near')
-                .name('fogNear')
-                .min(0)
-                .max(80)
-                .step(0.001)
-            this.debugFolder
-                .add( fog, 'far')
+                .add( this.fog, 'far')
                 .name('fogFar')
                 .min(0)
                 .max(80)
@@ -66,6 +61,10 @@ export default class Skybox {
                     skyMesh.material.color = new THREE.Color( new THREE.Color(debug.skyColor) )
                 })
         }
+    }
+    update() {
+        this.fog.near = this.camera.instance.position.distanceTo( new THREE.Vector3() )
+        
     }
 }
 

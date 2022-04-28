@@ -25,6 +25,7 @@ export default class Grass {
             uColor2: { value: new THREE.Color('#63ca4e') },
         }
         this.materials()
+        this.createGrassGeometry()
         this.createGrass()
     }
     materials () {
@@ -51,17 +52,7 @@ export default class Grass {
                 })
         }
     }
-    createGrass() {
-        const size = 10
-        const countXY = {
-            x: 300,
-            y: 300,
-        }
-
-        const groundReference = new THREE.PlaneBufferGeometry( size, size, countXY.x, countXY.y)
-        const count = groundReference.attributes.position.count
-        groundReference.rotateX(Math.PI * 0.5)
-
+    createGrassGeometry() {
         const poisnts = new Float32Array([
             -0.01, 0, 0,
             0.01, 0, 0,
@@ -87,37 +78,60 @@ export default class Grass {
             4, 3, 5,
         ]
 
-        const grassBufferGeometry = new THREE.BufferGeometry()
-        grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(poisnts, 3))
-        grassBufferGeometry.setIndex( indeces )
-        grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+        this.grassBufferGeometry = new THREE.BufferGeometry()
+        this.grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(poisnts, 3))
+        this.grassBufferGeometry.setIndex( indeces )
+        this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+    }
+    createGrass() {
+        const count = 100000
+        const size = 10
+        const countXY = {
+            x: 300,
+            y: 300,
+        }
+        const groundPoints = new THREE.Float32BufferAttribute(count * 3, 3)
+
+        const groundReference = new THREE.PlaneBufferGeometry( size, size, countXY.x, countXY.y)
+        groundReference.rotateX(Math.PI * 0.5)
 
 
-
-
-        const instancedGrassMesh = new THREE.InstancedMesh( grassBufferGeometry, this.grassMaterial, count );
+        const instancedGrassMesh = new THREE.InstancedMesh( this.grassBufferGeometry, this.grassMaterial, count );
         
         const dummy = new THREE.Object3D()
-        
+        const PI = Math.PI
+
         for ( let i = 0 ; i < count; i++ ) {
             const scale = 0.5 + Math.random() * 0.5
+
+            const r = size * 0.5* Math.sqrt(Math.random())
+            const theta = Math.random() * 2 * PI
+
+            const x = 0 + r * Math.cos(theta)
+            const z = 0 + r * Math.sin(theta)
+
             dummy.position.set(
-                (Math.random() - 0.5) * size,
+                x,
                 0,
-                (Math.random() - 0.5) * size
+                z
             )
+            groundPoints.setXYZ(i, x, 0, z)
+
             dummy.scale.setScalar( scale + 0.4 );
             dummy.rotation.y = Math.random() * Math.PI
             dummy.updateMatrix()
             instancedGrassMesh.setMatrixAt( i, dummy.matrix )
         
         }
+        instancedGrassMesh.instanceMatrix.needsUpdate = true
+        const ground = new THREE.BufferGeometry()
+        ground.setAttribute('position', groundPoints)
+
         
-        instancedGrassMesh.instanceMatrix.needsUpdate = true;
 
         const groundMaterial = new THREE.MeshBasicMaterial({color: '#004400', side: THREE.DoubleSide})
         const groundMesh = new THREE.Mesh(
-            groundReference,
+            ground,
             groundMaterial
         )
         
