@@ -27,10 +27,11 @@ void main() {
     sun = clamp(sun, 0.0, 1.0);
 
     // baseColor
-    baseColor *= mix(0.6, 1.1, vPosition.y);
+    baseColor *= mix(0.6, 1.1, vPosition.y * 2.0 - 1.0);
     vec3 finalColor = mix( vec3(0.23, 0.23, 0.23), baseColor, shadow );
     finalColor = mix( finalColor, uColor2, (1.0 - sun) * 0.2 + vStaticNoise );
     
     
-    gl_FragColor = vec4( finalColor + abs(cos(vNoise * 50.0) * vNoise * 2.0), 1.0); 
+    gl_FragColor = vec4( finalColor + abs(cos(vNoise * 500.0) * vNoise * 2.0), 1.0); 
+    gl_FragColor = vec4( finalColor - abs(cos(vStaticNoise * 20.0)) * 0.08 - vNoise * 0.1, 1.0); 
 }

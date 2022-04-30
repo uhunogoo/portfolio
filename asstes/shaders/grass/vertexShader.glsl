@@ -88,14 +88,14 @@ void main() {
 	// static random rotation
 	mvPosition.xz += mix( 0.0, stepY * 0.02, dispArea * (((1.0 + sin(angle * 50.0)) / 2.0)));
 	// Noise spirale
-	mvPosition.x += noise * stepY * 0.05 * (1.0 - dispArea);
+	mvPosition.x += noise * stepY * 0.1 * (1.0 - dispArea);
 	// Move from center
 	mvPosition.xz *= mix(1.0, 1.0 + ((1.0 + cos( angle * 50.0 )) / 2.0) * disp * stepY * 4.6, dispArea);
     
     vec4 modelViewPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * modelViewPosition;
 
-    vNoise = disp;
+    vNoise = noise;
     vStaticNoise = staticNoise;
     vNormal = normal;
     vPosition = mvPosition.xyz;
