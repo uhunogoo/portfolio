@@ -128,10 +128,13 @@ void main() {
     vec3 color_3 = uColor3;
     vec3 mixedColor = mix( color_1, color_2, fire - strength * 0.3 );
     mixedColor = mix( mixedColor, color_3, activePath * noise * 10.0 );
+    mixedColor = clamp( mixedColor, vec3(0.0), vec3(1.0) );
 
     // final
-    vec3 mask = vec3( fire);
+    float mask = clamp( side * fire, 0.0, 1.0 );
 
-    gl_FragColor = vec4( mixedColor, side * fire);
+    if (mask < 0.1) discard;
+
+    gl_FragColor = vec4( mixedColor, mask);
     // gl_FragColor = vec4( vec3( noise + activePath ), side);
 }

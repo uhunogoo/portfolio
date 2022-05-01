@@ -17,9 +17,9 @@ export default class World {
             // Setup
             this.sky = new Skybox()
             this.grass = new Grass()
-            this.sword = new Sword()
-            this.fire = new Fire()
-            this.stones = new Stones()
+            // this.sword = new Sword()
+            // this.fire = new Fire()
+            // this.stones = new Stones()
             
             this.environment = new Environment()
         })
@@ -30,9 +30,6 @@ export default class World {
         }
         if(this.fire) {
             this.fire.update()
-        }
-        if(this.sky) {
-            this.sky.update()
         }
     }
 }

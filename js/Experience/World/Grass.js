@@ -21,8 +21,8 @@ export default class Grass {
         
         this.customUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#32b859') },
-            uColor2: { value: new THREE.Color('#63ca4e') },
+            uColor1: { value: new THREE.Color('#63c569') },
+            uColor2: { value: new THREE.Color('#285332') },
         }
         this.materials()
         this.createGrassGeometry()
@@ -53,7 +53,11 @@ export default class Grass {
         }
     }
     createGrassGeometry() {
-        const poisnts = new Float32Array([
+        const count = 90000
+        const size = 10
+
+        // DEFAULTS
+        const points = new Float32Array([
             -0.01, 0, 0,
             0.01, 0, 0,
             
@@ -71,33 +75,9 @@ export default class Grass {
             
             0.5, 1.0
         ])
-        const indeces = [
-            0, 1, 2, 
-            2, 0, 3,
-            3, 2, 4,
-            4, 3, 5,
-        ]
+        const offset = []
 
-        this.grassBufferGeometry = new THREE.BufferGeometry()
-        this.grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(poisnts, 3))
-        this.grassBufferGeometry.setIndex( indeces )
-        this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
-    }
-    createGrass() {
-        const count = 100000
-        const size = 10
-        const countXY = {
-            x: 300,
-            y: 300,
-        }
-        const groundPoints = new THREE.Float32BufferAttribute(count * 3, 3)
-
-        const groundReference = new THREE.PlaneBufferGeometry( size, size, countXY.x, countXY.y)
-        groundReference.rotateX(Math.PI * 0.5)
-
-
-        const instancedGrassMesh = new THREE.InstancedMesh( this.grassBufferGeometry, this.grassMaterial, count );
-        
+        // Transform
         const dummy = new THREE.Object3D()
         const PI = Math.PI
 
@@ -110,45 +90,25 @@ export default class Grass {
             const x = 0 + r * Math.cos(theta)
             const z = 0 + r * Math.sin(theta)
 
-            dummy.position.set(
-                x,
-                0,
-                z
-            )
-            groundPoints.setXYZ(i, x, 0, z)
+            offset.push( x, 0, z )
 
-            dummy.scale.setScalar( scale + 0.4 );
-            dummy.rotation.y = Math.random() * Math.PI
-            dummy.updateMatrix()
-            instancedGrassMesh.setMatrixAt( i, dummy.matrix )
-        
+            // dummy.scale.setScalar( scale );
+            // dummy.rotation.x = (Math.random() - 0.5) * PI * 0.1
+            // dummy.rotation.y = (Math.random() - 0.5) * PI
+            // dummy.updateMatrix()
         }
-        instancedGrassMesh.instanceMatrix.needsUpdate = true
-        const ground = new THREE.BufferGeometry()
-        ground.setAttribute('position', groundPoints)
+        console.log(offset)
 
+        this.grassBufferGeometry = new THREE.InstancedBufferGeometry()
+        this.grassBufferGeometry.instanceCount = count
         
-
-        const groundMaterial = new THREE.MeshBasicMaterial({color: '#004400', side: THREE.DoubleSide})
-        const groundMesh = new THREE.Mesh(
-            ground,
-            groundMaterial
-        )
-        
-
-        // ground deformation
-        groundMaterial.onBeforeCompile = (shader) => {
-            shader.vertexShader = shader.vertexShader.replace(
-                '#include <begin_vertex>',
-                `
-                    #include <begin_vertex>
-                    transformed.y = (1.0 - smoothstep( 0.0, 3.5, length( transformed.xz * 0.5) )) * 1.5;
-                `
-            )
-        }
-
-        this.scene.add( instancedGrassMesh, groundMesh )
-        
+        this.grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( points ), 3))
+        this.grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(points, 3))
+        // this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+    }
+    createGrass() {
+        const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial );
+        this.scene.add( instancedGrassMesh )
     }
     update() {
         this.customUniform.uTime.value = this.experience.time.elapsed / 1000

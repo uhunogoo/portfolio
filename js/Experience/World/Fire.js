@@ -49,20 +49,19 @@ export default class Fire {
         })
         
         const particlesMesh = new THREE.Points( geometry, swordParticlesMaterial )
-        particlesMesh.position.y = 1.95
+        particlesMesh.position.y = 0.4
         
         // Generate fire around the sword
         // const fireGeometry
         const swordFireMaterial = new THREE.ShaderMaterial({
             uniforms: this.fireUniform,
             transparent: true,
-            depthWrite: false,
             side: THREE.DoubleSide,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
         })
         const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
-        fireMesh.position.y = 1.95
+        fireMesh.position.y = 0.4
 
         this.scene.add(particlesMesh, fireMesh)
 

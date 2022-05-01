@@ -43,17 +43,12 @@ export default class Sword {
         this.resources.items.metalTextureNormal.repeat.set(1.12, 1.12)
         this.resources.items.metalTextureNormal.wrapS = THREE.RepeatWrapping
         this.resources.items.metalTextureNormal.wrapT = THREE.RepeatWrapping
-        
-        this.resources.items.metalTextureRoughness.repeat.set(1.12, 1.12)
-        this.resources.items.metalTextureRoughness.wrapS = THREE.RepeatWrapping
-        this.resources.items.metalTextureRoughness.wrapT = THREE.RepeatWrapping
 
 
         // Create materials
         this.metalMaterial = new THREE.MeshStandardMaterial({
-            color: '#e5e5e5',
+            color: '#fefefe',
             roughness: 1,
-            // roughnessMap: this.resources.items.metalTextureRoughness,
             normalMap: this.resources.items.metalTextureNormal,
             metalness: 0.0
         })
@@ -98,7 +93,7 @@ export default class Sword {
         // Group parameters
         this.group.add(knife, handle, garda)
         this.group.scale.set(0.3, 0.3, 0.3)
-        this.group.position.y = 2
+        this.group.position.y = 0.5
         this.group.rotation.y = Math.PI
 
 

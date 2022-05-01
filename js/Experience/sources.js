@@ -3,23 +3,13 @@ export default [
     {
         name: 'runesTexture',
         type: 'texture',
-        path: '/asstes/textures/runes/runes.jpg?url'
+        path: '/asstes/textures/runes/runes.png?url'
     },
     // METAL
-    {
-        name: 'metalTextureRoughness',
-        type: 'texture',
-        path: '/asstes/textures/metal/metal_roughness.jpg?url'
-    },
     {
         name: 'metalTextureNormal',
         type: 'texture',
         path: '/asstes/textures/metal/metal_normal.jpg?url'
-    },
-    {
-        name: 'metalTextureDisplacement>',
-        type: 'texture',
-        path: '/asstes/textures/metal/metal_displacement.jpg?url'
     },
     // WOOD
     {

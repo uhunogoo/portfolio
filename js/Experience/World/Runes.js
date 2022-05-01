@@ -14,7 +14,7 @@ export default class Stones {
         this.parameters = {
             radius: 2,
             theta: Math.PI * 0.5,
-            yPosition: 2
+            yPosition: 0.4
         }
 
         // Debug
@@ -30,31 +30,36 @@ export default class Stones {
         runeTexture.minFilter = THREE.LinearFilter
 
         const shape = new THREE.PlaneBufferGeometry( this.parameters.radius, this.parameters.radius )
-        const shapeMaterial = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide , map: runeTexture, transparent: true, depthWrite: false })
-        shapeMaterial.onBeforeCompile = (shader) => {
-            shader.uniforms.uCircle = { value: new THREE.Vector2(0, 0) }
-            shader.fragmentShader = shader.fragmentShader.replace(
-                '#include <common>',
-                `
-                    uniform vec2 uCircle;
-                    #include <common>
-                `
-            )
-            shader.fragmentShader = shader.fragmentShader.replace(
-                '#include <map_fragment>',
-                `
-                    vec4 sampledDiffuseColor = texture2D( map, vUv );
-                    diffuseColor *= vec4( vec3(0.0, 0.0, 1.0), 1.0 );
-                    diffuseColor.a = (1.0 - sampledDiffuseColor.r);
+        const shapeMaterial = new THREE.MeshBasicMaterial({ 
+            side: THREE.DoubleSide , 
+            map: runeTexture,
+            alphaTest: 0.01,
+            transparent: true,
+        })
+        // shapeMaterial.onBeforeCompile = (shader) => {
+        //     shader.uniforms.uCircle = { value: new THREE.Vector2(0, 0) }
+        //     shader.fragmentShader = shader.fragmentShader.replace(
+        //         '#include <common>',
+        //         `
+        //             uniform vec2 uCircle;
+        //             #include <common>
+        //         `
+        //     )
+        //     shader.fragmentShader = shader.fragmentShader.replace(
+        //         '#include <map_fragment>',
+        //         `
+        //             vec4 sampledDiffuseColor = texture2D( map, vUv );
+        //             diffuseColor *= vec4( vec3(0.0, 0.0, 1.0), 1.0 );
+        //             diffuseColor.a = (1.0 - sampledDiffuseColor.r);
                     
-                    // float circle1 = step(uCircle.x, abs(distance(vUv, vec2(0.5)) - uCircle.y));
-                    // float circle2 = distance( vUv, vec2(0.5));
+        //             // float circle1 = step(uCircle.x, abs(distance(vUv, vec2(0.5)) - uCircle.y));
+        //             // float circle2 = distance( vUv, vec2(0.5));
                     
-                    // diffuseColor = vec4( vec3(0.0, 0.0, 1.0), 1.0 );
-                    // diffuseColor.a = (1.0 - circle1) * (1.0 - sampledDiffuseColor.r);
-                `
-            )
-        }
+        //             // diffuseColor = vec4( vec3(0.0, 0.0, 1.0), 1.0 );
+        //             // diffuseColor.a = (1.0 - circle1) * (1.0 - sampledDiffuseColor.r);
+        //         `
+        //     )
+        // }
 
         this.runeMesh = new THREE.Mesh( shape, shapeMaterial )
 
