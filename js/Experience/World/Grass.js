@@ -21,7 +21,7 @@ export default class Grass {
         
         this.customUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#63c569') },
+            uColor1: { value: new THREE.Color('#58ad5d') },
             uColor2: { value: new THREE.Color('#285332') },
         }
         this.materials()
@@ -53,7 +53,7 @@ export default class Grass {
         }
     }
     createGrassGeometry() {
-        const count = 90000
+        const count = 100000
         const size = 10
 
         // DEFAULTS
@@ -66,6 +66,11 @@ export default class Grass {
 
             0, 0.25, 0,
         ])
+        const indeces = [
+            0, 1, 2, 
+            2, 0, 3,
+            3, 2, 4,
+        ]
         const uv = new Float32Array([
             0.0, 0.0,
             1.0, 0.0,
@@ -76,11 +81,14 @@ export default class Grass {
             0.5, 1.0
         ])
         const offset = []
+        const scales = []
+        const rotations = []
 
         // Transform
         const dummy = new THREE.Object3D()
         const PI = Math.PI
 
+        // Calculation
         for ( let i = 0 ; i < count; i++ ) {
             const scale = 0.5 + Math.random() * 0.5
 
@@ -92,19 +100,26 @@ export default class Grass {
 
             offset.push( x, 0, z )
 
-            // dummy.scale.setScalar( scale );
-            // dummy.rotation.x = (Math.random() - 0.5) * PI * 0.1
-            // dummy.rotation.y = (Math.random() - 0.5) * PI
-            // dummy.updateMatrix()
+            // matrix
+            
+            
+            scales.push( scale )
+            rotations.push( 
+                (Math.random() - 0.5) * PI * 0.1,
+                (Math.random() - 0.5) * PI
+            )
         }
-        console.log(offset)
-
+        // Create grass instance 
         this.grassBufferGeometry = new THREE.InstancedBufferGeometry()
         this.grassBufferGeometry.instanceCount = count
         
-        this.grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( points ), 3))
+        // Apply attributes
         this.grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(points, 3))
-        // this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+        this.grassBufferGeometry.setIndex( indeces )
+        this.grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( offset ), 3))
+        this.grassBufferGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute( new Float32Array( scales ), 1))
+        this.grassBufferGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute( new Float32Array( rotations ), 2))
+        this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
     }
     createGrass() {
         const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial );

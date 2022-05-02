@@ -25,6 +25,7 @@ export default class Skybox {
         const that = this
         const sky = new Sky()
         sky.castShadow = true
+        sky.receiveShadow = true
         sky.scale.setScalar( 100)
         this.scene.add( sky )
 

@@ -17,8 +17,8 @@ export default class World {
             // Setup
             this.sky = new Skybox()
             this.grass = new Grass()
-            // this.sword = new Sword()
-            // this.fire = new Fire()
+            this.sword = new Sword()
+            this.fire = new Fire()
             // this.stones = new Stones()
             
             this.environment = new Environment()

@@ -10,6 +10,7 @@ export default class Sword {
 
         this.loadMaterials()
         this.createSword()
+        this.createPostament()
 
         this.animation()
     }
@@ -46,11 +47,9 @@ export default class Sword {
 
 
         // Create materials
-        this.metalMaterial = new THREE.MeshStandardMaterial({
-            color: '#fefefe',
-            roughness: 1,
+        this.metalMaterial = new THREE.MeshBasicMaterial({
+            color: '#e5e5e5',
             normalMap: this.resources.items.metalTextureNormal,
-            metalness: 0.0
         })
 
         this.woodMaterial = new THREE.MeshStandardMaterial({
@@ -68,6 +67,14 @@ export default class Sword {
             normalMap: this.resources.items.goldTextureNormal,
         })
         
+    }
+    createPostament() {
+        const group = new THREE.Group()
+        const postament = this.resources.items.postamentModel.scene.children
+        postament.forEach(el => group.add( el ))
+        group.scale.setScalar(0.3)
+        group.position.y = 0.04
+        this.scene.add( group )
     }
     createSword() {
         this.group = new THREE.Group()
@@ -93,7 +100,7 @@ export default class Sword {
         // Group parameters
         this.group.add(knife, handle, garda)
         this.group.scale.set(0.3, 0.3, 0.3)
-        this.group.position.y = 0.5
+        this.group.position.y = 2
         this.group.rotation.y = Math.PI
 
 
@@ -105,7 +112,7 @@ export default class Sword {
             repeat: -1,
             defaults: {
                 ease: 'power3.inOut',
-                duration: 0.8,
+                duration: 1.2,
             }
         })
         tl.to(this.group.position, {

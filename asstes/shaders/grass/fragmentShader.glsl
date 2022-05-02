@@ -1,5 +1,5 @@
 varying vec2 vUv;
-varying float vBright;
+varying float vNoise;
 
 uniform vec3 uColor1;
 uniform vec3 uColor2;
@@ -13,5 +13,5 @@ void main() {
     vec3 finalColor = mix( color1, color2, abs( 1.0 - length(st.x - 0.5) ) * (1.0 - st.y * 2.0) );
     
     
-    gl_FragColor = vec4( finalColor, 1.0); 
+    gl_FragColor = vec4( finalColor - vNoise * 0.08, 1.0); 
 }

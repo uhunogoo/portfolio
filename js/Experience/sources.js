@@ -44,9 +44,9 @@ export default [
         type: 'gltfLoader',
         path: '/asstes/geometry/knife.glb?url'
     },
-    // {
-    //     name: 'stoneModel',
-    //     type: 'gltfLoader',
-    //     path: '/asstes/geometry/stone.glb?url'
-    // },
+    {
+        name: 'postamentModel',
+        type: 'gltfLoader',
+        path: '/asstes/geometry/postament-2.glb?url'
+    },
 ]
