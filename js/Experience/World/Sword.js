@@ -70,9 +70,14 @@ export default class Sword {
     }
     createPostament() {
         const group = new THREE.Group()
-        const postament = this.resources.items.postamentModel.scene.children
-        postament.forEach(el => group.add( el ))
-        group.scale.setScalar(0.3)
+        const postament = this.resources.items.postamentModel.scene.children[0].geometry
+        postament.castShadow = true
+        postament.receiveShadow = true
+        const postamentMaterial = new THREE.MeshStandardMaterial({})
+        const postamentMesh = new THREE.Mesh( postament, postamentMaterial )
+        group.add( postamentMesh )
+        // postament.forEach(el => )
+        group.scale.setScalar(0.45)
         group.position.y = 0.04
         this.scene.add( group )
     }
@@ -90,12 +95,12 @@ export default class Sword {
         knife.material = this.metalMaterial.clone()
         handle.material = this.woodMaterial.clone()
 
-        garda.castShadow = true
-        garda.receiveShadow = true
-        knife.castShadow = true
-        knife.receiveShadow = true
-        handle.castShadow = true
-        handle.receiveShadow = true
+        // garda.castShadow = true
+        // garda.receiveShadow = true
+        // knife.castShadow = true
+        // knife.receiveShadow = true
+        // handle.castShadow = true
+        // handle.receiveShadow = true
 
         // Group parameters
         this.group.add(knife, handle, garda)

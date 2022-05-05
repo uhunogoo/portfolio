@@ -41,10 +41,10 @@ export default class Renderer {
             }`
         )
 
-        // this.instance.shadowMap.enabled = true
-        // this.instance.shadowMap.type = THREE.PCFSoftShadowMap
-        // this.instance.shadowMap.autoUpdate = false
-        // this.instance.shadowMap.needsUpdate = true
+        this.instance.shadowMap.enabled = true
+        this.instance.shadowMap.type = THREE.PCFSoftShadowMap
+        this.instance.shadowMap.autoUpdate = false
+        this.instance.shadowMap.needsUpdate = true
 
         
         // Debug renderer
