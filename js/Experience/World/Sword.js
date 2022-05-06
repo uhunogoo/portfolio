@@ -73,12 +73,15 @@ export default class Sword {
         const postament = this.resources.items.postamentModel.scene.children[0].geometry
         postament.castShadow = true
         postament.receiveShadow = true
-        const postamentMaterial = new THREE.MeshStandardMaterial({})
+        console.log( postament )
+        const postamentMaterial = new THREE.MeshStandardMaterial({
+            color: '#fefefe',
+            shadowSide: THREE.DoubleSide
+        })
         const postamentMesh = new THREE.Mesh( postament, postamentMaterial )
         group.add( postamentMesh )
-        // postament.forEach(el => )
         group.scale.setScalar(0.45)
-        group.position.y = 0.04
+        group.position.y = 2.1
         this.scene.add( group )
     }
     createSword() {
@@ -105,7 +108,7 @@ export default class Sword {
         // Group parameters
         this.group.add(knife, handle, garda)
         this.group.scale.set(0.3, 0.3, 0.3)
-        this.group.position.y = 2
+        this.group.position.y = 2.4
         this.group.rotation.y = Math.PI
 
 
