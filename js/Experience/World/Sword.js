@@ -73,10 +73,11 @@ export default class Sword {
         const postament = this.resources.items.postamentModel.scene.children[0].geometry
         postament.castShadow = true
         postament.receiveShadow = true
-        console.log( postament )
-        const postamentMaterial = new THREE.MeshStandardMaterial({
-            color: '#fefefe',
-            shadowSide: THREE.DoubleSide
+        
+        this.resources.items.towerTexture.flipY = false
+        this.resources.items.towerTexture.encoding = THREE.sRGBEncoding
+        const postamentMaterial = new THREE.MeshBasicMaterial({
+            map: this.resources.items.towerTexture
         })
         const postamentMesh = new THREE.Mesh( postament, postamentMaterial )
         group.add( postamentMesh )

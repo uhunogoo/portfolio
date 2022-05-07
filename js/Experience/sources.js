@@ -5,6 +5,12 @@ export default [
         type: 'texture',
         path: '/asstes/textures/runes/runes.png?url'
     },
+    //  TOWER
+    {
+        name: 'towerTexture',
+        type: 'texture',
+        path: '/asstes/textures/tower/baked.jpg?url'
+    },
     // METAL
     {
         name: 'metalTextureNormal',
