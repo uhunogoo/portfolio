@@ -52,7 +52,6 @@ export default class Skybox {
 
             const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation )
             const theta = THREE.MathUtils.degToRad( effectController.azimuth )
-            console.log(sky.material.fragment)
             sun.setFromSphericalCoords( 1, phi, theta )
 
             uniforms[ 'sunPosition' ].value.copy( sun )

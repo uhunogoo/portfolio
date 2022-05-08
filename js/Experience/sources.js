@@ -1,16 +1,4 @@
 export default [
-    //  Runes
-    {
-        name: 'runesTexture',
-        type: 'texture',
-        path: '/asstes/textures/runes/runes.png?url'
-    },
-    //  TOWER
-    {
-        name: 'towerTexture',
-        type: 'texture',
-        path: '/asstes/textures/tower/baked.jpg?url'
-    },
     // METAL
     {
         name: 'metalTextureNormal',
@@ -50,8 +38,14 @@ export default [
         type: 'gltfLoader',
         path: '/asstes/geometry/knife.glb?url'
     },
+    //  TOWER
     {
-        name: 'postamentModel',
+        name: 'towerTexture',
+        type: 'texture',
+        path: '/asstes/textures/tower/baked.jpg?url'
+    },
+    {
+        name: 'towerModel',
         type: 'gltfLoader',
         path: '/asstes/geometry/postament-2.glb?url'
     },

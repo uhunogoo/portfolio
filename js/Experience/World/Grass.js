@@ -54,7 +54,7 @@ export default class Grass {
     }
     createGrassGeometry() {
         const count = 100000
-        const size = 10
+        const size = 12
 
         // DEFAULTS
         const points = new Float32Array([
@@ -89,25 +89,27 @@ export default class Grass {
         const PI = Math.PI
 
         // Calculation
-        for ( let i = 0 ; i < count; i++ ) {
+        let i = 0
+        while (i < count) {
+        // for ( let i = 0 ; i < count; i++ ) {
             const scale = 0.5 + Math.random() * 0.5
 
-            const r = size * 0.5* Math.sqrt(Math.random())
-            const theta = Math.random() * 2 * PI
-
-            const x = 0 + r * Math.cos(theta)
-            const z = 0 + r * Math.sin(theta)
-
-            offset.push( x, 0, z )
-
-            // matrix
-            
-            
-            scales.push( scale )
-            rotations.push( 
-                (Math.random() - 0.5) * PI * 0.1,
-                (Math.random() - 0.5) * PI
-            )
+            const r = size * 0.5 * Math.random()
+            if( r > 3 ) {
+                const theta = Math.random() * 2 * PI
+                
+                const x = r * Math.cos(theta)
+                const z = r * Math.sin(theta)
+    
+                offset.push( x, 0, z )
+                scales.push( scale )
+                rotations.push( 
+                    (Math.random() - 0.5) * PI * 0.1,
+                    (Math.random() - 0.5) * PI
+                )
+                // increase 
+                i++
+            }
         }
         // Create grass instance 
         this.grassBufferGeometry = new THREE.InstancedBufferGeometry()

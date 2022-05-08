@@ -2,7 +2,7 @@ import Experience from '../Experience'
 import Environment from './Environment'
 import Fire from './Fire'
 import Grass from './Grass'
-import Stones from './Runes'
+import Tower from './Tower'
 import Sword from './Sword'
 import Skybox from './Skybox'
 
@@ -17,9 +17,9 @@ export default class World {
             // Setup
             this.sky = new Skybox()
             this.grass = new Grass()
+            this.stones = new Tower()
             this.sword = new Sword()
             this.fire = new Fire()
-            // this.stones = new Stones()
             
             this.environment = new Environment()
         })

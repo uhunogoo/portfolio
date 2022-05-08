@@ -48,15 +48,15 @@ float snoise(vec2 v){
 void main(){
 	float noise = ( snoise( offset.xz / vec2(2.0, 4.0) + vec2(0.0, uTime * 0.5) ) );
 	float staticNoise = 1.0 - abs( snoise( offset.xz / vec2(5.0, 10.0) ) );
+	float staticNoise2 = 1.0 - snoise( offset.xz / vec2(0.5, 0.8) );
 
 	vec3 st = position * scale;
 	st *= 1.0 + staticNoise;
+	st *= staticNoise2 * 0.5;
 	st.y -= 0.2;
 	st.xz *= get2dRotateMatrix( rotation.y );
 	st += offset;
 	vec4 modelPosition = modelMatrix * vec4(st, 1.0);
-
-	
 
 
 	modelPosition.xz *= get2dRotateMatrix( noise * uv.y * 0.01 );

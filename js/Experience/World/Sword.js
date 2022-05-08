@@ -10,7 +10,6 @@ export default class Sword {
 
         this.loadMaterials()
         this.createSword()
-        this.createPostament()
 
         this.animation()
     }
@@ -49,7 +48,6 @@ export default class Sword {
         // Create materials
         this.metalMaterial = new THREE.MeshBasicMaterial({
             color: '#e5e5e5',
-            normalMap: this.resources.items.metalTextureNormal,
         })
 
         this.woodMaterial = new THREE.MeshStandardMaterial({
@@ -68,23 +66,7 @@ export default class Sword {
         })
         
     }
-    createPostament() {
-        const group = new THREE.Group()
-        const postament = this.resources.items.postamentModel.scene.children[0].geometry
-        postament.castShadow = true
-        postament.receiveShadow = true
-        
-        this.resources.items.towerTexture.flipY = false
-        this.resources.items.towerTexture.encoding = THREE.sRGBEncoding
-        const postamentMaterial = new THREE.MeshBasicMaterial({
-            map: this.resources.items.towerTexture
-        })
-        const postamentMesh = new THREE.Mesh( postament, postamentMaterial )
-        group.add( postamentMesh )
-        group.scale.setScalar(0.45)
-        group.position.y = 2.1
-        this.scene.add( group )
-    }
+    
     createSword() {
         this.group = new THREE.Group()
         this.sword = this.resources.items.swordModel
