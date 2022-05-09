@@ -21,7 +21,7 @@ export default class Grass {
         
         this.customUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#58ad5d') },
+            uColor1: { value: new THREE.Color('#adaa58') },
             uColor2: { value: new THREE.Color('#285332') },
         }
         this.materials()
@@ -95,7 +95,7 @@ export default class Grass {
             const scale = 0.5 + Math.random() * 0.5
 
             const r = size * 0.5 * Math.random()
-            if( r > 3 ) {
+            if( r > 2 ) {
                 const theta = Math.random() * 2 * PI
                 
                 const x = r * Math.cos(theta)

@@ -61,7 +61,7 @@ void main(){
 
 	modelPosition.xz *= get2dRotateMatrix( noise * uv.y * 0.01 );
 	// modelPosition.xz *= noise ;
-	modelPosition.xz -= noise * step(0.6, uv.y) * 0.04;
+	modelPosition.xz += noise * step(0.6, uv.y) * 0.04;
 
 
     vec4 viewPosition = viewMatrix * modelPosition;
