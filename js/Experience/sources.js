@@ -40,9 +40,19 @@ export default [
     },
     //  TOWER
     {
-        name: 'towerTexture',
+        name: 'towerTexture1',
         type: 'texture',
-        path: '/asstes/textures/tower/baked.jpg?url'
+        path: '/asstes/textures/tower/baked-1.jpg?url'
+    },
+    {
+        name: 'towerTexture2',
+        type: 'texture',
+        path: '/asstes/textures/tower/baked-2.jpg?url'
+    },
+    {
+        name: 'sandTexture',
+        type: 'texture',
+        path: '/asstes/textures/runes/sand.jpg?url'
     },
     {
         name: 'towerModel',

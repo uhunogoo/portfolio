@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import gsap from 'gsap'
+// import gsap from 'gsap'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+// import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls'
 
 import Experience from './Experience'
-import { fromPairs } from 'lodash-es'
 
 export default class Camera {
     constructor() {
@@ -16,67 +16,34 @@ export default class Camera {
         
         // Wait for environment
         this.parameters = {}
-        this.resources.on('ready', () => {
-            this.animation()
-        })
-
 
         // call method
         this.setInstance()
-        this.setControl()
+        // this.setControl()
     }
     setInstance() {
-        this.parameters.lookAt = new THREE.Vector3(0, 1, 0)
+        this.parameters.lookAt = new THREE.Vector3(0, 3, 0)
 
         // Base camera
         this.instance = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.instance.position.set(4, 2, 4)
+        this.instance.position.set(1, 3, 1)
         this.instance.lookAt( this.parameters.lookAt )
         this.scene.add(this.instance)
-        
-        console.log(this.instance)
     }
     setControl() {
         this.controls = new OrbitControls(this.instance, this.canvas)
         this.controls.enableDamping = true
+        this.controls.target = new THREE.Vector3( 0, this.instance.position.y, 0 )
     }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
         this.instance.updateProjectionMatrix()
     }
-    animation() {
-        this.tl = gsap.timeline({
-            yoyo: true,
-            repeat: -1,
-            delay: 3,
-            defaults: {
-                duration: 2,
-                ease: 'power2.inOut'
-            }
-        })
-        // step 1
-        this.tl.from(this.parameters.lookAt, {
-            y: 3,
-        }, 0)
-        this.tl.from(this.instance.position, {
-            x: -2,
-            y: 4,
-            z: 1,
-        }, 0)
-        // step 2
-        this.tl.to(this.parameters.lookAt, {
-            y: '-=1',
-        })
-        this.tl.to(this.instance.position, {
-            x: 2,
-            y: 2,
-            z: '-=4',
-        }, '<')
-
-    }
 
     update() {
-        this.controls.update()
-        this.instance.lookAt( this.parameters.lookAt )
+        // this.controls.update()
+        if(this.instance) {
+            this.instance.lookAt( this.parameters.lookAt )
+        }
     }
 }

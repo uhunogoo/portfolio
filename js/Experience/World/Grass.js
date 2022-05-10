@@ -13,25 +13,31 @@ export default class Grass {
         this.resources = this.experience.resources
         this.debug = this.experience.debug
 
-        // Debug
-        if (this.debug.active) {
-            this.debugFolder = this.debug.ui.addFolder('Grass')
-            this.debugFolder.close()
+        // Parameters
+        this.grassParameters = {
+            count: 100000,
+            size: 12
         }
-        
         this.customUniform = {
             uTime: { value: 0 },
             uColor1: { value: new THREE.Color('#adaa58') },
             uColor2: { value: new THREE.Color('#285332') },
         }
+
+        // Debug
+        if (this.debug.active) {
+            this.debugFolder = this.debug.ui.addFolder('Grass')
+            this.debugFolder.close()
+        }
+
         this.materials()
         this.createGrassGeometry()
         this.createGrass()
+        this.createFloor()
     }
     materials () {
         this.grassMaterial = new THREE.ShaderMaterial({
             uniforms: this.customUniform,
-            transparent: true,
             side: THREE.DoubleSide,
             vertexShader,
             fragmentShader,
@@ -53,8 +59,7 @@ export default class Grass {
         }
     }
     createGrassGeometry() {
-        const count = 100000
-        const size = 12
+        const {size, count} = this.grassParameters
 
         // DEFAULTS
         const points = new Float32Array([
@@ -122,6 +127,28 @@ export default class Grass {
         this.grassBufferGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute( new Float32Array( scales ), 1))
         this.grassBufferGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute( new Float32Array( rotations ), 2))
         this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+    }
+    createFloor() {
+        const floorGeometry = new THREE.CircleBufferGeometry( this.grassParameters.size / 2, 80, 0, Math.PI * 2 )
+        
+        this.resources.items.sandTexture.encoding = THREE.sRGBEncoding
+        this.resources.items.sandTexture.repeat.set(6, 6)
+        this.resources.items.sandTexture.wrapS = THREE.RepeatWrapping
+        this.resources.items.sandTexture.wrapT = THREE.RepeatWrapping
+
+        const floorMaterial = new THREE.MeshStandardMaterial({
+            map: this.resources.items.sandTexture
+        })
+        
+        const floor = new THREE.Mesh(
+            floorGeometry,
+            floorMaterial
+        )
+        floor.receiveShadow  = true
+        // Transform
+        floor.rotation.x = -Math.PI / 2
+
+        this.scene.add( floor )
     }
     createGrass() {
         const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial );

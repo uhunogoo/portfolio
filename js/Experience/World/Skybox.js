@@ -33,10 +33,10 @@ export default class Skybox {
 
         /// GUI
         const effectController = {
-            turbidity: 2,
-            rayleigh: 0.33,
-            mieCoefficient: 0.005,
-            mieDirectionalG: 0.8,
+            turbidity: 1.8,
+            rayleigh: 0.263,
+            mieCoefficient: 0.042,
+            mieDirectionalG: 0.975,
             luminance: 1.1,
             elevation: 90,
             azimuth: 180,
