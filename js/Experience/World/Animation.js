@@ -61,6 +61,14 @@ export default class Animation {
             {
                 element: document.querySelector('.point-0'),
                 position: new THREE.Vector3( 0, 1, 0 )
+            },
+            {
+                element: document.querySelector('.point-1'),
+                position: new THREE.Vector3( 0, 3.2, 0 )
+            },
+            {
+                element: document.querySelector('.point-2'),
+                position: new THREE.Vector3( 3, 0.3, -2 )
             }
         ]
     }
@@ -86,7 +94,7 @@ export default class Animation {
     
                 const translateX = screenPosition.x * this.sizes.width * 0.5
                 const translateY = -screenPosition.y * this.sizes.height * 0.5
-                point.element.style.transform = `translate(${translateX}px, ${translateY}px)`
+                point.element.style.transform = `translate(${Math.trunc(translateX)}px, ${Math.trunc(translateY)}px)`
     
             }
         }

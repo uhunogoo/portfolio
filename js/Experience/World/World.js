@@ -1,3 +1,5 @@
+import Stats from 'three/examples/jsm/libs/stats.module'
+
 import Experience from '../Experience'
 import Environment from './Environment'
 import Fire from './Fire'
@@ -12,6 +14,8 @@ export default class World {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
+        this.stats = new Stats()
+        document.body.appendChild( this.stats.dom )
         
         // Wait for environment
         this.resources.on('ready', () => {
@@ -36,5 +40,6 @@ export default class World {
         if(this.animation) {
             this.animation.update()
         }
+        this.stats.update()
     }
 }
