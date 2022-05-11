@@ -4,6 +4,9 @@ html, body {
   padding: 0;
   width: 100%;
 }
+* {
+  box-sizing: border-box;
+}
 #app {
   background: url(/asstes/backgrounds/bg-2.jpg?url) no-repeat;
   background-size: cover;
@@ -31,11 +34,66 @@ html, body {
   content: '%';
 }
 
-.webgl
-{
-    
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+.point {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+.point .lable {
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 30px;
+  position: relative;
+  transition: .3s ease-in-out;
+  transform: scale(0);
+  width: 30px;
+}
+.point.visible .lable {
+  transform: scale(1);
+}
+.point .lable::after {
+  border-radius: 50%;
+  background: #fff;
+  content: '';
+  position: absolute;
+  height: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  top: 50%;
+  width: 100%;
+  transition: .3s ease-in-out;
+}
+.point .lable:hover {
+  transform: scale(1.3);
+}
+.point .lable:hover::after {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+.point .text {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(0.1em);
+  bottom: 0;
+  border-radius: 10px;
+  left: 50%;
+  margin: 0;
+  opacity: 0;
+  padding: 20px;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, 150%);
+  width: 200px;
+}
+.point:hover .text {
+  opacity: 1;
+  transform: translate(-50%, 110%);
 }

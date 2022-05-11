@@ -129,7 +129,7 @@ export default class Grass {
         this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
     }
     createFloor() {
-        const floorGeometry = new THREE.CircleBufferGeometry( this.grassParameters.size / 2, 80, 0, Math.PI * 2 )
+        const floorGeometry = new THREE.CircleBufferGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 )
         
         this.resources.items.sandTexture.encoding = THREE.sRGBEncoding
         this.resources.items.sandTexture.repeat.set(6, 6)
@@ -151,7 +151,12 @@ export default class Grass {
         this.scene.add( floor )
     }
     createGrass() {
-        const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial );
+        const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial )
+        
+        // Bounding sphere for frustumculled 
+        instancedGrassMesh.geometry.computeBoundingSphere()
+        instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
+
         this.scene.add( instancedGrassMesh )
     }
     update() {

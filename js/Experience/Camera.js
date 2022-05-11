@@ -13,13 +13,19 @@ export default class Camera {
         this.scene = this.experience.scene
         this.canvas = this.experience.canvas
         this.resources = this.experience.resources
+        this.debug = this.experience.debug
         
         // Wait for environment
         this.parameters = {}
 
+        // Debug
+        if (this.debug.active) {
+            this.debugFolder = this.debug.ui.addFolder('Camera')
+        }
+
         // call method
         this.setInstance()
-        // this.setControl()
+        this.setControl()
     }
     setInstance() {
         this.parameters.lookAt = new THREE.Vector3(0, 3, 0)
@@ -33,17 +39,17 @@ export default class Camera {
     setControl() {
         this.controls = new OrbitControls(this.instance, this.canvas)
         this.controls.enableDamping = true
-        this.controls.target = new THREE.Vector3( 0, this.instance.position.y, 0 )
+        this.controls.target = this.parameters.lookAt
     }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
         this.instance.updateProjectionMatrix()
     }
-
+    
     update() {
-        // this.controls.update()
-        if(this.instance) {
-            this.instance.lookAt( this.parameters.lookAt )
-        }
+        this.controls.update()
+        // if(this.instance) {
+        //     this.instance.lookAt( this.parameters.lookAt )
+        // }
     }
 }

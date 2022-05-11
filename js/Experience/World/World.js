@@ -15,15 +15,15 @@ export default class World {
         
         // Wait for environment
         this.resources.on('ready', () => {
+            this.animation = new Animation()
             // Setup
             this.sky = new Skybox()
             this.grass = new Grass()
             this.stones = new Tower()
-            this.sword = new Sword()
-            this.fire = new Fire()
+            // this.sword = new Sword()
+            // this.fire = new Fire()
             
             this.environment = new Environment()
-            this.animation = new Animation()
         })
     }
     update() {
@@ -32,6 +32,9 @@ export default class World {
         }
         if(this.fire) {
             this.fire.update()
+        }
+        if(this.animation) {
+            this.animation.update()
         }
     }
 }
