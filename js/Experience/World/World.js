@@ -7,7 +7,7 @@ import Grass from './Grass'
 import Tower from './Tower'
 import Sword from './Sword'
 import Skybox from './Skybox'
-import Animation from './Animation'
+import Animation from '../Animations/Animations'
 
 export default class World {
     constructor() {
@@ -27,7 +27,7 @@ export default class World {
             // this.sword = new Sword()
             // this.fire = new Fire()
             
-            this.environment = new Environment()
+            // this.environment = new Environment()
         })
     }
     update() {

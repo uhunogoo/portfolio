@@ -7,13 +7,7 @@ export default class Tower {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
-        this.debug = this.experience.debug
 
-
-        // Debug
-        if (this.debug.active) {
-            this.debugFolder = this.debug.ui.addFolder('Tower')
-        }
         this.loadMaterials()
         this.generateShape()
     }
@@ -41,13 +35,6 @@ export default class Tower {
         
         towerPart1.material = this.towerMaterial1
         towerPart2.material = this.towerMaterial2
-        towerPart1.castShadow = true
-        towerPart1.receiveShadow = true
-        towerPart2.castShadow = true
-        towerPart2.receiveShadow = true
-
-        // towerPart1.scale.setScalar(0.47)
-        // towerPart2.scale.setScalar(0.47)
         
         tower.add( towerPart1, towerPart2 )
         tower.scale.set( 0.47, 0.47, 0.47 )

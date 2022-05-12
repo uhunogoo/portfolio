@@ -136,7 +136,7 @@ export default class Grass {
         this.resources.items.sandTexture.wrapS = THREE.RepeatWrapping
         this.resources.items.sandTexture.wrapT = THREE.RepeatWrapping
 
-        const floorMaterial = new THREE.MeshStandardMaterial({
+        const floorMaterial = new THREE.MeshBasicMaterial({
             map: this.resources.items.sandTexture
         })
         
@@ -144,7 +144,8 @@ export default class Grass {
             floorGeometry,
             floorMaterial
         )
-        floor.receiveShadow  = true
+        // floor.receiveShadow  = true
+
         // Transform
         floor.rotation.x = -Math.PI / 2
 
@@ -156,7 +157,7 @@ export default class Grass {
         // Bounding sphere for frustumculled 
         instancedGrassMesh.geometry.computeBoundingSphere()
         instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
-
+        
         this.scene.add( instancedGrassMesh )
     }
     update() {

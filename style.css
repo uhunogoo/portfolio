@@ -82,9 +82,12 @@ html, body {
   transform: translate(-50%, -50%) scale(0.9);
 }
 .point .text {
-  background: rgba(255, 255, 255, 0.4);
+  background: #ffffff90;
   bottom: 0;
   border-radius: 10px;
+  color: #2d2d2d;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 400;
   left: 50%;
   margin: 0;
   opacity: 0;
@@ -94,10 +97,10 @@ html, body {
   text-align: center;
   transition: opacity 0.3s ease-out,
               transform 0.3s ease-out;
-  transform: translate(-50%, 150%);
+  transform: translate(-50%, 80%) scale(0.7) skewY(-2deg);
   width: 200px;
 }
 .point:hover .text {
   opacity: 1;
-  transform: translate(-50%, 115%);
+  transform: translate(-50%, 115%) scale(1) skewY(0);
 }

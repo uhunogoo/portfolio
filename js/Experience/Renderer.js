@@ -30,8 +30,8 @@ export default class Renderer {
         this.instance.toneMapping = THREE.LinearToneMapping
         this.instance.toneMappingExposure = 1
         // Shadows
-        this.instance.shadowMap.enabled = true
-        this.instance.shadowMap.type = THREE.PCFSoftShadowMap
+        // this.instance.shadowMap.enabled = true
+        // this.instance.shadowMap.type = THREE.PCFSoftShadowMap
 
         
         // Debug renderer
