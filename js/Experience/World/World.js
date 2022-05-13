@@ -19,7 +19,6 @@ export default class World {
         
         // Wait for environment
         this.resources.on('ready', () => {
-            this.animation = new Animation()
             // Setup
             this.sky = new Skybox()
             this.grass = new Grass()
@@ -28,6 +27,7 @@ export default class World {
             // this.fire = new Fire()
             
             // this.environment = new Environment()
+            this.animation = new Animation()
         })
     }
     update() {

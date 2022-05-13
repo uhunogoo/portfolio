@@ -38,6 +38,7 @@ export default class Camera {
         this.controls.enableDamping = true
         this.controls.target = this.parameters.lookAt
         this.controls.maxPolarAngle = Math.PI * 0.53
+        this.controls.update()
     }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height

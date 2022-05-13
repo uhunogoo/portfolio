@@ -11,80 +11,100 @@ export default class pointsOfInterest {
         this.sizes = this.experience.sizes
         this.scene = this.experience.scene
         this.camera = this.experience.camera.instance
-
-        // every time the camera or objects change position (or every frame)
-        this.camera.updateMatrix()
-        this.camera.updateMatrixWorld()
-        // // this.camera.matrixWorldInverse.invert( this.camera.matrixWorld )
-
-        this.frustum = new THREE.Frustum()
-        this.matrix = new THREE.Matrix4().multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse)
-        this.frustum.setFromProjectionMatrix(this.matrix)
-
+        this.cameraParameters = this.experience.camera.parameters
+        this.raycasterObject = this.scene.children.find( child => child.type === 'Group' )
+        this.dummyVector = new THREE.Vector3()
         // Add parameters
         this.animationComplete = false
         this.raycaster = new THREE.Raycaster()
 
         this.createPoints()
+
+        // document.addEventListener('mousedown', () => {
+        //     const that = this
+        //     function onMouseMove () {
+        //         that.raycasterAnimation()
+        //     }
+        //     document.addEventListener('mousemove', onMouseMove)
+            
+        //     document.addEventListener('mouseup', () => {
+        //         document.removeEventListener('mousemove', onMouseMove)
+        //     })
+        // } )
     }
 
     createPoints() {
         const geometry = new THREE.BoxBufferGeometry(0, 0, 0)
         const material = new THREE.MeshBasicMaterial()
+        this.pointsGroup = new THREE.Group()
         this.points.forEach( point => {
             const mesh = new THREE.Mesh(
                 geometry.clone(),
                 material.clone()
             )
             mesh.position.copy( point.position )
-            this.scene.add(mesh)
+            this.pointsGroup.add(mesh)
 
             const pointLabel = new CSS2DObject( point.element )
             pointLabel.position.set(0, 0, 0 )
             mesh.add( pointLabel )
 
+        })
+        this.labelRenderer = new CSS2DRenderer()
+        this.labelRenderer.setSize( window.innerWidth, window.innerHeight )
+        this.labelRenderer.domElement.style.position = 'absolute'
+        this.labelRenderer.domElement.style.top = '0px'
+        document.body.appendChild( this.labelRenderer.domElement )
 
-            this.labelRenderer = new CSS2DRenderer()
-            this.labelRenderer.setSize( window.innerWidth, window.innerHeight )
-            this.labelRenderer.domElement.style.position = 'absolute'
-            this.labelRenderer.domElement.style.top = '0px'
-            document.body.appendChild( this.labelRenderer.domElement )
+        this.controls = new OrbitControls( this.camera, this.labelRenderer.domElement )
+        this.controls.enableDamping = true
+        this.controls.target = this.cameraParameters.lookAt
+        this.controls.maxPolarAngle = Math.PI * 0.53
+        this.controls.update()
 
-            this.controls = new OrbitControls( this.camera, this.labelRenderer.domElement )
-            this.controls.enableDamping = true
-            this.controls.maxPolarAngle = Math.PI * 0.53
+        this.scene.add(this.pointsGroup)
+    }
+    raycasterAnimation() {
+        this.points.forEach(point => {
+            const isPointVisible = point.element.classList.contains('visible')
+            const coords = point.position.clone()
+            coords.project(this.camera)
+            coords.x.toFixed(2) 
+            coords.y.toFixed(2) 
+            coords.z.toFixed(2)
+            
+            
+            this.raycaster.setFromCamera( coords, this.camera )
+            const intersects = this.raycaster.intersectObjects(this.raycasterObject.children )
+
+            if (intersects.length === 0) {
+                if (!isPointVisible) {
+                    point.element.classList.add('visible')
+                }
+            } else {
+                const intersectionDistance = intersects[0].distance
+                const pointDistance = point.position.distanceTo(this.camera.position)
+
+                if ( intersectionDistance < pointDistance ) {
+                    if (isPointVisible) {
+                        point.element.classList.remove('visible')
+                    }
+                } else {
+                    if (!isPointVisible) {
+                        point.element.classList.add('visible') 
+                    }
+                }
+            }
         })
     }
 
     update() {
+        // CSS2D renderer and OrbitControl
         this.controls.update()
         this.labelRenderer.render( this.scene, this.camera );
-        // for (const point of this.points ) {
-        //     const screenPosition = point.position.clone()
-        //     screenPosition.project(this.camera)
 
-        //     // console.log( this.camera.position.angleTo( point.position ) > ( Math.PI / 2 ) )
-            
-        //     const pointInView = (Math.abs(screenPosition.x) >= 1 || Math.abs(screenPosition.y) >= 1) ? false : true
 
-        //     this.raycaster.setFromCamera( screenPosition, this.camera )
-        //     const intersects = this.raycaster.intersectObjects(this.scene.children, true)
-        //     if (intersects.length === 0) {
-        //         point.element.classList.add('visible')
-        //     } else {
-        //         const intersectionDistance = intersects[0].distance
-        //         const pointDistance = point.position.distanceTo(this.camera.position)
-        //         if ( intersectionDistance < pointDistance || !pointInView ) {
-        //             point.element.classList.remove('visible')
-        //         } else {
-        //             point.element.classList.add('visible') 
-        //         }
-        //     }
+        this.raycasterAnimation()
 
-        //     // const translateX = screenPosition.x * this.sizes.width * 0.5
-        //     // const translateY = -screenPosition.y * this.sizes.height * 0.5
-        //     // point.element.style.transform = `translate(${Math.trunc(translateX)}px, ${Math.trunc(translateY)}px)`
-
-        // }
     }
 }
