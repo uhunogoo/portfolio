@@ -23,38 +23,33 @@ export default class CameraMove extends EventEmitter {
 
     }
     pointsClick() {
-        document.addEventListener('click', (e) => {
-            const target = e.target
-            const targetParent = target.offsetParent
-
-            const currentPoint = this.points.find( child => child.element === targetParent)
-            if (!currentPoint) return
-
-            const currentPointPosition = currentPoint.position
-
-            const timeline = gsap.timeline({
-                defaults: {
-                    duration: 1,
-                    ease: 'power2.inOut'
-                },
-                onUpdate: () => {
-                    // const { step, radius } = this.cameraParameters
-                    // this.camera.position.x = Math.cos( Math.PI * currentPointPosition.y ) * (currentPointPosition.x + 1)
-                    // this.camera.position.z = Math.sin( Math.PI * currentPointPosition.y ) * (currentPointPosition.x + 1)
-
-                    this.cameraParameters.lookAt.y = this.camera.position.y
-                },
+        for ( const point of this.points  ) {
+            console.log(
+                point.animation
+            )
+            point.element.addEventListener('mousedown', (e) => {
+                const currentPointPosition = point.position.clone()
+                const { step, radius } = point.animationParameters
+    
+                const timeline = gsap.timeline({
+                    defaults: {
+                        duration: 1,
+                        ease: 'power4.inOut'
+                    },
+                })
+                timeline.to(this.camera.position, {
+                    x: '+=' + (this.camera.position.x - Math.cos( Math.PI * step ) * radius) * -1,
+                    y: currentPointPosition.y + 0.75,
+                    z: '+=' + (this.camera.position.z - Math.sin( Math.PI * step ) * radius) * -1
+                }, '<+=10%')
+                timeline.to(this.cameraParameters.lookAt, {
+                    y: currentPointPosition.y
+                }, '<')
             })
-            timeline.to(this.camera.position, {
-                x: currentPointPosition.x,
-                y: currentPointPosition.y,
-                z: currentPointPosition.z
-            })
-            // timeline.to()
-        })
+        }
+        
     }
     animation() {
-
         this.tl = gsap.timeline({
             delay: 3,
             defaults: {
@@ -82,7 +77,7 @@ export default class CameraMove extends EventEmitter {
             ease: 'circ'
         }, '<+=60%')
         this.tl.to(this.cameraParameters, {
-            radius: '+=2.5',
+            radius: '+=3',
         }, '<')
     }
 }

@@ -43,11 +43,9 @@ html, body {
   outline: none;
 }
 .point {
+  pointer-events: auto;
   position: absolute;
-  /* left: 50%;
-  top: 50%; */
-  /* transform: translate(-50%, -50%); */
-  will-change: transform;
+  will-change: auto;
 }
 .point .lable {
   border: 2px solid #fff;
@@ -57,7 +55,6 @@ html, body {
   position: relative;
   transition: transform .3s ease-in-out;
   transform: scale(0);
-  will-change: transform;
   width: 30px;
 }
 .point.visible .lable {

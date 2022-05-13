@@ -20,17 +20,7 @@ export default class pointsOfInterest {
 
         this.createPoints()
 
-        // document.addEventListener('mousedown', () => {
-        //     const that = this
-        //     function onMouseMove () {
-        //         that.raycasterAnimation()
-        //     }
-        //     document.addEventListener('mousemove', onMouseMove)
-            
-        //     document.addEventListener('mouseup', () => {
-        //         document.removeEventListener('mousemove', onMouseMove)
-        //     })
-        // } )
+        this.sizes.on('resize', () => { this.resize() })
     }
 
     createPoints() {
@@ -51,16 +41,16 @@ export default class pointsOfInterest {
 
         })
         this.labelRenderer = new CSS2DRenderer()
-        this.labelRenderer.setSize( window.innerWidth, window.innerHeight )
+        this.labelRenderer.setSize( this.sizes.width, this.sizes.height )
         this.labelRenderer.domElement.style.position = 'absolute'
         this.labelRenderer.domElement.style.top = '0px'
+        this.labelRenderer.domElement.style.pointerEvents = 'none'
+        
         document.body.appendChild( this.labelRenderer.domElement )
-
-        this.controls = new OrbitControls( this.camera, this.labelRenderer.domElement )
-        this.controls.enableDamping = true
-        this.controls.target = this.cameraParameters.lookAt
-        this.controls.maxPolarAngle = Math.PI * 0.53
-        this.controls.update()
+        // childs.forEach( el => {
+        //     console.log(el);
+        // })
+        
 
         this.scene.add(this.pointsGroup)
     }
@@ -75,7 +65,7 @@ export default class pointsOfInterest {
             
             
             this.raycaster.setFromCamera( coords, this.camera )
-            const intersects = this.raycaster.intersectObjects(this.raycasterObject.children )
+            const intersects = this.raycaster.intersectObject(this.raycasterObject )
 
             if (intersects.length === 0) {
                 if (!isPointVisible) {
@@ -97,14 +87,11 @@ export default class pointsOfInterest {
             }
         })
     }
-
+    resize() {
+        this.labelRenderer.setSize( this.sizes.width, this.sizes.height );
+    }
     update() {
-        // CSS2D renderer and OrbitControl
-        this.controls.update()
         this.labelRenderer.render( this.scene, this.camera );
-
-
         this.raycasterAnimation()
-
     }
 }
