@@ -9,7 +9,7 @@ import fragmentShader from '../../../asstes/shaders/grass/fragmentShader.glsl?ra
 export default class Grass {
     constructor () {
         this.experience = new Experience()
-        this.scene = this.experience.scene
+        this.grassGroup = new THREE.Group()
         this.resources = this.experience.resources
         this.debug = this.experience.debug
 
@@ -90,7 +90,6 @@ export default class Grass {
         const rotations = []
 
         // Transform
-        const dummy = new THREE.Object3D()
         const PI = Math.PI
 
         // Calculation
@@ -105,15 +104,37 @@ export default class Grass {
                 
                 const x = r * Math.cos(theta)
                 const z = r * Math.sin(theta)
-    
-                offset.push( x, 0, z )
-                scales.push( scale )
-                rotations.push( 
-                    (Math.random() - 0.5) * PI * 0.1,
-                    (Math.random() - 0.5) * PI
-                )
-                // increase 
-                i++
+                if ( x < 0) {
+                    offset.push( x, 0, z )
+                    scales.push( scale )
+                    rotations.push( 
+                        (Math.random() - 0.5) * PI * 0.1,
+                        (Math.random() - 0.5) * PI
+                    )
+                    // increase 
+                    i++
+                } else {
+                    if (z < -0.7) { 
+                        offset.push( x, 0, z )
+                        scales.push( scale )
+                        rotations.push( 
+                            (Math.random() - 0.5) * PI * 0.1,
+                            (Math.random() - 0.5) * PI
+                        )
+                        // increase 
+                        i++
+                    } else if (z > 0.7) {
+                        offset.push( x, 0, z )
+                        scales.push( scale )
+                        rotations.push( 
+                            (Math.random() - 0.5) * PI * 0.1,
+                            (Math.random() - 0.5) * PI
+                        )
+                        // increase 
+                        i++
+                    }
+                        
+                }
             }
         }
         // Create grass instance 
@@ -144,12 +165,11 @@ export default class Grass {
             floorGeometry,
             floorMaterial
         )
-        // floor.receiveShadow  = true
 
         // Transform
         floor.rotation.x = -Math.PI / 2
 
-        this.scene.add( floor )
+        this.grassGroup.add( floor )
     }
     createGrass() {
         const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial )
@@ -158,7 +178,7 @@ export default class Grass {
         instancedGrassMesh.geometry.computeBoundingSphere()
         instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
         
-        this.scene.add( instancedGrassMesh )
+        this.grassGroup.add( instancedGrassMesh )
     }
     update() {
         this.customUniform.uTime.value = this.experience.time.elapsed / 1000

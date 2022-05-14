@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import Stats from 'three/examples/jsm/libs/stats.module'
 
 import Experience from '../Experience'
@@ -8,6 +9,7 @@ import Tower from './Tower'
 import Sword from './Sword'
 import Skybox from './Skybox'
 import Animation from '../Animations/Animations'
+import pointsOfInterest from '../Animations/PointsCalculation'
 
 export default class World {
     constructor() {
@@ -17,17 +19,23 @@ export default class World {
         this.stats = new Stats()
         document.body.appendChild( this.stats.dom )
         
+        const sceneGroup = new THREE.Group()
+        sceneGroup.name = 'worldGroup'
         // Wait for environment
         this.resources.on('ready', () => {
             // Setup
             this.sky = new Skybox()
             this.grass = new Grass()
-            this.stones = new Tower()
+            this.tower = new Tower()
             // this.sword = new Sword()
             // this.fire = new Fire()
+            sceneGroup.add( this.sky.skyGroup, this.grass.grassGroup, this.tower.towerGroup )
+            this.scene.add( sceneGroup )
+
+            this.points = new pointsOfInterest()
             
             // this.environment = new Environment()
-            this.animation = new Animation()
+            this.animation = new Animation( sceneGroup )
         })
     }
     update() {
@@ -39,6 +47,9 @@ export default class World {
         }
         if(this.animation) {
             this.animation.update()
+        }
+        if(this.points) {
+            this.points.update()
         }
         this.stats.update()
     }

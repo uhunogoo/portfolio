@@ -17,28 +17,21 @@ export default class Camera {
 
         // call method
         this.setInstance()
-        this.setControl()
     }
     setInstance() {
-        
+        this.instanceGroup = new THREE.Group()
+        this.scene.add(this.instanceGroup)
         // Base camera
         this.instance = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
         this.instance.position.set(1, 3, 1)
-        this.scene.add(this.instance)
-
+        
         this.instance.updateMatrix()
         this.instance.updateProjectionMatrix()
-
+        
         this.parameters.lookAt = new THREE.Vector3(0, this.instance.position.y, 0)
-
-
-    }
-    setControl() {
-        this.controls = new OrbitControls(this.instance, this.canvas)
-        this.controls.enableDamping = true
-        this.controls.target = this.parameters.lookAt
-        this.controls.maxPolarAngle = Math.PI * 0.53
-        this.controls.update()
+        this.instance.lookAt( this.parameters.lookAt )
+        
+        this.instanceGroup.add(this.instance)
     }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
@@ -46,6 +39,6 @@ export default class Camera {
     }
     
     update() {
-        this.controls.update()
+        this.instance.lookAt( this.parameters.lookAt )
     }
 }

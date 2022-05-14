@@ -12,6 +12,7 @@ import sources from './sources'
 // Debug
 import Debug from './Utils/Debug'
 import Points from './Utils/Points'
+import Mouse from './Utils/Mouse'
 
 
 let instance = null
@@ -30,6 +31,7 @@ export default class Experience {
         // Setup
         this.debug = new Debug()
         this.sizes = new Sizes()
+        this.mouse = new Mouse()
         this.points = new Points()
         this.time = new Time()
         this.scene = new THREE.Scene()

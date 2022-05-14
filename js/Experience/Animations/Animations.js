@@ -1,12 +1,10 @@
-import pointsOfInterest from './PointsCalculation'
 import CameraMove from './CameraMove'
 
 export default class Animation {
-    constructor () {
+    constructor (target) {
         // Animations
-        this.points = new pointsOfInterest()
-        this.cameraMove = new CameraMove()
-
+        this.cameraMove = new CameraMove( target )
+        
         // State
         this.cameraAnimationCoplete = false
         this.cameraMove.on('animationComplete', () => {
@@ -15,7 +13,7 @@ export default class Animation {
     }
     update() {
         if(this.cameraAnimationCoplete) {
-            this.points.update()
+            this.cameraMove.update()
         }
     }
 }

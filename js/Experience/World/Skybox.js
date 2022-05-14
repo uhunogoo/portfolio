@@ -7,7 +7,7 @@ import Experience from '../Experience'
 export default class Skybox {
     constructor() {
         this.experience = new Experience()
-        this.scene = this.experience.scene
+        this.skyGroup = new THREE.Group()
         this.renderer = this.experience.renderer
         this.camera = this.experience.camera
         this.resources = this.experience.resources
@@ -16,6 +16,7 @@ export default class Skybox {
         // Debug
         if (this.debug.active) {
             this.debugFolder = this.debug.ui.addFolder('Sky')
+            this.debugFolder.close()
         }
 
         this.createSky()
@@ -25,7 +26,7 @@ export default class Skybox {
         const that = this
         const sky = new Sky()
         sky.scale.setScalar( 100)
-        this.scene.add( sky )
+        this.skyGroup.add( sky )
 
         const sun = new THREE.Vector3()
 

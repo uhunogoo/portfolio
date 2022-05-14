@@ -5,7 +5,7 @@ import Experience from '../Experience'
 export default class Tower {
     constructor () {
         this.experience = new Experience()
-        this.scene = this.experience.scene
+        this.towerGroup = new THREE.Group()
         this.resources = this.experience.resources
 
         this.loadMaterials()
@@ -29,6 +29,7 @@ export default class Tower {
     generateShape() {
         const towerScene = this.resources.items.towerModel.scene
         const tower = new THREE.Group()
+        tower.name = 'towerGroup'
 
         const towerPart1 = towerScene.children.find((child) => child.name === 'part2')
         const towerPart2 = towerScene.children.find((child) => child.name === 'part1')
@@ -40,6 +41,6 @@ export default class Tower {
         tower.scale.set( 0.47, 0.47, 0.47 )
         tower.position.y = 0.37
 
-        this.scene.add( tower )
+        this.towerGroup = tower
     }
 }
