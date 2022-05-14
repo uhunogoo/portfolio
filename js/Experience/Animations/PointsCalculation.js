@@ -33,7 +33,7 @@ export default class pointsOfInterest {
     }
 
     createPoints() {
-        const geometry = new THREE.BoxBufferGeometry(0.01, 0.01, 0.01)
+        const geometry = new THREE.BoxBufferGeometry(0, 0, 0)
         const material = new THREE.MeshBasicMaterial()
         
         this.points.forEach( point => {
@@ -57,14 +57,16 @@ export default class pointsOfInterest {
         this.labelRenderer.domElement.style.position = 'absolute'
         this.labelRenderer.domElement.style.top = '0px'
         this.labelRenderer.domElement.style.pointerEvents = 'none'
+        this.labelRenderer.domElement.style.overflow = ''
         document.body.appendChild( this.labelRenderer.domElement )
     }
     raycasterAnimation() {
         if(this.towerGroup) {
+            this.camera.getWorldDirection(this.dummyDirection)
             this.pointsGroup.children.forEach((point, i) => {
                 const isPointVisible = this.points[i].element.classList.contains( 'visible' )
 
-                this.camera.getWorldDirection(this.dummyDirection)
+                
                 point.getWorldPosition(this.dummyWorld)
 
                 this.raycaster.set( this.dummyWorld, this.dummyDirection.multiply( new THREE.Vector3(-1, 1, -1) ) )

@@ -44,7 +44,8 @@ html, body {
 }
 .point {
   pointer-events: auto;
-  position: absolute;
+  visibility: hidden;
+  transition: visibility .3s ease-in-out;
   will-change: auto;
 }
 .point .lable {
@@ -56,6 +57,9 @@ html, body {
   transition: transform .3s ease-in-out;
   transform: scale(0);
   width: 30px;
+}
+.point.visible {
+  visibility: visible;
 }
 .point.visible .lable {
   transform: scale(1);
@@ -100,4 +104,45 @@ html, body {
 .point:hover .text {
   opacity: 1;
   transform: translate(-50%, 115%) scale(1) skewY(0);
+}
+
+.point__content {
+  border-radius: 20px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-height: 600px;
+  width: 60vw;
+  z-index: 5;
+}
+.close_btn {
+  cursor: pointer;
+  height: 16px;
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  width: 16px;
+}
+.close_btn::before,
+.close_btn::after {
+  background: #000;
+  content: '';
+  display: block;
+  height: 2px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(-45deg);
+  transform-origin: center;
+  width: 100%;
+}
+.close_btn::after {
+  transform: translateY(-50%) rotate(45deg);
+}
+.close_btn:hover {
+  transform: scale(1.2);
 }

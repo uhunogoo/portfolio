@@ -4,7 +4,7 @@ export default class Points {
         // Setup
         this.list = [
             {
-                element: document.querySelector('.point-0'),
+                element: document.getElementById('point-0'),
                 position: new THREE.Vector3( 0, 1, 0 ),
                 animationParameters: {
                     angle: 1.75,
@@ -12,7 +12,7 @@ export default class Points {
                 }
             },
             {
-                element: document.querySelector('.point-1'),
+                element: document.getElementById('point-1'),
                 position: new THREE.Vector3( 0, 3.2, 0 ),
                 animationParameters: {
                     angle: 0,
@@ -20,7 +20,7 @@ export default class Points {
                 }
             },
             {
-                element: document.querySelector('.point-2'),
+                element: document.getElementById('point-2'),
                 position: new THREE.Vector3( 3, 0.3, -2 ),
                 animationParameters: {
                     angle: 1.56,

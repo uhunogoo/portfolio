@@ -25,11 +25,10 @@ export default class CameraMove extends EventEmitter {
         this.animationComplete = false
         this.previousTime = 0
         this.clock = new THREE.Clock()
-        
-        this.animation()
 
-    }
-    pointsClick() {
+        for ( const point of this.points  ) {
+            gsap.set('[data-trigger=' + point.element.id + ']', { autoAlpha: 0 })
+        }
         gsap.registerEffect({
             name: "clickEffect",
             extendTimeline:true,
@@ -56,8 +55,32 @@ export default class CameraMove extends EventEmitter {
                 return tl
             }
         })
+        
+        this.animation()
+
+    }
+    closeBtn() {
+        const closeBtn = [...document.querySelectorAll('.close_btn')]
+        closeBtn.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const { radius } = this.parameters
+
+                const animation = gsap.timeline()
+                animation.clickEffect( btn, { 
+                    y: 1,
+                    angle: 2.1, 
+                    radius 
+                })
+                animation.to('.point__content', {
+                    autoAlpha: 0,
+                }, 0)
+            })
+        })
+    }
+    pointsClick() {
         for ( const point of this.points  ) {
             point.element.addEventListener('mousedown', (e) => {
+                
                 const currentPointPosition = point.position.clone()
                 const { angle, radius } = point.animationParameters
 
@@ -67,6 +90,9 @@ export default class CameraMove extends EventEmitter {
                     angle, 
                     radius 
                 })
+                animation.to('[data-trigger=' + point.element.id + ']', {
+                    autoAlpha: 1,
+                }, '<+=200%')
             })
         }
         
@@ -79,7 +105,10 @@ export default class CameraMove extends EventEmitter {
                 ease: 'power2.inOut'
             },
             onComplete: () => {
+                if (this.animationComplete) return
+                this.animationComplete = true
                 this.pointsClick()
+                this.closeBtn()
                 this.trigger('animationComplete')
             }
         })
@@ -96,7 +125,7 @@ export default class CameraMove extends EventEmitter {
             ease: 'power3.inOut'
         }, '<')
         this.tl.to(this.target.rotation, {
-            y: Math.PI * 2,
+            y: Math.PI * 2.1,
             ease: 'circ'
         }, '<+=60%')
     }
