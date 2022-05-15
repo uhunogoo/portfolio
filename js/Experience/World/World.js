@@ -28,8 +28,8 @@ export default class World {
             this.grass = new Grass()
             this.tower = new Tower()
             // this.sword = new Sword()
-            // this.fire = new Fire()
-            sceneGroup.add( this.sky.skyGroup, this.grass.grassGroup, this.tower.towerGroup )
+            this.fire = new Fire()
+            sceneGroup.add( this.sky.skyGroup, this.grass.grassGroup, this.tower.towerGroup, this.fire.fireGroup )
             this.scene.add( sceneGroup )
 
             this.points = new pointsOfInterest()

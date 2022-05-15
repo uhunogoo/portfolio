@@ -10,6 +10,7 @@ import swordFireFragment from '../../../asstes/shaders/sword/fireFragment.glsl?r
 export default class Fire {
     constructor() {
         this.experience = new Experience()
+        this.fireGroup = new THREE.Group()
         this.scene = this.experience.scene
         this.sizes = this.experience.sizes
         this.debug = this.experience.debug
@@ -21,6 +22,8 @@ export default class Fire {
         }
         
         // Setup
+        this.options = {}
+        this.options.y = 2.7
         this.fireUniform = {
             uTime: { value: 0 },
             uColor1: { value: new THREE.Color('#1e00ff') },
@@ -49,7 +52,7 @@ export default class Fire {
         })
         
         const particlesMesh = new THREE.Points( geometry, swordParticlesMaterial )
-        particlesMesh.position.y = 2.46
+        particlesMesh.position.y = this.options.y
         
         // Generate fire around the sword
         // const fireGeometry
@@ -61,9 +64,9 @@ export default class Fire {
             fragmentShader: swordFireFragment
         })
         const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
-        fireMesh.position.y = 2.46
+        fireMesh.position.y = this.options.y
 
-        this.scene.add(particlesMesh, fireMesh)
+        this.fireGroup.add(particlesMesh, fireMesh)
 
         // Debug shader material
         if (this.debug.active) {
