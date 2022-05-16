@@ -8,18 +8,24 @@ export default [
     {
         name: 'towerModel',
         type: 'gltfLoader',
-        path: '/asstes/geometry/postament-2.glb?url'
+        // path: '/asstes/geometry/postament-2.glb?url'
+        path: '/asstes/geometry/postament.glb?url'
     },
     //  TOWER
     {
         name: 'towerTexture1',
         type: 'texture',
-        path: '/asstes/textures/tower/baked-1.jpg?url'
+        path: '/asstes/textures/tower/floorTexture.jpg?url'
     },
     {
         name: 'towerTexture2',
         type: 'texture',
-        path: '/asstes/textures/tower/baked-2.jpg?url'
+        path: '/asstes/textures/tower/wallTexture.jpg?url'
+    },
+    {
+        name: 'towerTexture3',
+        type: 'texture',
+        path: '/asstes/textures/tower/otherTextures.jpg?url'
     },
     {
         name: 'sandTexture',

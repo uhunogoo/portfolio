@@ -23,7 +23,9 @@ export default class Fire {
         
         // Setup
         this.options = {}
-        this.options.y = 2.7
+        this.options.x = 3.8
+        this.options.y = 0.83
+        this.options.z = -1.8
         this.fireUniform = {
             uTime: { value: 0 },
             uColor1: { value: new THREE.Color('#1e00ff') },
@@ -52,7 +54,10 @@ export default class Fire {
         })
         
         const particlesMesh = new THREE.Points( geometry, swordParticlesMaterial )
+        particlesMesh.position.x = this.options.x
         particlesMesh.position.y = this.options.y
+        particlesMesh.position.z = this.options.z
+
         
         // Generate fire around the sword
         // const fireGeometry
@@ -64,7 +69,9 @@ export default class Fire {
             fragmentShader: swordFireFragment
         })
         const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
+        fireMesh.position.x = this.options.x
         fireMesh.position.y = this.options.y
+        fireMesh.position.z = this.options.z
 
         this.fireGroup.add(particlesMesh, fireMesh)
 

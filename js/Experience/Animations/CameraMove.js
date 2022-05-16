@@ -18,7 +18,7 @@ export default class CameraMove extends EventEmitter {
         this.mouse = this.experience.mouse
 
         this.parameters = this.experience.camera.parameters
-        this.parameters.angle = 1.75
+        this.parameters.angle = 1.5
         this.parameters.radius = 4.5
 
         // Add parameters
@@ -125,19 +125,19 @@ export default class CameraMove extends EventEmitter {
             ease: 'power3.inOut'
         }, '<')
         this.tl.to(this.target.rotation, {
-            y: Math.PI * 2.1,
+            y: Math.PI * 2,
             ease: 'circ'
         }, '<+=60%')
     }
     update() {
-        const elapsedTime = this.clock.getElapsedTime()
-        const deltaTime = elapsedTime - this.previousTime
-        this.previousTime = elapsedTime
+        // const elapsedTime = this.clock.getElapsedTime()
+        // const deltaTime = elapsedTime - this.previousTime
+        // this.previousTime = elapsedTime
 
-        const parallaxY = this.mouse.y * 0.3
-        const parallaxX = - this.mouse.x * 0.5
+        // const parallaxY = - this.mouse.y * 0.4
+        // const parallaxX = this.mouse.x * 0.8
 
-        this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 5 * deltaTime
-        this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 5 * deltaTime       
+        // this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 5 * deltaTime
+        // this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 5 * deltaTime       
     }
 }

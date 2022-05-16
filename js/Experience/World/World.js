@@ -34,7 +34,7 @@ export default class World {
 
             this.points = new pointsOfInterest()
             
-            // this.environment = new Environment()
+            this.environment = new Environment()
             this.animation = new Animation( sceneGroup )
         })
     }

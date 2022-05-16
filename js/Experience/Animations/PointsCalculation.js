@@ -70,7 +70,7 @@ export default class pointsOfInterest {
                 point.getWorldPosition(this.dummyWorld)
 
                 this.raycaster.set( this.dummyWorld, this.dummyDirection.multiply( new THREE.Vector3(-1, 1, -1) ) )
-                const intersects = this.raycaster.intersectObject( this.towerGroup )
+                const intersects = this.raycaster.intersectObject( this.towerGroup.children, true )
                 
                 if (intersects.length === 0) {
                     if (!isPointVisible) {

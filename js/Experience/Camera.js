@@ -17,6 +17,7 @@ export default class Camera {
 
         // call method
         this.setInstance()
+        this.setControl()
     }
     setInstance() {
         this.instanceGroup = new THREE.Group()
@@ -33,12 +34,17 @@ export default class Camera {
         
         this.instanceGroup.add(this.instance)
     }
+    setControl() {
+        this.controls = new OrbitControls(this.instance, this.canvas)
+        this.controls.enableDamping = true
+    }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
         this.instance.updateProjectionMatrix()
     }
     
     update() {
+        this.controls.update()
         this.instance.lookAt( this.parameters.lookAt )
     }
 }
