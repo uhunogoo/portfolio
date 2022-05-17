@@ -8,27 +8,26 @@ export default class CameraMove extends EventEmitter {
     constructor ( target ) {
         super()
 
-        this.target = target
+        this.target = target        
+        
         this.experience = new Experience()
+        this.scene = this.experience.scene
         this.points = this.experience.points.list
         this.camera = this.experience.camera.instance
-        this.camera.updateMatrixWorld()
-        this.camera.updateWorldMatrix()
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
 
         this.parameters = this.experience.camera.parameters
-        this.parameters.angle = 1.5
+        this.parameters.angle = 1.75
         this.parameters.radius = 4.5
+        this.parameters.cameraY = 0.75
 
         // Add parameters
         this.animationComplete = false
         this.previousTime = 0
         this.clock = new THREE.Clock()
 
-        for ( const point of this.points  ) {
-            gsap.set('[data-trigger=' + point.element.id + ']', { autoAlpha: 0 })
-        }
+
         gsap.registerEffect({
             name: "clickEffect",
             extendTimeline:true,
@@ -57,18 +56,22 @@ export default class CameraMove extends EventEmitter {
         })
         
         this.animation()
-
+        this.on('animationComplete', () => {
+            this.animationComplete = true
+            this.pointsClick()
+            this.closeBtn()
+        })
     }
     closeBtn() {
         const closeBtn = [...document.querySelectorAll('.close_btn')]
         closeBtn.forEach(btn => {
             btn.addEventListener('click', () => {
-                const { radius } = this.parameters
+                const { angle, radius } = this.parameters
 
                 const animation = gsap.timeline()
                 animation.clickEffect( btn, { 
-                    y: 1,
-                    angle: 2.1, 
+                    y: 0.75,
+                    angle, 
                     radius 
                 })
                 animation.to('.point__content', {
@@ -105,10 +108,6 @@ export default class CameraMove extends EventEmitter {
                 ease: 'power2.inOut'
             },
             onComplete: () => {
-                if (this.animationComplete) return
-                this.animationComplete = true
-                this.pointsClick()
-                this.closeBtn()
                 this.trigger('animationComplete')
             }
         })
@@ -120,24 +119,25 @@ export default class CameraMove extends EventEmitter {
         }, '<')
         this.tl.to(this.camera.position, {
             x: this.parameters.radius,
-            y: 1,
+            y: 0.75,
             z: this.parameters.radius,
             ease: 'power3.inOut'
         }, '<')
         this.tl.to(this.target.rotation, {
-            y: Math.PI * 2,
+            y: Math.PI * this.parameters.angle,
             ease: 'circ'
         }, '<+=60%')
     }
     update() {
-        // const elapsedTime = this.clock.getElapsedTime()
-        // const deltaTime = elapsedTime - this.previousTime
-        // this.previousTime = elapsedTime
+        if (!this.animationComplete) return
+        const elapsedTime = this.clock.getElapsedTime()
+        const deltaTime = elapsedTime - this.previousTime
+        this.previousTime = elapsedTime
 
-        // const parallaxY = - this.mouse.y * 0.4
-        // const parallaxX = this.mouse.x * 0.8
+        const parallaxY = - this.mouse.y * 0.3
+        const parallaxX = this.mouse.x * 0.5
 
-        // this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 5 * deltaTime
-        // this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 5 * deltaTime       
+        this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 5 * deltaTime
+        this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 5 * deltaTime       
     }
 }

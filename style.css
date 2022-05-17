@@ -110,12 +110,14 @@ html, body {
   border-radius: 20px;
   background: #fff;
   display: grid;
+  left: 50%;
+  opacity: 0;
   place-items: center;
   position: fixed;
-  left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   min-height: 600px;
+  visibility: hidden;
   width: 60vw;
   z-index: 5;
 }

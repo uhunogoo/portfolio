@@ -31,8 +31,8 @@ export default class World {
             this.fire = new Fire()
             sceneGroup.add( this.sky.skyGroup, this.grass.grassGroup, this.tower.towerGroup, this.fire.fireGroup )
             this.scene.add( sceneGroup )
-
             this.points = new pointsOfInterest()
+
             
             this.environment = new Environment()
             this.animation = new Animation( sceneGroup )

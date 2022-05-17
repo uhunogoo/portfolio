@@ -14,6 +14,8 @@ export default class Camera {
         
         // Wait for environment
         this.parameters = {}
+        this.parameters.cameraPosition = new THREE.Vector3(1, 3, 1)
+        this.parameters.lookAt = new THREE.Vector3(0, 3, 0)
 
         // call method
         this.setInstance()
@@ -22,14 +24,10 @@ export default class Camera {
     setInstance() {
         this.instanceGroup = new THREE.Group()
         this.scene.add(this.instanceGroup)
+
         // Base camera
         this.instance = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.instance.position.set(1, 3, 1)
-        
-        this.instance.updateMatrix()
-        this.instance.updateProjectionMatrix()
-        
-        this.parameters.lookAt = new THREE.Vector3(0, this.instance.position.y, 0)
+        this.instance.position.copy( this.parameters.cameraPosition )
         this.instance.lookAt( this.parameters.lookAt )
         
         this.instanceGroup.add(this.instance)
