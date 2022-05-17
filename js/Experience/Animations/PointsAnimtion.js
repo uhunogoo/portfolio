@@ -1,61 +1,41 @@
+
 import * as THREE from 'three'
 import gsap from 'gsap'
-import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
 import Experience from '../Experience'
 
-export default class pointsOfInterest {
+export default class PointsAnimation {
     constructor () {
         // Setup
         this.experience = new Experience()
-        this.points = this.experience.points.list
-        this.sizes = this.experience.sizes
         this.scene = this.experience.scene
+        this.points = this.experience.points.list
         this.camera = this.experience.camera.instance
         this.raycaster = new THREE.Raycaster()
         
-        // Add parameters
-        this.pointsGroup = new THREE.Group()
-        this.pointsGroup.name = 'pointsGroup'
+        // Defaults
+        this.firstDraw = false
         this.worldGroup = this.scene.children.find( child => child.name === 'worldGroup' )
         this.towerGroup = this.worldGroup.children.find(group => group.name === 'towerGroup')
-        
-        // Methods
-        this.createPoints()
+        this.pointsGroup = this.worldGroup.children.find(group => group.name === 'pointsGroup')
 
-        // Events
-        this.sizes.on('resize', () => { this.resize() })
+        // Animation
+        // this.showPoints()
+        
+        
     }
-
-    createPoints() {
-        // Default points geometry and material
-        const geometry = new THREE.BoxBufferGeometry(0, 0, 0)
-        const material = new THREE.MeshBasicMaterial()
-        
-        // Create points
-        this.points.forEach( point => {
-            const mesh = new THREE.Mesh(
-                geometry.clone(),
-                material.clone()
-            )
-            mesh.position.copy( point.position )
-            mesh.geometry.computeBoundingBox()
-            this.pointsGroup.add(mesh)
-
-            const pointLabel = new CSS2DObject( point.element )
-            pointLabel.position.set(0, 0, 0 )
-            mesh.add( pointLabel )
-            
+    showPoints() {
+        gsap.to('.point.visible .lable', {
+            scale: 1,
+            ease: 'back',
+            stagger: 0.2,
         })
-        this.worldGroup.add( this.pointsGroup )
-
-        // CSS 2D renderer
-        this.labelRenderer = new CSS2DRenderer()
-        this.labelRenderer.setSize( this.sizes.width, this.sizes.height )
-        this.labelRenderer.domElement.style.position = 'absolute'
-        this.labelRenderer.domElement.style.top = '0px'
-        this.labelRenderer.domElement.style.pointerEvents = 'none'
-        this.labelRenderer.domElement.style.overflow = ''
-        document.body.appendChild( this.labelRenderer.domElement )
+    }
+    hidePoints() {
+        this.hidePointsAniomation = gsap.to('.point.unvisible .lable', {
+            scale: 0,
+            ease: 'power2',
+            stagger: 0.2,
+        })
     }
     raycasterAnimation() {
         this.points.forEach((point, i) => {
@@ -76,31 +56,38 @@ export default class pointsOfInterest {
             // Point visible by default
             if (intersects.length === 0) {
                 if (!isPointVisible) {
+                    point.element.classList.remove('unvisible')
                     point.element.classList.add('visible')
+                    
+                    // Play animation
+                    this.showPoints()
                 }
             } else {
                 // Compare distanse part
                 const intersectionDistance = intersects[0].distance                
                 const pointDistance = pointPosition.distanceTo(this.camera.position)
-
+                
                 if ( intersectionDistance < pointDistance ) {
                     if (isPointVisible) {
                         point.element.classList.remove('visible')
+                        point.element.classList.add('unvisible')
+
+                        // Play animation
+                        this.hidePoints()
                     }
                 } else {
                     if (!isPointVisible) {
-                        point.element.classList.add('visible') 
+                        point.element.classList.remove('unvisible')
+                        point.element.classList.add('visible')
+                        
+                        // Play animation
+                        this.showPoints()
                     }
                 }
             }
         })
     }
-    resize() {
-        this.labelRenderer.setSize( this.sizes.width, this.sizes.height );
-    }
     update() {
-        // CSS renderer and raycaster animation
-        this.labelRenderer.render( this.scene, this.camera );
         this.raycasterAnimation()
     }
 }

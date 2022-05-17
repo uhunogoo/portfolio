@@ -9,7 +9,7 @@ import Tower from './Tower'
 import Sword from './Sword'
 import Skybox from './Skybox'
 import Animation from '../Animations/Animations'
-import pointsOfInterest from '../Animations/PointsCalculation'
+import Createpoints from './CreatePoints'
 
 export default class World {
     constructor() {
@@ -29,11 +29,18 @@ export default class World {
             this.tower = new Tower()
             // this.sword = new Sword()
             this.fire = new Fire()
-            sceneGroup.add( this.sky.skyGroup, this.grass.grassGroup, this.tower.towerGroup, this.fire.fireGroup )
-            this.scene.add( sceneGroup )
-            this.points = new pointsOfInterest()
-
+            this.points = new Createpoints()
             
+            // Add all scene group to main 
+            sceneGroup.add( 
+                this.sky.skyGroup, 
+                this.grass.grassGroup, 
+                this.tower.towerGroup, 
+                this.fire.fireGroup, 
+                this.points.pointsGroup 
+            )
+            this.scene.add( sceneGroup )
+
             this.environment = new Environment()
             this.animation = new Animation( sceneGroup )
         })

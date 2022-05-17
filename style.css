@@ -54,15 +54,11 @@ html, body {
   cursor: pointer;
   height: 30px;
   position: relative;
-  transition: transform .3s ease-in-out;
   transform: scale(0);
   width: 30px;
 }
 .point.visible {
   visibility: visible;
-}
-.point.visible .lable {
-  transform: scale(1);
 }
 .point .lable::after {
   border-radius: 50%;

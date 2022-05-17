@@ -7,9 +7,9 @@ import EventEmitter from '../Utils/EventEmitter'
 export default class CameraMove extends EventEmitter {
     constructor ( target ) {
         super()
-
-        this.target = target        
         
+        // Setup 
+        this.target = target        
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.points = this.experience.points.list
@@ -17,13 +17,13 @@ export default class CameraMove extends EventEmitter {
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
 
+        // Defaults
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
         this.parameters.radius = 4.5
         this.parameters.cameraY = 0.75
 
         // Add parameters
-        this.animationComplete = false
         this.previousTime = 0
         this.clock = new THREE.Clock()
 
@@ -57,7 +57,6 @@ export default class CameraMove extends EventEmitter {
         
         this.animation()
         this.on('animationComplete', () => {
-            this.animationComplete = true
             this.pointsClick()
             this.closeBtn()
         })
@@ -129,15 +128,15 @@ export default class CameraMove extends EventEmitter {
         }, '<+=60%')
     }
     update() {
-        if (!this.animationComplete) return
-        const elapsedTime = this.clock.getElapsedTime()
-        const deltaTime = elapsedTime - this.previousTime
-        this.previousTime = elapsedTime
+    //     if (!this.animationComplete) return
+    //     const elapsedTime = this.clock.getElapsedTime()
+    //     const deltaTime = elapsedTime - this.previousTime
+    //     this.previousTime = elapsedTime
 
-        const parallaxY = - this.mouse.y * 0.3
-        const parallaxX = this.mouse.x * 0.5
+    //     const parallaxY = this.mouse.y * 0.3
+    //     const parallaxX = this.mouse.x * 0.3
 
-        this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 5 * deltaTime
-        this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 5 * deltaTime       
+    //     this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 5 * deltaTime
+    //     this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 5 * deltaTime       
     }
 }
