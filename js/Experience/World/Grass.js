@@ -20,8 +20,8 @@ export default class Grass {
         }
         this.customUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#adaa58') },
-            uColor2: { value: new THREE.Color('#285332') },
+            uColor1: { value: new THREE.Color('#d4a268') },
+            uColor2: { value: new THREE.Color('#533f28') },
         }
 
         // Debug

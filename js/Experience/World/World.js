@@ -58,6 +58,9 @@ export default class World {
         if(this.points) {
             this.points.update()
         }
+        if(this.tower) {
+            this.tower.update()
+        }
         this.stats.update()
     }
 }

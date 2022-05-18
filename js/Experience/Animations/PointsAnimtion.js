@@ -19,23 +19,25 @@ export default class PointsAnimation {
         this.pointsGroup = this.worldGroup.children.find(group => group.name === 'pointsGroup')
 
         // Animation
-        // this.showPoints()
-        
-        
-    }
-    showPoints() {
-        gsap.to('.point.visible .lable', {
-            scale: 1,
-            ease: 'back',
-            stagger: 0.2,
+        this.tl = gsap.timeline()
+        gsap.registerEffect({
+            name: "pointsShow",
+            extendTimeline:true,
+            effect: (target, parameters) => {                
+                const tl = gsap.timeline({
+                    defaults: {
+                        duration: 0.3,
+                        ease: 'power2.inOut'
+                    },
+                })
+                tl.to(target, {
+                    scale: parameters.scale,
+                })
+
+                return tl
+            }
         })
-    }
-    hidePoints() {
-        this.hidePointsAniomation = gsap.to('.point.unvisible .lable', {
-            scale: 0,
-            ease: 'power2',
-            stagger: 0.2,
-        })
+        
     }
     raycasterAnimation() {
         this.points.forEach((point, i) => {
@@ -60,7 +62,7 @@ export default class PointsAnimation {
                     point.element.classList.add('visible')
                     
                     // Play animation
-                    this.showPoints()
+                    this.tl.pointsShow( point.element.querySelector('.lable'), {scale: 1})
                 }
             } else {
                 // Compare distanse part
@@ -73,7 +75,7 @@ export default class PointsAnimation {
                         point.element.classList.add('unvisible')
 
                         // Play animation
-                        this.hidePoints()
+                        this.tl.pointsShow( point.element.querySelector('.lable'), {scale: 0})
                     }
                 } else {
                     if (!isPointVisible) {
@@ -81,7 +83,7 @@ export default class PointsAnimation {
                         point.element.classList.add('visible')
                         
                         // Play animation
-                        this.showPoints()
+                        this.tl.pointsShow( point.element.querySelector('.lable'), {scale: 1})
                     }
                 }
             }

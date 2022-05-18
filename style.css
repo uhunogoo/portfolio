@@ -20,8 +20,7 @@ html, body {
   width: 100vw;
 }
 .loader {
-  background: #2d2d2d;
-  color: #ffffff;
+  background: #fff;
   display: grid;
   place-items: center;
   font-size: 100px;
@@ -32,8 +31,24 @@ html, body {
   width: 100%;
   z-index: 2;
 }
-.loader span::after {
-  content: '%';
+.loader__content {
+  width: 15%;
+}
+.loader svg {
+  display: block;
+  width: 100%;
+}
+.loader svg rect {
+  stroke: #000;
+  stroke-width: 2px;
+}
+.loader__progress {
+  background: #000;
+  border-radius: 4px;
+  height: 4px;
+  margin-top: 10%;
+  transform-origin: left center;
+  width: 100%;
 }
 
 .webgl {
@@ -45,7 +60,7 @@ html, body {
 .point {
   pointer-events: auto;
   visibility: hidden;
-  transition: visibility .3s ease-in-out;
+  transition: visibility .35s ease-in-out;
   will-change: auto;
 }
 .point .lable {
