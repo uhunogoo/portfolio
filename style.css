@@ -19,7 +19,7 @@ html, body {
   overflow: clip;
   width: 100vw;
 }
-.loader {
+.preload {
   background: #fff;
   display: grid;
   place-items: center;
@@ -31,22 +31,22 @@ html, body {
   width: 100%;
   z-index: 2;
 }
-.loader__content {
-  width: 15%;
+.preload__content {
+  width: 45vmin;
 }
-.loader svg {
+.preload svg {
   display: block;
   width: 100%;
 }
-.loader svg rect {
-  stroke: #000;
-  stroke-width: 2px;
+.preload svg rect {
+  /* visibility: hidden;
+  opacity: 0; */
 }
-.loader__progress {
+.preload__progress {
   background: #000;
   border-radius: 4px;
   height: 4px;
-  margin-top: 10%;
+  margin-top: 20%;
   transform-origin: left center;
   width: 100%;
 }
