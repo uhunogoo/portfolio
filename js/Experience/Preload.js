@@ -16,10 +16,18 @@ export default class Preload extends EventEmitter {
         
         // action
         this.createSVG()
+        this.loading()
+        
         this.resources.on('loadingProgress', () => {
-            this.loading()
+            gsap.fromTo(this.progress, { value: this.progress.value }, {
+                value: this.resources.loaded / this.resources.toLoad,
+                duration: 1,
+                onUpdate: () => {
+                    this.preload.play(this.progress.value)
+                }
+            })
         })
-
+        
     }
     //chuck a bunch of square <rects> in the svg
     createSVG() {
@@ -34,65 +42,122 @@ export default class Preload extends EventEmitter {
                 svg.appendChild(rect)
             }
         }
-        gsap.set('.preload svg rect', { scale: 0, transformOrigin: 'center'})
-        gsap.set('.preload', { autoAlpha: 0 })
-        gsap.set('.preload__progress', { scaleX: 0 })
     }
     loading() {
-        const that = this
         const colors = ['#d4a268', '#533f28']
-
+        const text = document.querySelector('h1').childNodes
 
         function weightedRandom(collection, ease) {
             return gsap.utils.pipe(
-                Math.random,            //random number between 0 and 1
-                gsap.parseEase(ease),   //apply the ease
-                gsap.utils.mapRange(0, 1, -0.5, collection.length-0.5), //map to the index range of the array, stretched by 0.5 each direction because we'll round and want to keep distribution (otherwise linear distribution would be center-weighted slightly)
-                gsap.utils.snap(1),     //snap to the closest integer
-                i => collection[i]      //return that element from the array
+                Math.random,
+                gsap.parseEase(ease),
+                gsap.utils.mapRange(0, 1, -0.5, collection.length-0.5),
+                gsap.utils.snap(1),
+                i => collection[i]
             );
         }
         let randomColor = weightedRandom(colors, "circ.inOut")
-        gsap.set('.preload svg rect', { fill: randomColor })
+        gsap.set('.preload svg rect', { fill: randomColor }) 
 
-        
-        const preload = gsap.timeline()
-        preload.to('.preload', {
+        const showText = gsap.timeline({ 
+            paused: true,
+            onComplete: () => {
+                window.addEventListener('click', () => this.finis.play())
+            }
+        })
+        this.preload = gsap.timeline({
+            paused: true,
+            onComplete: () => showText.play()
+        })
+        this.preload.to('.preload', {
             autoAlpha: 1,
         })
-        preload.to('.preload svg rect', {
-            scale: 1,
-            ease: 'power1',
-            duration: 1,
+
+        this.preload.from('.preload svg rect', {
+            scale: 0,
+            ease: 'power2',
+            transformOrigin: '50% 50%',
             stagger: {
+                amount: 1,
                 each: 0.01,
                 from: 'random'
             }
         })
-        preload.to('.preload__progress', {
-            scaleX: 1,
-            duration: 1.5,
-        }, '<')
+        this.preload.from('.preload__progress', {
+            duration: 2,
+            scaleX: 0,
+            transformOrigin: 'left center'
+        }, 0)
+
         
-        preload.to('.preloader__left div', {
-            x: '-20%',
-            duration: 1.5,
+        showText.to('.preload__progress', {
+            scaleX: 0,
+            duration: 0.9,
+            ease: 'power4',
+            transformOrigin: 'right center'
         })
-        preload.to('.preloader__right div', {
-            x: '20%',
-            duration: 1.5,
+        showText.from( '.title div', {
+            filter: 'blur(0.1em)',
+            x: '100%',
+            opacity: 0,
+            ease: 'power4',
+            stagger: {
+                amount: 1,
+                // each: 0.04,
+            }
         }, '<')
-        preload.to('.preloader__left', {
+        showText.to('.code div', {
+            scaleY: '1.4',
+            transformOrigin: 'left top',
+            ease: 'power3',
+            stagger: {
+                amount: 1,
+                // each: 0.04,
+            }
+        }, '<+=24%')
+
+        this.finis = gsap.timeline({ paused: true })
+        this.finis.to('.preload svg rect', {
+            y: 801,
+            duration: 4,
+            ease: 'power4',
+        })
+        this.finis.to( '.title div', {
+            y: '90%',
+            ease: 'power4.inOut',
+            duration: (1 / text.length) * 10.0,
+            stagger: 0.04,
+        }, '<')
+        this.finis.to('.code div', {
+            y: '110%',
+            duration: 0.6,
+            transformOrigin: 'left top',
+            ease: 'power3',
+            stagger: {
+                each: 0.04
+            }
+        }, '<')
+
+        this.finis.to('.preloader__left', {
             x: '-100%',
             ease: 'power3',
             duration: 1.5,
-        }, '<+=1%')
-        preload.to('.preloader__right', {
+        }, '<+=80%')
+        this.finis.to('.preloader__right', {
             x: '100%',
             ease: 'power3',
             duration: 1.5,
         }, '<')
+        this.finis.to('.preloader__left div', {
+            x: '-20%',
+            duration: 1.5,
+        }, '<+=10%')
+        this.finis.to('.preloader__right div', {
+            x: '20%',
+            duration: 1.5,
+        }, '<')
         
+
         // preload.to('.preload', {
         //     autoAlpha: 0
         // })

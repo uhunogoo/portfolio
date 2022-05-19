@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&family=Libre+Baskerville&display=swap');
+
 html, body {
+  font-size: 16px;
   height: 100vh;
   margin: 0;
   overflow: clip;
@@ -39,16 +42,21 @@ html, body {
   display: block;
   width: 100%;
 }
-/* .preload svg rect { */
-  /* visibility: hidden;
-  opacity: 0; */
-/* } */
+h1 {
+  font-family: 'Libre Baskerville', serif;
+  font-weight: normal;
+  font-size: 4.19vmin;
+  margin: 20% 0 0;
+  position: relative;
+  overflow: clip;
+}
+h1 div {
+  display: inline-block;
+}
 .preload__progress {
   background: #000;
-  border-radius: 4px;
-  height: 4px;
-  margin-top: 20%;
-  transform-origin: left center;
+  height: 4.4vmin;
+  margin-top: -12%;
   width: 100%;
 }
 .preloader__left,
@@ -70,6 +78,18 @@ html, body {
   background: #fff;
   height: 100%;
   width: 100%;
+}
+.preload .code {
+  font-size: 5.5vmin;
+  transform: translateX(1.5%) scaleX(1.03);
+  line-height: 1;
+  margin-top: 10%;
+  overflow: clip;
+}
+.preload .code div {
+  font-family: 'Libre Barcode 128', cursive;
+  display: inline-block;
+  transform: scaleY(0)
 }
 
 
