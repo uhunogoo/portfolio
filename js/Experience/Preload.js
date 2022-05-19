@@ -30,10 +30,13 @@ export default class Preload extends EventEmitter {
         for(let r = 0; r < rows; r++){
             for(let c = 0; c < cols; c++){
                 let rect = document.createElementNS(svgNS, "rect")
-                gsap.set(rect, { attr:{width: 49, height: 49, x: c*50, y: r*50 }})
+                gsap.set(rect, { attr:{width: 51, height: 51, x: c*50, y: r*50 }})
                 svg.appendChild(rect)
             }
         }
+        gsap.set('.preload svg rect', { scale: 0, transformOrigin: 'center'})
+        gsap.set('.preload', { autoAlpha: 0 })
+        gsap.set('.preload__progress', { scaleX: 0 })
     }
     loading() {
         const that = this
@@ -50,28 +53,48 @@ export default class Preload extends EventEmitter {
             );
         }
         let randomColor = weightedRandom(colors, "circ.inOut")
-        gsap.set('.preload svg rect', { fill: '#ffffff', scale: 0, transformOrigin: 'center', autoAlpha: 0})
+        gsap.set('.preload svg rect', { fill: randomColor })
 
         
         const preload = gsap.timeline()
-        preload.to('.preload svg rect', {
+        preload.to('.preload', {
             autoAlpha: 1,
         })
         preload.to('.preload svg rect', {
             scale: 1,
-            ease: 'circ',
+            ease: 'power1',
             duration: 1,
             stagger: {
-                each: 0.015,
+                each: 0.01,
                 from: 'random'
             }
         })
-        preload.to('.preload svg rect', {
-            fill: randomColor,
+        preload.to('.preload__progress', {
+            scaleX: 1,
             duration: 1.5,
         }, '<')
-        preload.to('.preload', {
-            autoAlpha: 0
+        
+        preload.to('.preloader__left div', {
+            x: '-20%',
+            duration: 1.5,
         })
+        preload.to('.preloader__right div', {
+            x: '20%',
+            duration: 1.5,
+        }, '<')
+        preload.to('.preloader__left', {
+            x: '-100%',
+            ease: 'power3',
+            duration: 1.5,
+        }, '<+=1%')
+        preload.to('.preloader__right', {
+            x: '100%',
+            ease: 'power3',
+            duration: 1.5,
+        }, '<')
+        
+        // preload.to('.preload', {
+        //     autoAlpha: 0
+        // })
     }
 }

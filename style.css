@@ -20,7 +20,6 @@ html, body {
   width: 100vw;
 }
 .preload {
-  background: #fff;
   display: grid;
   place-items: center;
   font-size: 100px;
@@ -32,16 +31,18 @@ html, body {
   z-index: 2;
 }
 .preload__content {
+  position: relative;
   width: 45vmin;
+  z-index: 2;
 }
 .preload svg {
   display: block;
   width: 100%;
 }
-.preload svg rect {
+/* .preload svg rect { */
   /* visibility: hidden;
   opacity: 0; */
-}
+/* } */
 .preload__progress {
   background: #000;
   border-radius: 4px;
@@ -50,6 +51,27 @@ html, body {
   transform-origin: left center;
   width: 100%;
 }
+.preloader__left,
+.preloader__right {
+  background: #d4a268;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 50%;
+}
+.preloader__right {
+  left: auto;
+  right: 0;
+}
+
+.preloader__left div,
+.preloader__right div {
+  background: #fff;
+  height: 100%;
+  width: 100%;
+}
+
 
 .webgl {
   position: fixed;
