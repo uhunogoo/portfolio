@@ -44,11 +44,12 @@ html, body {
 }
 h1 {
   font-family: 'Libre Baskerville', serif;
-  font-weight: normal;
-  font-size: 4.19vmin;
-  margin: 20% 0 0;
-  position: relative;
-  overflow: clip;
+    font-weight: normal;
+    font-size: 4.19vmin;
+    margin: 20% 0 0;
+    position: relative;
+    overflow: clip;
+    height: 4.19vmin;
 }
 h1 div {
   display: inline-block;
@@ -56,7 +57,7 @@ h1 div {
 .preload__progress {
   background: #000;
   height: 4.4vmin;
-  margin-top: -12%;
+  margin-top: -9%; 
   width: 100%;
 }
 .preloader__left,
@@ -80,11 +81,11 @@ h1 div {
   width: 100%;
 }
 .preload .code {
-  font-size: 5.5vmin;
-  transform: translateX(1.5%) scaleX(1.03);
-  line-height: 1;
+  font-size: 5.4vmin;
+  line-height: 0.7;
   margin-top: 10%;
   overflow: clip;
+  transform: translateX(1.5%) scaleX(1.03);
 }
 .preload .code div {
   font-family: 'Libre Barcode 128', cursive;
