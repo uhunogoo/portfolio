@@ -14,10 +14,17 @@ export default class Preload extends EventEmitter {
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
         
-        // action
+        // actions
         this.createSVG()
+        this.animationControll()        
+    }
+    animationControll() {
+        // Get base animations
         this.loading()
-        
+        this.inAnimation()
+        this.outAnimation()
+
+        // Start animation
         this.resources.on('loadingProgress', () => {
             gsap.fromTo(this.progress, { value: this.progress.value }, {
                 value: this.resources.loaded / this.resources.toLoad,
@@ -27,10 +34,10 @@ export default class Preload extends EventEmitter {
                 }
             })
         })
-        
     }
     //chuck a bunch of square <rects> in the svg
     createSVG() {
+        // Setup <rect> grid
         let svgNS = "http://www.w3.org/2000/svg"
         let svg = document.getElementById("grid")
         let rows = 10
@@ -42,14 +49,16 @@ export default class Preload extends EventEmitter {
                 svg.appendChild(rect)
             }
         }
+
+
+        // Base parameters
         gsap.to('.preload', {
             autoAlpha: 1,
         })
-    }
-    loading() {
-        const colors = ['#d4a268', '#533f28']
-        const text = document.querySelector('h1').childNodes
 
+
+        // Apply colors
+        const colors = ['#d4a268', '#533f28']
         function weightedRandom(collection, ease) {
             return gsap.utils.pipe(
                 Math.random,
@@ -59,32 +68,36 @@ export default class Preload extends EventEmitter {
                 i => collection[i]
             );
         }
-        let randomColor = weightedRandom(colors, "circ.inOut")
-        gsap.set('.preload svg rect', { fill: randomColor }) 
 
-        const showText = gsap.timeline({ 
-            paused: true,
-            onComplete: () => {
-                window.addEventListener('click', () => this.finis.play())
-            }
-        })
+        let randomColor = weightedRandom(colors, "circ.inOut")
+        gsap.set('.preload svg rect', { fill: randomColor })
+    }
+    loading() {
         this.preload = gsap.timeline({
             paused: true,
-            onComplete: () => showText.play()
+            onComplete: () => this.playInAnimation.play()
         })
         this.preload.from('.preload__progress', {
             duration: 2,
             scaleX: 0,
             transformOrigin: 'left center'
+        })  
+    }
+    inAnimation() {
+        this.playInAnimation = gsap.timeline({ 
+            paused: true,
+            onComplete: () => {
+                window.addEventListener('click', () => this.playOutAnimation.play())
+            }
         })
-          
-        showText.to('.preload__progress', {
+
+        this.playInAnimation.to('.preload__progress', {
             duration: 0.5,
             scaleX: 0,
             ease: 'none',
             transformOrigin: 'right center'
         })
-        showText.from( '.title div', {
+        this.playInAnimation.from( '.title div', {
             y: '100%',
             scaleX: 0.7,
             ease: 'power4',
@@ -92,7 +105,7 @@ export default class Preload extends EventEmitter {
                 amount: 0.2,
             }
         }, '<+=60%')
-        showText.to('.code div', {
+        this.playInAnimation.to('.code div', {
             scaleY: '1.5',
             transformOrigin: 'left top',
             ease: 'power4',
@@ -101,16 +114,20 @@ export default class Preload extends EventEmitter {
                 from: 'end'
             }
         })
-        showText.from('svg', {
+        this.playInAnimation.from('svg', {
             y: '-100%',
+            opacity: 0,
             ease: 'power4',
             duration: 1.2,
             transformOrigin: 'center'
         }, '<+=5%')
-
-
-        this.finis = gsap.timeline({ paused: true })
-        this.finis.to('.code div', {
+    }
+    outAnimation() {
+        this.playOutAnimation = gsap.timeline({ 
+            paused: true, 
+            onComplete: () => this.trigger('preloadComplete') 
+        })
+        this.playOutAnimation.to('.code div', {
             y: '-130%',
             transformOrigin: 'left top',
             ease: 'power4',
@@ -118,8 +135,8 @@ export default class Preload extends EventEmitter {
                 amount: 0.2,
                 from: 'end'
             }
-          })
-        this.finis.to( '.title div', {
+        })
+        this.playOutAnimation.to( '.title div', {
             y: '-100%',
             ease: 'power4',
             stagger: {
@@ -127,35 +144,34 @@ export default class Preload extends EventEmitter {
                 from: 'end'
             }
         }, '<+=10%')
-        this.finis.to('svg', {
+        this.playOutAnimation.to('svg', {
             y: '-100%',
+            opacity: 0,
             ease: 'power4',
             duration: 1,
             transformOrigin: 'center'
         }, '<+=25%')
 
-        this.finis.to('.preloader__left', {
+        this.playOutAnimation.to('.preloader__left', {
             x: '-100%',
             ease: 'power3',
             duration: 1.5,
-        }, '<+=80%')
-        this.finis.to('.preloader__right', {
+        }, '<+=20%')
+        this.playOutAnimation.to('.preloader__right', {
             x: '100%',
             ease: 'power3',
             duration: 1.5,
         }, '<')
-        this.finis.to('.preloader__left div', {
+        this.playOutAnimation.to('.preloader__left div', {
             x: '-20%',
             duration: 1.5,
         }, '<+=10%')
-        this.finis.to('.preloader__right div', {
+        this.playOutAnimation.to('.preloader__right div', {
             x: '20%',
             duration: 1.5,
         }, '<')
-        
-
-        // preload.to('.preload', {
-        //     autoAlpha: 0
-        // })
+        this.playOutAnimation.to('.preload', {
+            autoAlpha: 0,
+        }, '<+=95%')
     }
 }

@@ -14,35 +14,6 @@ export default class Sword {
         this.animation()
     }
     loadMaterials() {
-        // Wood
-        this.resources.items.woodTexture.encoding = THREE.sRGBEncoding
-        this.resources.items.woodTexture.repeat.set(0.25, 0.25)
-        this.resources.items.woodTexture.wrapS = THREE.RepeatWrapping
-        this.resources.items.woodTexture.wrapT = THREE.RepeatWrapping
-        
-        this.resources.items.woodTextureRoughness.repeat.set(0.25, 0.25)
-        this.resources.items.woodTextureRoughness.wrapS = THREE.RepeatWrapping
-        this.resources.items.woodTextureRoughness.wrapT = THREE.RepeatWrapping
-        
-        
-        // Gold
-        this.resources.items.goldTexture.encoding = THREE.sRGBEncoding
-        this.resources.items.goldTexture.repeat.set(0.25, 0.25)
-        this.resources.items.goldTexture.wrapS = THREE.RepeatWrapping
-        this.resources.items.goldTexture.wrapT = THREE.RepeatWrapping
-        
-        this.resources.items.goldTextureNormal.repeat.set(0.25, 0.25)
-        this.resources.items.goldTextureNormal.wrapS = THREE.RepeatWrapping
-        this.resources.items.goldTextureNormal.wrapT = THREE.RepeatWrapping
-        
-        this.resources.items.goldTextureRoughness.repeat.set(0.25, 0.25)
-        this.resources.items.goldTextureRoughness.wrapS = THREE.RepeatWrapping
-        this.resources.items.goldTextureRoughness.wrapT = THREE.RepeatWrapping
-
-        // Metal        
-        this.resources.items.metalTextureNormal.repeat.set(1.12, 1.12)
-        this.resources.items.metalTextureNormal.wrapS = THREE.RepeatWrapping
-        this.resources.items.metalTextureNormal.wrapT = THREE.RepeatWrapping
 
 
         // Create materials
@@ -53,16 +24,13 @@ export default class Sword {
         this.woodMaterial = new THREE.MeshStandardMaterial({
             roughness: 1,
             metalness: 0.2,
-            roughnessMap: this.resources.items.woodTextureRoughness,
-            map: this.resources.items.woodTexture
+            color: '#ffeeee'
         })
 
         this.goldMaterial = new THREE.MeshStandardMaterial({
             roughness: 0.6,
             metalness: 0.6,
-            map: this.resources.items.goldTexture,
-            roughnessMap: this.resources.items.goldTextureRoughness,
-            normalMap: this.resources.items.goldTextureNormal,
+            color: '#ff00ff'
         })
         
     }
@@ -90,9 +58,9 @@ export default class Sword {
 
         // Group parameters
         this.group.add(knife, handle, garda)
-        this.group.scale.set(0.3, 0.3, 0.3)
+        this.group.scale.setScalar( 0.25 )
         this.group.position.y = 2.4
-        this.group.rotation.y = Math.PI
+        this.group.rotation.y = Math.PI * 0.5
 
 
         this.scene.add( this.group )

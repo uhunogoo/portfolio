@@ -21,7 +21,7 @@ export default class Points {
             },
             {
                 element: document.getElementById('point-2'),
-                position: new THREE.Vector3( 3, 0.3, -2 ),
+                position: new THREE.Vector3( 3.8, 0.85, -1.8 ),
                 animationParameters: {
                     angle: 1.56,
                     radius: 4

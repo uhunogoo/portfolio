@@ -24,7 +24,7 @@ export default class Fire {
         // Setup
         this.options = {}
         this.options.x = 3.8
-        this.options.y = 0.83
+        this.options.y = 0.64
         this.options.z = -1.8
         this.fireUniform = {
             uTime: { value: 0 },
@@ -41,7 +41,7 @@ export default class Fire {
     }
     createFire() {
         // Shape around te sword
-        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.5, 10, 10)
+        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.25, 10, 10)
 
         // Generate particles around the sword
         const swordParticlesMaterial = new THREE.ShaderMaterial({
