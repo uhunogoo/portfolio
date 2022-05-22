@@ -17,8 +17,19 @@ export default class Animation {
             
             // Show points after camera animation
             this.cameraMove.on('animationComplete', () => {
+                
                 this.pointsAnimation = new PointsAnimation( target )
+                
             })
+        })
+        
+        // Play animation for preload hovering
+        this.preload.on('preloadHovered', () => {
+            this.followingCursor.showPlay.play()
+        })
+        // Hide play text
+        this.preload.on('preloadWasClicked', () => {
+            this.followingCursor.showPlay.reverse()
         })
     }
     update() {

@@ -6,17 +6,26 @@ export default class Preload extends EventEmitter {
     constructor() {
         super()
 
-        // Options
+        // Setup
         this.experience = new Experience()
         this.resources = this.experience.resources
-
-        // Setup
+        
+        // Defaults
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
+        this.preloadHovered = false
         
         // actions
         this.createSVG()
-        this.animationControll()        
+        this.animationControll()  
+        
+        // Hover trigger
+        document.querySelector('.preload').addEventListener('mouseover', () => {
+            if(!this.preloadHovered) {
+                this.preloadHovered = true
+                this.trigger( 'preloadHovered' )
+            }
+        })
     }
     animationControll() {
         // Get base animations
@@ -87,7 +96,10 @@ export default class Preload extends EventEmitter {
         this.playInAnimation = gsap.timeline({ 
             paused: true,
             onComplete: () => {
-                window.addEventListener('click', () => this.playOutAnimation.play())
+                document.querySelector('.preload').addEventListener('click', () => {
+                    this.trigger( 'preloadWasClicked' )
+                    this.playOutAnimation.play()
+                })
             }
         })
 

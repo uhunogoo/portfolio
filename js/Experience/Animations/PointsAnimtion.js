@@ -134,14 +134,16 @@ export default class PointsAnimation extends EventEmitter {
             }, {
                 y: 0
             },'<+=90%')
-            animation.fromTo('.work__techonologys li', {
-                x: 50,
-                opacity: 0,
-            }, {
-                x: 0,
-                opacity: 1,
-                stagger: 0.15
-            },'<')
+            works.forEach( el => {
+                animation.fromTo( el.querySelectorAll('.work__techonologys li'), {
+                    x: 50,
+                    opacity: 0,
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    stagger: 0.15
+                },'<')
+            })
         }
     }
     raycasterAnimation() {
