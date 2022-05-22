@@ -244,3 +244,17 @@ h1 div {
 .close_btn:hover {
   transform: scale(1.2);
 }
+
+@media screen and (min-width: 767.5px) {
+  .following {
+    background: #fff;
+    border-radius: 50%;
+    height: 50px;
+    pointer-events: none;
+    position: fixed;
+    mix-blend-mode: exclusion;
+    top: 0;
+    width: 50px;
+    z-index: 99;
+  }
+}

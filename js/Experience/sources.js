@@ -32,4 +32,10 @@ export default [
         type: 'texture',
         path: '/asstes/textures/runes/sand.jpg?url'
     },
+    //  Point
+    {
+        name: 'pointTexture',
+        type: 'texture',
+        path: '/asstes/textures/runes/point.png?url'
+    },
 ]

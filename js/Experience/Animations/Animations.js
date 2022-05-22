@@ -1,11 +1,14 @@
 import Experience from '../Experience'
 import CameraMove from './CameraMove'
+import followingCursor from './MouseFollow'
 import PointsAnimation from './PointsAnimtion'
 
 export default class Animation {
     constructor (target) {
+        // Defaults
         this.experience = new Experience()
         this.preload = this.experience.preload
+        this.followingCursor = new followingCursor()
 
         // Wait while preload animation will finished
         this.preload.on('preloadComplete', () => {   
@@ -14,7 +17,7 @@ export default class Animation {
             
             // Show points after camera animation
             this.cameraMove.on('animationComplete', () => {
-                this.pointsAnimation = new PointsAnimation()
+                this.pointsAnimation = new PointsAnimation( target )
             })
         })
     }

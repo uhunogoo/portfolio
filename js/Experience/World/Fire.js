@@ -28,9 +28,9 @@ export default class Fire {
         this.options.z = -1.8
         this.fireUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#1e00ff') },
-            uColor2: { value: new THREE.Color('#00bfff') },
-            uColor3: { value: new THREE.Color('#f5d0d0') },
+            uColor1: { value: new THREE.Color('#ff0000') },
+            uColor2: { value: new THREE.Color('#fff700') },
+            uColor3: { value: new THREE.Color('#e6893d') },
         }
         this.particlesUniform = {
             uTime: { value: 0 },

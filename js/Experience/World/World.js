@@ -6,7 +6,6 @@ import Environment from './Environment'
 import Fire from './Fire'
 import Grass from './Grass'
 import Tower from './Tower'
-// import Sword from './Sword'
 import Skybox from './Skybox'
 import Animation from '../Animations/Animations'
 import Createpoints from './CreatePoints'
@@ -28,18 +27,17 @@ export default class World {
             this.sky = new Skybox()
             this.grass = new Grass()
             this.tower = new Tower()
-            // this.sword = new Sword()
             this.fire = new Fire()
-            this.points = new Createpoints()
+            
+            // Create points
+            this.points = new Createpoints(this.tower.towerGroup)
             
             // Add all scene group to main 
             sceneGroup.add( 
                 this.sky.skyGroup, 
                 this.grass.grassGroup,
-                // this.sword.group,
                 this.tower.towerGroup, 
-                this.fire.fireGroup, 
-                this.points.pointsGroup 
+                this.fire.fireGroup
             )
             this.scene.add( sceneGroup )
 

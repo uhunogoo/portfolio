@@ -101,7 +101,7 @@ void main() {
     float newTime = uTime * 6.0;
 
     
-    vec2 rotatedUV = st * get2dRotateMatrix( st.y * 0.2 );
+    vec2 rotatedUV = st * get2dRotateMatrix( st.y * 0.1 );
 
     float strength =  mod(rotatedUV.x * 10.0, 1.0);
     strength = length(strength - 0.5) * (1.0 - st.y);

@@ -30,7 +30,7 @@
     <canvas class="webgl"></canvas>
     <div id="app">
       <div class="informationPart">
-        <div data-trigger="point-0" class="point__content db">
+        <div id="point-0" class="point__content db">
           <div class="close_btn"></div>
           
           <div class="works-wrap">
@@ -80,33 +80,25 @@
           </div>
 
         </div>
-        <div data-trigger="point-1" class="point__content">
+        <div id="point-1" class="point__content">
           <div class="close_btn"></div>
           <span>
             Some content for point 2
           </span>
         </div>
-        <div data-trigger="point-2" class="point__content">
+        <div id="point-2" class="point__content">
           <div class="close_btn"></div>
           <span>
             Some content for point 3
           </span>
         </div>
       </div>
-      
-      <div id="point-0" class="point">
-        <div class="lable"></div>
-        <p class="text">point 1</p>
-      </div>
-      <div id="point-1" class="point">
-        <div class="lable"></div>
-        <p class="text">point 2</p>
-      </div>
-      <div id="point-2" class="point">
-        <div class="lable"></div>
-        <p class="text">point 3</p>
-      </div>
     </div>
+
+
+    <!-- Mouse follow -->
+    <div class="following"></div>
+    <!-- .Mouse follow -->
 
     <script type="module" src="/main.js"></script>
   </body>

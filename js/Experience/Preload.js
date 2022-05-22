@@ -117,8 +117,8 @@ export default class Preload extends EventEmitter {
         this.playInAnimation.from('svg', {
             y: '-100%',
             opacity: 0,
-            ease: 'power4',
-            duration: 1.2,
+            ease: 'power3.out',
+            duration: 0.4,
             transformOrigin: 'center'
         }, '<+=5%')
     }
@@ -147,8 +147,8 @@ export default class Preload extends EventEmitter {
         this.playOutAnimation.to('svg', {
             y: '-100%',
             opacity: 0,
-            ease: 'power4',
-            duration: 1,
+            ease: 'power4.out',
+            duration: 0.6,
             transformOrigin: 'center'
         }, '<+=25%')
 
