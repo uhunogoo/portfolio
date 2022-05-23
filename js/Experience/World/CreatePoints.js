@@ -6,9 +6,7 @@ export default class Createpoints {
         // Setup
         this.experience = new Experience()
         this.points = this.experience.points.list
-        this.sizes = this.experience.sizes
         this.scene = this.experience.scene
-        this.camera = this.experience.camera.instance
         this.resources = this.experience.resources
         
         // Add parameters

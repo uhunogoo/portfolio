@@ -149,7 +149,7 @@ export default class PointsAnimation extends EventEmitter {
     raycasterAnimation() {
         const mouse = new THREE.Vector2( this.mouse.x, this.mouse.y )
         this.raycaster.setFromCamera(mouse, this.camera)
-        const intersects = this.raycaster.intersectObjects( this.towerGroup.children )
+        const intersects = this.raycaster.intersectObjects( this.towerGroup.children, true )
 
         if( intersects.length ) {
             if (this.intersect !== intersects[0].object) {

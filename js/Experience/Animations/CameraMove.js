@@ -28,9 +28,6 @@ export default class CameraMove extends EventEmitter {
         this.clock = new THREE.Clock()
 
         this.animation()
-        this.on('animationComplete', () => {
-            this.animationComplete = true
-        })
     }
     animation() {
         this.tl = gsap.timeline({
@@ -40,6 +37,7 @@ export default class CameraMove extends EventEmitter {
             },
             onComplete: () => {
                 this.trigger('animationComplete')
+                this.animationComplete = true
             }
         })
         this.tl.to(this.parameters.lookAt, {

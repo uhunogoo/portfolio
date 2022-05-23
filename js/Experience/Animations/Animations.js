@@ -11,15 +11,10 @@ export default class Animation {
         this.followingCursor = new followingCursor()
 
         // Wait while preload animation will finished
-        this.preload.on('preloadComplete', () => {   
-            // Animations
+        this.preload.on('preloadComplete', () => {
             this.cameraMove = new CameraMove( target )
-            
-            // Show points after camera animation
             this.cameraMove.on('animationComplete', () => {
-                
-                this.pointsAnimation = new PointsAnimation( target )
-                
+                this.pointsAnimation = new PointsAnimation( target )  
             })
         })
         
