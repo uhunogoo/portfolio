@@ -92,20 +92,36 @@ export default class PointsAnimation extends EventEmitter {
         if( this.pointInfoOpen ) {
             const closeBtn = target.querySelector('.close_btn')
             closeBtn.addEventListener('click', () => {
-                gsap.to(target, {
-                    autoAlpha: 0
-                })
+                this.open.timeScale(2).reverse()
+                this.pointInfoOpen = false
             })
-
-            this.pointInfoOpen = false
         }
     }
-    clickHandler(target) {
-        console.log( target )
-        gsap.to(target.element, {
+    openMenu(target) {
+        this.open = gsap.timeline({paused: true})
+        this.open.to(target.element, {
             autoAlpha: 1
         })
+        this.open.fromTo('.work', {y: '200%',}, {
+            y: 0,
+            duration: 1,
+            stagger: 0.05
+        }, '<+=50%')
+        this.open.fromTo('.work__name', {y: '150%', opacity: 0}, {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+        }, '<+=50%')
+        this.open.fromTo('.work__techonologys', {y: '190%', opacity: 0}, {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+        }, '<')
 
+        this.open.play()
+    }
+    clickHandler(target) {
+        this.openMenu(target)
         this.closeBtn(target.element)
     }
     clean() {
@@ -126,7 +142,6 @@ export default class PointsAnimation extends EventEmitter {
         if( intersects.length > 0 ) {
             if (this.intersect !== intersects[0].object) {
                 this.clean()
-                
                 this.intersect = intersects[0].object                
 
                 // Scale up animation
