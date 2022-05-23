@@ -1,4 +1,5 @@
 uniform float uTime;
+uniform float uRotate;
 
 // varying
 varying vec2 vUv;
@@ -54,6 +55,7 @@ void main(){
 	st *= 1.0 + staticNoise;
 	st *= 0.5 + staticNoise2 * 0.2;
 	st.xz *= get2dRotateMatrix( rotation.y );
+	st.zy *= get2dRotateMatrix( uRotate * sin( uRotate + staticNoise * 10.0) );
 	st += offset;
 	vec4 modelPosition = modelMatrix * vec4(st, 1.0);
 

@@ -23,19 +23,19 @@ export default class World {
         sceneGroup.name = 'worldGroup'
         // Wait for environment
         this.resources.on('ready', () => {
-            // Setup
+
+            // Create world
             this.sky = new Skybox()
             this.grass = new Grass()
             this.tower = new Tower()
             this.fire = new Fire()
-            
-            // Create points
-            this.points = new Createpoints(this.tower.towerGroup)
+            this.points = new Createpoints()
             
             // Add all scene group to main 
             sceneGroup.add( 
                 this.sky.skyGroup, 
                 this.grass.grassGroup,
+                this.points.pointsGroup,
                 this.tower.towerGroup, 
                 this.fire.fireGroup
             )

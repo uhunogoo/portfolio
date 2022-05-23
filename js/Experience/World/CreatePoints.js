@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import Experience from '../Experience'
 
 export default class Createpoints {
-    constructor (parentGroup) {
+    constructor () {
         // Setup
         this.experience = new Experience()
         this.points = this.experience.points.list
@@ -10,7 +10,8 @@ export default class Createpoints {
         this.resources = this.experience.resources
         
         // Add parameters
-        this.parentGroup = parentGroup
+        this.pointsGroup = new THREE.Group()
+        this.pointsGroup.name = 'pointsGroup'
         
         // Methods
         this.createPoints()
@@ -30,8 +31,8 @@ export default class Createpoints {
             sprite.geometry.computeBoundingBox()
             points.add(sprite)
         })
-        points.scale.divideScalar( this.parentGroup.scale.x )
-        this.parentGroup.add(points)
+        points.scale.divideScalar( this.pointsGroup.scale.x )
+        this.pointsGroup.add(points)
     }
     update() {
     }

@@ -9,19 +9,17 @@ export default class Animation {
         this.experience = new Experience()
         this.preload = this.experience.preload
         this.followingCursor = new followingCursor()
+        this.cameraMove = new CameraMove( target )
 
         // Wait while preload animation will finished
         this.preload.on('preloadComplete', () => {
-            this.cameraMove = new CameraMove( target )
+            this.cameraMove.towerInAnimation.play()
+
             this.cameraMove.on('animationComplete', () => {
                 this.pointsAnimation = new PointsAnimation( target )  
             })
         })
         
-        // Play animation for preload hovering
-        this.preload.on('preloadHovered', () => {
-            this.followingCursor.showPlay.play()
-        })
         // Hide play text
         this.preload.on('preloadWasClicked', () => {
             this.followingCursor.showPlay.reverse()

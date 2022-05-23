@@ -20,6 +20,7 @@ export default class Grass {
         }
         this.customUniform = {
             uTime: { value: 0 },
+            uRotate: { value: 0.2 },
             uColor1: { value: new THREE.Color('#d4a268') },
             uColor2: { value: new THREE.Color('#533f28') },
         }
@@ -56,6 +57,12 @@ export default class Grass {
                 .onChange( () => {
                     this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
                 })
+            this.debugFolder
+                .add(this.grassMaterial.uniforms.uRotate, 'value')
+                .name('grassRotation')
+                .min(-1)
+                .max(1)
+                .step(0.001)
         }
     }
     createGrassGeometry() {

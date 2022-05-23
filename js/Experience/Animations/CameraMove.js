@@ -12,7 +12,6 @@ export default class CameraMove extends EventEmitter {
         this.target = target        
         this.experience = new Experience()
         this.scene = this.experience.scene
-        this.points = this.experience.points.list
         this.camera = this.experience.camera.instance
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
@@ -27,10 +26,9 @@ export default class CameraMove extends EventEmitter {
         this.previousTime = 0
         this.clock = new THREE.Clock()
 
-        this.animation()
-    }
-    animation() {
-        this.tl = gsap.timeline({
+        // Animations
+        this.towerInAnimation = gsap.timeline({
+            paused: true,
             defaults: {
                 duration: 2,
                 ease: 'power2.inOut'
@@ -40,19 +38,22 @@ export default class CameraMove extends EventEmitter {
                 this.animationComplete = true
             }
         })
-        this.tl.to(this.parameters.lookAt, {
+        this.animation()
+    }
+    animation() {
+        this.towerInAnimation.to(this.parameters.lookAt, {
             y: 1,
         }, '<')
-        this.tl.to(this.target.rotation, {
+        this.towerInAnimation.to(this.target.rotation, {
             y: Math.PI * this.parameters.angle
         }, '<')
-        this.tl.to(this.camera.position, {
+        this.towerInAnimation.to(this.camera.position, {
             x: this.parameters.radius,
             y: 0.75,
             z: this.parameters.radius,
             ease: 'power3.inOut'
         }, '<')
-        this.tl.to(this.target.rotation, {
+        this.towerInAnimation.to(this.target.rotation, {
             y: Math.PI * this.parameters.angle,
             ease: 'circ'
         }, '<+=60%')

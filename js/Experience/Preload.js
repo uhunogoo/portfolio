@@ -18,17 +18,29 @@ export default class Preload extends EventEmitter {
         // actions
         this.createSVG()
         this.animationControll()  
-        
-        // Hover trigger
-        document.querySelector('.preload').addEventListener('mouseover', () => {
-            if(!this.preloadHovered) {
-                this.preloadHovered = true
-                this.trigger( 'preloadHovered' )
-            }
-        })
     }
     animationControll() {
-        // Get base animations
+        // Create animations
+        this.playOutAnimation = gsap.timeline({ 
+            paused: true, 
+            onComplete: () => this.trigger('preloadComplete') 
+        })
+        this.playInAnimation = gsap.timeline({ 
+            paused: true,
+            onComplete: () => {
+                document.querySelector('.preload').addEventListener('click', () => {
+                    this.trigger( 'preloadWasClicked' )
+                    this.playOutAnimation.play()
+                })
+            }
+        })
+        this.preload = gsap.timeline({
+            paused: true,
+            onComplete: () => this.playInAnimation.play()
+        })
+
+
+        // Call base animations
         this.loading()
         this.inAnimation()
         this.outAnimation()
@@ -64,28 +76,9 @@ export default class Preload extends EventEmitter {
         gsap.to('.preload', {
             autoAlpha: 1,
         })
-
-
-        // Apply colors
-        const colors = ['#d4a268', '#533f28']
-        function weightedRandom(collection, ease) {
-            return gsap.utils.pipe(
-                Math.random,
-                gsap.parseEase(ease),
-                gsap.utils.mapRange(0, 1, -0.5, collection.length-0.5),
-                gsap.utils.snap(1),
-                i => collection[i]
-            );
-        }
-
-        let randomColor = weightedRandom(colors, "circ.inOut")
-        gsap.set('.preload svg rect', { fill: randomColor })
+        gsap.set('.preload svg rect', { fill: '#ffeeee' })
     }
-    loading() {
-        this.preload = gsap.timeline({
-            paused: true,
-            onComplete: () => this.playInAnimation.play()
-        })
+    loading() {  
         this.preload.from('.preload__progress', {
             duration: 2,
             scaleX: 0,
@@ -93,16 +86,6 @@ export default class Preload extends EventEmitter {
         })  
     }
     inAnimation() {
-        this.playInAnimation = gsap.timeline({ 
-            paused: true,
-            onComplete: () => {
-                document.querySelector('.preload').addEventListener('click', () => {
-                    this.trigger( 'preloadWasClicked' )
-                    this.playOutAnimation.play()
-                })
-            }
-        })
-
         this.playInAnimation.to('.preload__progress', {
             duration: 0.5,
             scaleX: 0,
@@ -135,10 +118,6 @@ export default class Preload extends EventEmitter {
         }, '<+=5%')
     }
     outAnimation() {
-        this.playOutAnimation = gsap.timeline({ 
-            paused: true, 
-            onComplete: () => this.trigger('preloadComplete') 
-        })
         this.playOutAnimation.to('.code div', {
             y: '-130%',
             transformOrigin: 'left top',
@@ -164,26 +143,21 @@ export default class Preload extends EventEmitter {
             transformOrigin: 'center'
         }, '<+=25%')
 
-        this.playOutAnimation.to('.preloader__left', {
-            x: '-100%',
-            ease: 'power3',
+        this.playOutAnimation.to('.preload__bg ', {
+            y: '-110%',
+            skewY: '2.5deg',
+            ease: 'power3.inOut',
             duration: 1.5,
         }, '<+=20%')
-        this.playOutAnimation.to('.preloader__right', {
-            x: '100%',
-            ease: 'power3',
-            duration: 1.5,
-        }, '<')
-        this.playOutAnimation.to('.preloader__left div', {
-            x: '-20%',
+        this.playOutAnimation.to('.preload__bg div', {
+            y: '-80%',
+            skewY: '2.5deg',
+            ease: 'power2.inOut',
             duration: 1.5,
         }, '<+=10%')
-        this.playOutAnimation.to('.preloader__right div', {
-            x: '20%',
-            duration: 1.5,
-        }, '<')
+
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
-        }, '<+=95%')
+        }, '>-=20%')
     }
 }

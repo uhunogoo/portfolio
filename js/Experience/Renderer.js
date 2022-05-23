@@ -27,8 +27,8 @@ export default class Renderer {
         })
 
         this.instance.outputEncoding = THREE.sRGBEncoding
-        this.instance.toneMapping = THREE.LinearToneMapping
-        this.instance.toneMappingExposure = 1
+        // this.instance.toneMapping = THREE.ACESFilmicToneMapping
+        // this.instance.toneMappingExposure = 1
         // Shadows
         // this.instance.shadowMap.enabled = true
         // this.instance.shadowMap.type = THREE.PCFSoftShadowMap
