@@ -98,25 +98,58 @@ export default class PointsAnimation extends EventEmitter {
         }
     }
     openMenu(target) {
-        this.open = gsap.timeline({paused: true})
+        this.open = gsap.timeline({
+            paused: true,
+            defaults: {
+              duration: 1,
+              ease: 'power4.out'
+            }
+          })
+
         this.open.to(target.element, {
-            autoAlpha: 1
+            autoAlpha: 1,
+            duration: 0.1
         })
-        this.open.fromTo('.work', {y: '200%',}, {
+        this.open.fromTo(target.element, { skewY: '5deg', y: '20%', clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' }, {
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            skewY: 0,
             y: 0,
-            duration: 1,
-            stagger: 0.05
-        }, '<+=50%')
-        this.open.fromTo('.work__name', {y: '150%', opacity: 0}, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-        }, '<+=50%')
-        this.open.fromTo('.work__techonologys', {y: '190%', opacity: 0}, {
-            y: 0,
-            opacity: 1,
-            duration: 1,
+            duration: 1.2
+        })
+        this.open.fromTo('.work__info', {autoAlpha: 0}, {
+            autoAlpha: 1,
+            duration: 0.1
         }, '<')
+        this.open.fromTo('.work', {y: '180%', skewY: '5deg'}, {
+            y: 0,
+            skewY: 0,
+            duration: 2,
+            stagger: 0.11,
+        }, '<')
+        this.open.fromTo('.work__image', {clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'}, {
+            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+            stagger: 0.07,
+            duration: 1.5,
+            ease: 'power2'
+        }, '<')
+        this.open.fromTo('.work__image img', { filter: 'blur(0.1em)', scale: 1.6 },{
+            filter: 'blur(0em)',
+            scale: 1,
+            stagger: 0.1,
+            duration: 1.5,
+            transformOrigin: 'top center',
+            ease: 'power2'
+        }, '<')
+        this.open.fromTo('.work__name span', { y: '150%', skewY: '5deg' }, {
+            y: 0,
+            skewY: 0,
+            stagger: 0.15,
+        }, '<+=55%')
+        this.open.fromTo('.work__technology', { y: '150%' }, {
+            y: 0,
+            stagger: 0.15,
+        }, '<+=10%')
+
 
         this.open.play()
     }
@@ -142,7 +175,10 @@ export default class PointsAnimation extends EventEmitter {
         if( intersects.length > 0 ) {
             if (this.intersect !== intersects[0].object) {
                 this.clean()
-                this.intersect = intersects[0].object                
+                this.intersect = intersects[0].object    
+                
+                // Cursor pointer
+                document.documentElement.style.cursor = 'pointer'
 
                 // Scale up animation
                 if( this.tl ) this.tl.kill()
@@ -158,6 +194,10 @@ export default class PointsAnimation extends EventEmitter {
                 })
             }
         } else {
+            // Cursor default
+            if (document.documentElement.style.cursor === 'pointer') {
+                document.documentElement.style.cursor = 'default'
+            }
             this.clean()
         }
     }

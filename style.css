@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Libre+Barcode+128&family=Libre+Baskerville&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;500&family=Libre+Barcode+128&display=swap');
 
 html, body {
   color: #2d2d2d;
@@ -66,7 +66,7 @@ html, body {
   .code {
     font-size: 6.7vmin;
     line-height: 0.7;
-    margin-top: 10%;
+    margin-top: -11.6%;
     overflow: clip;
     transform: translateX(1.5%) scaleX(1.03);
     div {
@@ -90,13 +90,14 @@ html, body {
   }
 }
 h1 {
-  font-family: 'Libre Baskerville', serif;
-  font-weight: normal;
-  font-size: 5.1vmin;
+  font-family: 'Barlow Condensed', serif;
+  font-weight: 500;
+  font-size: 7.6vmin;
+  line-height: 1;
   margin: 20% 0 0;
   position: relative;
   overflow: clip;
-  height: 5.1vmin;
+  height: 7.6vmin;
   div {
     display: inline-block;
   }
@@ -111,7 +112,6 @@ h1 {
 
 .point__content {
   background: #fff;
-  display: grid;
   left: 50%;
   opacity: 0;
   place-items: center;
@@ -128,54 +128,86 @@ h1 {
   width: 100%;
 }
 .works {
-  align-items: center;
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
   gap: 30px;
-  padding: 0 15px;
-  height: 100%;
-  /* WROK BLOCK BEGIN */
-  .work {
-    flex: 0 0 45%;
-    min-width: 45%;
-    &__image {
-      background: #000;
-      aspect-ratio: 1.5;
+  grid-template-columns: 1fr;
+  grid-auto-rows: max-content;
+  height: 100vh;
+  overflow-x: clip;
+  overflow-y: scroll;
+  padding: 30px;
+  @media screen and (min-width: 991.5px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media screen and (min-width: 1100px) {
+    gap: 40px;
+    padding: 40px;
+  }
+}
+.work {
+  position: relative;
+  overflow: clip;
+  min-width: 0;
+  &__image {
+    transition: transform 0.3s cubic-bezier(0.39, 0.575, 0.565, 1),
+                filter 0.2s cubic-bezier(0.39, 0.575, 0.565, 1);
+    img {
+      display: block;
+      width: 100%;
+      will-change: filter, transform;
     }
-    &__name {
-      font-family: 'Libre Baskerville', serif;
-      font-size: 2em;
-      color: inherit;
-      line-height: 1.25;
-      margin: 1em 0 0;
+  }
+  &__info {
+    mix-blend-mode: difference;
+    font-size: clamp(24px, 3vmax, 50px);
+    bottom: 0;
+    padding: 0.5em;
+    position: absolute;
+    width: 100%;
+  }
+  &__name {
+    color: #fff;
+    font-family: 'Barlow Condensed', serif;
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+    overflow: clip;
+    span {
+      display: block;
+      line-height: 1.2;
     }
-    &__techonologys {
-      font-size: 0;
-      list-style: none;
-      margin: 0;
-      padding: 0; 
-      li {
-        font-size: 1rem;
-        display: inline-block;
-        margin: 1.5em 0 0;
-        & + li {
-          margin-left: 0.8em;
-        }
+  }
+  &__technology {
+    color: #fff;
+    list-style: none;
+    font-size: 0.4em;
+    margin: 1.25em 0 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      & + li {
+        margin-left: 15px;
       }
     }
   }
-  /* WROK BLOCK END */
+  &:hover {
+    .work__image {
+      transform: scale(1.1);
+      filter: brightness(0.9);
+    }
+  }
 }
 
 
 .close_btn {
   cursor: pointer;
-  height: 16px;
+  height: 30px;
   position: absolute;
   right: 25px;
   top: 25px;
   transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-  width: 16px;
+  width: 30px;
+  z-index: 2;
   &::before,
   &::after {
     background: #000;

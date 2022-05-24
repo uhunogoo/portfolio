@@ -92,23 +92,30 @@ export default class Preload extends EventEmitter {
             ease: 'none',
             transformOrigin: 'right center'
         })
-        this.playInAnimation.from( '.title div', {
-            y: '100%',
-            scaleX: 0.7,
-            ease: 'power4',
-            stagger: {
-                amount: 0.2,
-            }
-        }, '<+=60%')
         this.playInAnimation.to('.code div', {
             scaleY: '1.5',
             transformOrigin: 'left top',
             ease: 'power4',
             stagger: {
-                amount: 0.2,
-                from: 'end'
+                amount: 0.2
             }
         })
+        this.playInAnimation.to('.code div', {
+            y: '100%',
+            transformOrigin: 'left top',
+            ease: 'power4',
+            stagger: {
+                amount: 0.2,
+            }
+        })
+        this.playInAnimation.from( '.title div', {
+            y: '-100%',
+            scaleX: 0.7,
+            ease: 'power4',
+            stagger: {
+                amount: 0.2,
+            }
+        }, '<+=10%')
         this.playInAnimation.from('svg', {
             y: '-100%',
             opacity: 0,
@@ -118,15 +125,6 @@ export default class Preload extends EventEmitter {
         }, '<+=5%')
     }
     outAnimation() {
-        this.playOutAnimation.to('.code div', {
-            y: '-130%',
-            transformOrigin: 'left top',
-            ease: 'power4',
-            stagger: {
-                amount: 0.2,
-                from: 'end'
-            }
-        })
         this.playOutAnimation.to( '.title div', {
             y: '-100%',
             ease: 'power4',
@@ -134,14 +132,14 @@ export default class Preload extends EventEmitter {
                 amount: 0.2,
                 from: 'end'
             }
-        }, '<+=10%')
+        })
         this.playOutAnimation.to('svg', {
             y: '-100%',
             opacity: 0,
             ease: 'power4.out',
             duration: 0.6,
             transformOrigin: 'center'
-        }, '<+=25%')
+        }, '>-=80%')
 
         this.playOutAnimation.to('.preload__bg ', {
             y: '-110%',
