@@ -1,133 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div class="preload">
-      <div class="preload__content">
-        <svg id="grid" viewBox="0 0 500 500"></svg>
 
-        <h1 class="title">
-          <div>Y</div><div>u</div><div>r</div><div>i</div><div>i</div> <div>S</div><div>c</div><div>h</div><div>e</div><div>r</div><div>b</div><div>a</div><div>c</div><div>h</div><div>e</div><div>n</div><div>k</div><div>o</div>
-        </h1>
-        <div class="preload__progress"></div>
-        <div class="code">
-          <div>c</div><div>h</div><div>e</div><div>c</div><div>k</div><div>e</div><div>d</div> <div>b</div><div>y</div> <div>a</div><div>n</div><div>n</div><div>a</div> <div>m</div><div>e</div><div>l</div><div>n</div><div>i</div><div>k</div><div>o</div><div>v</div><div>a</div>
-        </div>
-      </div>
-      <div class="preload__bg">
-        <div></div>
-      </div>
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<style type="text/css" media="screen, print">
+		@font-face {
+		  font-family: "Romanica";
+		  src: url("./asstes/fonts/Romanica/Romanica.ttf");
+		  font-display: swap;
+		  font-weight: normal;
+		}
+		@font-face {
+		  font-family: "PoetsenOne";
+		  src: url("./asstes/fonts/PoetsenOne/PoetsenOne-Regular.ttf");
+		  font-display: swap;
+		  font-weight: normal;
+		}
+	  </style>
+	<title>Yurii</title>
+</head>
 
-    </div>
-    <canvas class="webgl"></canvas>
-    <div id="app">
-      <div class="informationPart">
-        <div id="point-0" class="point__content db">
-          <div class="close_btn"></div>
-          <div class="works">
-            <div class="work">
-              <div class="work__image">
-                <img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=80" alt="image">
-              </div>
-              <div class="work__info">
-                <h2 class="work__name"><span>Lorem ipsum</span></h2>
-                <ul class="work__technology">
-                  <li>Lorem</li>
-                  <li>ipsum</li>
-                  <li>dolor</li>
-                  <li>sit</li>
-                  <li>amet</li>
-                  <li>consectetur</li>
-                  <li>adipisicing</li>
-                  <li>elit</li>    
-                </ul>
-              </div>
-            </div>
-            <div class="work">
-              <div class="work__image">
-                <img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=80" alt="image">
-              </div>
-              <div class="work__info">
-                <h2 class="work__name"><span>Lorem ipsum</span></h2>
-                <ul class="work__technology">
-                  <li>Lorem</li>
-                  <li>ipsum</li>
-                  <li>dolor</li>
-                  <li>sit</li>
-                  <li>amet</li>
-                  <li>consectetur</li>
-                  <li>adipisicing</li>
-                  <li>elit</li>    
-                </ul>
-              </div>
-            </div>
-            <div class="work">
-              <div class="work__image">
-                <img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=80" alt="image">
-              </div>
-              <div class="work__info">
-                <h2 class="work__name"><span>Lorem ipsum</span></h2>
-                <ul class="work__technology">
-                  <li>Lorem</li>
-                  <li>ipsum</li>
-                  <li>dolor</li>
-                  <li>sit</li>
-                  <li>amet</li>
-                  <li>consectetur</li>
-                  <li>adipisicing</li>
-                  <li>elit</li>    
-                </ul>
-              </div>
-            </div>
-            <div class="work">
-              <div class="work__image">
-                <img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=80" alt="image">
-              </div>
-              <div class="work__info">
-                <h2 class="work__name"><span>Lorem ipsum</span></h2>
-                <ul class="work__technology">
-                  <li>Lorem</li>
-                  <li>ipsum</li>
-                  <li>dolor</li>
-                  <li>sit</li>
-                  <li>amet</li>
-                  <li>consectetur</li>
-                  <li>adipisicing</li>
-                  <li>elit</li>    
-                </ul>
-              </div>
-            </div>
-          </div>
+<body>
+	<div class="preload">
+		<div class="preload__content">
+			<svg id="grid" viewBox="0 0 500 500"></svg>
 
-        </div>
-        <div id="point-1" class="point__content">
-          <div class="close_btn"></div>
-          <span>
-            Some content for point 2
-          </span>
-        </div>
-        <div id="point-2" class="point__content">
-          <div class="close_btn"></div>
-          <span>
-            Some content for point 3
-          </span>
-        </div>
-      </div>
-    </div>
+			<h1 class="title">
+				<div>Y</div>
+				<div>u</div>
+				<div>r</div>
+				<div>i</div>
+				<div>i</div>
+				<div>&nbsp;</div>
+				<div>S</div>
+				<div>c</div>
+				<div>h</div>
+				<div>e</div>
+				<div>r</div>
+				<div>b</div>
+				<div>a</div>
+				<div>c</div>
+				<div>h</div>
+				<div>e</div>
+				<div>n</div>
+				<div>k</div>
+				<div>o</div>
+			</h1>
+			<div class="preload__progress"></div>
+			<div class="code">
+				<div>c</div>
+				<div>h</div>
+				<div>e</div>
+				<div>c</div>
+				<div>k</div>
+				<div>e</div>
+				<div>d</div>
+				<div>&nbsp;</div>
+				<div>b</div>
+				<div>y</div>
+				<div>&nbsp;</div>
+				<div>a</div>
+				<div>n</div>
+				<div>n</div>
+				<div>a</div>
+				<div>&nbsp;</div>
+				<div>m</div>
+				<div>e</div>
+				<div>l</div>
+				<div>n</div>
+				<div>i</div>
+				<div>k</div>
+				<div>o</div>
+				<div>v</div>
+				<div>a</div>
+			</div>
+		</div>
+		<div class="preload__bg">
+			<div></div>
+		</div>
+
+	</div>
+	<canvas class="webgl"></canvas>
+	<div id="app">
+		<div class="informationPart">
+			<div id="point-0" class="point__content db">
+				<div class="close_btn"></div>
+				<div class="works">
+					<div class="work">
+						<div class="work__image">
+							<img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=100"
+								alt="image">
+						</div>
+						<div class="work__info">
+							<h2 class="work__name"><span>Lorem ipsum</span></h2>
+							<ul class="work__technology">
+								<li>Lorem</li>
+								<li>ipsum</li>
+								<li>dolor</li>
+								<li>sit</li>
+								<li>amet</li>
+								<li>consectetur</li>
+								<li>adipisicing</li>
+								<li>elit</li>
+							</ul>
+						</div>
+					</div>
+					<div class="work">
+						<div class="work__image">
+							<img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=100"
+								alt="image">
+						</div>
+						<div class="work__info">
+							<h2 class="work__name"><span>Lorem ipsum</span></h2>
+							<ul class="work__technology">
+								<li>Lorem</li>
+								<li>ipsum</li>
+								<li>dolor</li>
+								<li>sit</li>
+								<li>amet</li>
+								<li>consectetur</li>
+								<li>adipisicing</li>
+								<li>elit</li>
+							</ul>
+						</div>
+					</div>
+					<div class="work">
+						<div class="work__image">
+							<img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=100"
+								alt="image">
+						</div>
+						<div class="work__info">
+							<h2 class="work__name"><span>Lorem ipsum</span></h2>
+							<ul class="work__technology">
+								<li>Lorem</li>
+								<li>ipsum</li>
+								<li>dolor</li>
+								<li>sit</li>
+								<li>amet</li>
+								<li>consectetur</li>
+								<li>adipisicing</li>
+								<li>elit</li>
+							</ul>
+						</div>
+					</div>
+					<div class="work">
+						<div class="work__image">
+							<img src="https://images.unsplash.com/photo-1653164494885-a8526f62678c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTMzODY0NDk&ixlib=rb-1.2.1&q=100"
+								alt="image">
+						</div>
+						<div class="work__info">
+							<h2 class="work__name"><span>Lorem ipsum</span></h2>
+							<ul class="work__technology">
+								<li>Lorem</li>
+								<li>ipsum</li>
+								<li>dolor</li>
+								<li>sit</li>
+								<li>amet</li>
+								<li>consectetur</li>
+								<li>adipisicing</li>
+								<li>elit</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div id="point-1" class="point__content">
+				<div class="close_btn"></div>
+				<span>
+					Some content for point 2
+				</span>
+			</div>
+			<div id="point-2" class="point__content">
+				<div class="close_btn"></div>
+				<span>
+					Some content for point 3
+				</span>
+			</div>
+		</div>
+		<nav class="menu">
+			<div class="menu__item" role="button"><img src="./asstes/backgrounds/marker.svg?url" alt="marker"><span>About me</span></div>
+			<div class="menu__item" role="button"><img src="./asstes/backgrounds/marker.svg?url" alt="marker"><span>Works</span></div>
+		</nav>
+	</div>
 
 
-    <!-- Mouse follow -->
-    <div class="following">
-      <span class="following__look following_centered">Look</span>
-      <span class="following__play following_centered">Click to start</span>
-    </div>
-    <!-- .Mouse follow -->
+	<!-- Mouse follow -->
+	<div class="following">
+		<span class="following__look following_centered">Look</span>
+		<span class="following__play following_centered">Click to start</span>
+	</div>
+	<!-- .Mouse follow -->
 
-    <script type="module" src="/main.js"></script>
-  </body>
+	<script type="module" src="/main.js"></script>
+</body>
+
 </html>

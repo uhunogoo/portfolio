@@ -59,15 +59,15 @@ export default class CameraMove extends EventEmitter {
         }, '<+=60%')
     }
     update() {
-        if (!this.animationComplete) return
-        const elapsedTime = this.clock.getElapsedTime()
-        const deltaTime = elapsedTime - this.previousTime
-        this.previousTime = elapsedTime
+        // if (!this.animationComplete) return
+        // const elapsedTime = this.clock.getElapsedTime()
+        // const deltaTime = elapsedTime - this.previousTime
+        // this.previousTime = elapsedTime
 
-        const parallaxY = - this.mouse.y * 0.1
-        const parallaxX = this.mouse.x * 0.25
+        // const parallaxY = - this.mouse.y * 0.1
+        // const parallaxX = this.mouse.x * 0.25
 
-        this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 3 * deltaTime
-        this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 3 * deltaTime       
+        // this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 3 * deltaTime
+        // this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 3 * deltaTime       
     }
 }

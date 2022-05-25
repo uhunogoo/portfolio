@@ -1,7 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;500&family=Libre+Barcode+128&display=swap');
 
+:root {
+  --white: #ffffff;
+  --dark: #000000; 
+}
+
 html, body {
   color: #2d2d2d;
+  font-family: 'PoetsenOne', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
   height: 100vh;
   margin: 0;
@@ -13,9 +21,6 @@ html, body {
   box-sizing: border-box;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   overflow: clip;
   width: 100vw;
@@ -31,7 +36,7 @@ html, body {
   &__content {
     margin: 0 auto;
     position: relative;
-    width: 55vmin;
+    width: 65vmin;
     z-index: 2;
   }
   svg {
@@ -40,7 +45,7 @@ html, body {
   }
 
   &__progress {
-    background: #000;
+    background: var(--dark);
     height: 4.4vmin;
     margin-top: -9%; 
     width: 100%;
@@ -54,7 +59,7 @@ html, body {
     top: 0;
     width: 50%;
     div {
-      background: #fff;
+      background: var(--white);
       height: 100%;
       width: 100%;
     }
@@ -64,12 +69,13 @@ html, body {
     right: 0;
   }
   .code {
-    font-size: 6.7vmin;
-    line-height: 0.7;
+    font-size: 0;
+    height: 4rem;
     margin-top: -11.6%;
     overflow: clip;
     transform: translateX(1.5%) scaleX(1.03);
     div {
+      font-size: 6.7vmin;
       font-family: 'Libre Barcode 128', cursive;
       display: inline-block;
       line-height: 1;
@@ -83,22 +89,24 @@ html, body {
     top: 0;
     width: 100%;
     div {
-      background: #fff;
+      background: var(--white);
       height: 100%;
       width: 100%;
     }
   }
 }
 h1 {
-  font-family: 'Barlow Condensed', serif;
+  font-family: 'Romanica';
   font-weight: 500;
-  font-size: 7.6vmin;
+  font-size: 0;
+  height: 6.02vmin;
   line-height: 1;
   margin: 20% 0 0;
-  position: relative;
   overflow: clip;
-  height: 7.6vmin;
+  position: relative;
+  text-transform: uppercase;
   div {
+    font-size: 6.02vmin;
     display: inline-block;
   }
 }
@@ -111,7 +119,7 @@ h1 {
 }
 
 .point__content {
-  background: #fff;
+  background: var(--white);
   left: 50%;
   opacity: 0;
   place-items: center;
@@ -158,31 +166,38 @@ h1 {
     }
   }
   &__info {
-    mix-blend-mode: difference;
-    font-size: clamp(24px, 3vmax, 50px);
+    font-size: clamp(24px, 2vmax, 50px);
     bottom: 0;
     padding: 0.5em;
     position: absolute;
     width: 100%;
   }
   &__name {
-    color: #fff;
-    font-family: 'Barlow Condensed', serif;
-    font-size: 1em;
+    color: var(--dark);
+    font-family: 'Romanica';
+    font-size: 1.2em;
     font-weight: 500;
     margin: 0;
     overflow: clip;
+    text-transform: uppercase;
     span {
       display: block;
       line-height: 1.2;
     }
   }
   &__technology {
-    color: #fff;
-    list-style: none;
+    color: var(--white);
+    text-shadow:
+      -1px -1px 0 var(--dark),  
+      1px -1px 0 var(--dark),
+      -1px  1px 0 var(--dark),
+      1px  1px 0 var(--dark);
     font-size: 0.4em;
+    letter-spacing: 0.015em;
+    list-style: none;
     margin: 1.25em 0 0;
     padding: 0;
+    text-transform: capitalize;
     li {
       display: inline-block;
       & + li {
@@ -210,7 +225,7 @@ h1 {
   z-index: 2;
   &::before,
   &::after {
-    background: #000;
+    background: var(--dark);
     content: '';
     display: block;
     height: 2px;
@@ -230,7 +245,7 @@ h1 {
 
 @media screen and (min-width: 767.5px) {
   .following {
-    background: #fff;
+    background: var(--white);
     border-radius: 50%;
     height: 70px;
     pointer-events: none;
@@ -252,6 +267,39 @@ h1 {
       top: 50%;
       transform: translate(-50%, -50%);
       width: 100%;
+    }
+  }
+}
+
+.menu {
+  bottom: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  left: 50%;
+  padding-top: 10px;
+  position: fixed;
+  max-width: 600px;
+  transform: translateX(-50%);
+  width: 90%;
+  &__item {
+    color: var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow:
+      -1px -1px 0 var(--dark),  
+      1px -1px 0 var(--dark),
+      -1px  1px 0 var(--dark),
+      1px  1px 0 var(--dark);
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+    img {
+      display: block;
+      margin-right: 15px;
+      width: 20px;
     }
   }
 }
