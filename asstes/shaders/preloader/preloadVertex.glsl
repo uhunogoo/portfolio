@@ -1,4 +1,5 @@
 uniform float uProgress;
+uniform float uAspect;
 
 // varying
 varying vec2 vUv;
@@ -57,9 +58,10 @@ float fbm(vec2 n){
 
 void main() {
   float progress = uProgress;
+  vec2 smogUV = (uv + 0.5) / vec2( 1.0, uAspect ) + 0.5;
   // Points
   gl_Position = vec4(position, 1.0);
   // varying
   vUv = uv;
-  vSmog = fbm( uv / 2.0 + progress * 0.1 + fbm(uv * 6.0 + progress * 10.0) + cnoise(uv * 3.0 + progress) * 0.2) * 8.0;
+  vSmog = fbm( smogUV / 2.0 + progress * 0.1 + fbm(smogUV * 6.0 + progress * 10.0) + cnoise(smogUV * 3.0 + progress) * 0.2) * 8.0;
 }

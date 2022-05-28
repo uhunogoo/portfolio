@@ -71,12 +71,14 @@ export default class Preload extends EventEmitter {
             })
         })
     }
-    preloadBG() {        
+    preloadBG() {
+        const aspect = this.experience.sizes.width / this.experience.sizes.height
         const plane = new THREE.PlaneGeometry(2, 2, 200, 200)
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 uProgress: { value: 1 },
-                uTime: { value: 0 }
+                uTime: { value: 0 },
+                uAspect: { value: aspect }
             },
             transparent: true,
             depthWrite: false,
@@ -97,27 +99,35 @@ export default class Preload extends EventEmitter {
         }
     }
     loading() {  
-        this.preload.from('.progress__bar', {
+        this.preload.from('#progress__bar', {
             duration: 2,
             scaleX: 0,
             transformOrigin: 'left center'
         })  
     }
     inAnimation() {
-        this.playInAnimation.to('.progress__bar', {
-            duration: 0.5,
-            scaleX: 1,
-            ease: 'none',
-            transformOrigin: 'right center'
+        this.playInAnimation.to('.preload__progress', {
+            opacity: 0,
+            scale: 0.8,
+            filter: 'blur(0.1em)',
+            ease: 'power3.out',
         })
-        this.playInAnimation.from('.title div', {
-            y: 100,
+        this.playInAnimation.from('.text-part', {
+            scale: 1.3,
+            y: 200,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power1'
+        }, '<+=10%')
+        this.playInAnimation.from('.text', {
+            y: 40,
+            scale: 1.2,
+            filter: 'blur(0.1em)',
+            opacity: 0,
             stagger: {
-                amount: 0.7,
-                from: 'center',
-                ease: 'power1.out',
+                amount: 0.2
             }
-        })
+        }, '<+=30%')
     }
     outAnimation() {
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {

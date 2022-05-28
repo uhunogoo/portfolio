@@ -35,35 +35,81 @@ html, body {
   top: 0;
   width: 100%;
   z-index: 2;
+  .top__content {
+    margin: 20% auto 0;
+    max-width: 900px;
+    position: relative;
+    width: 100%;
+    &::after {
+      background: url(./asstes/backgrounds/grece.svg) no-repeat center;
+      content: '';
+      opacity: 0.025;
+      display: block;
+      height: 0;
+      left: 50%;
+      padding-top: 110%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 110%;
+      z-index: -1;
+    }
+    .text-part {
+      padding: 4.6% 0 4%;
+      position: relative;
+      &::after,
+      &::before {
+        background: url(./asstes/backgrounds/title-line.svg) no-repeat 50% 100%;
+        content: '';
+        display: block;
+        height: 50%;
+        position: absolute;
+        top: 0;
+        transform: translateY(-100%);
+        width: 100%;
+      }
+      &::after {
+        bottom: 0;
+        top: auto;
+        transform: translateY(100%) rotate(180deg);
+      }
+    }
+  }
   .title {
     text-align: center;
   }
+  .who {
+    font-family: 'Romanica';
+    font-size: 40px;
+    margin-bottom: 0;
+    text-align: center;
+  }
   &__progress {
-    background: var(--dark);
     bottom: 10%;
-    border: 2px solid var(--gold);
-    height: 59px;
     left: 50%;
-    padding: 8px;
     position: absolute;
     transform: translate( -50%, 0);
     max-width: 610px;
     width: 100%;
-    .progress__bar {
-      background: var(--red);
-      height: 100%;
-      width: 100%;
-    }
-    &::after {
-      background: url(./asstes/backgrounds/life_separators.svg) no-repeat 50% 50%;
-      background-size: cover;
-      content: '';
+    svg {
       display: block;
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      bottom: 10px;
-      right: 10px;
+      height: auto;
+      width: 100%;
+      .st0{
+        fill: var(--gold);
+      }
+      .st1{
+        fill: var(--dark);
+        fill-opacity: 0.8;
+        stroke: var(--gold);
+        stroke-width: 2;
+      }
+      .st2{
+        fill: var(--red);
+      }
+      .st3{
+        fill: var(--white);
+      }
     }
   }
   .code {
@@ -85,14 +131,17 @@ h1 {
   font-family: 'Romanica';
   font-weight: 500;
   font-size: 0;
-  height: 6.02vmin;
   line-height: 1;
-  margin: 20% 0 0;
-  overflow: clip;
+  margin: 0;
   position: relative;
   text-transform: uppercase;
-  div {
-    font-size: 6.02vmin;
+  .text__contaioner {
+    height: 8.02vmin;
+    overflow: clip;
+    position: relative;
+  }
+  span {
+    font-size: 8.02vmin;
     display: inline-block;
   }
 }

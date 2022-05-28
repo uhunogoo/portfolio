@@ -7,9 +7,9 @@ void main(){
 	vec2 st = vUv;
 	
 	float progress = uProgress;
-	st -= 1.2;
-	float shape = sin( (st.x + st.y) / 2.0 + progress * 2.0 );
-	shape = smoothstep(0.0, 0.5, shape + vSmog);
+	st -= 1.5;
+	float shape = sin( (st.x + st.y) / 2.0 + progress * 3.0 );
+	shape = smoothstep(0.0, 0.415, shape + vSmog);
 	shape = clamp(shape, 0.0, 1.0);
 	
 	
