@@ -27,7 +27,6 @@ export default class Preload extends EventEmitter {
         // Debug
         if (this.debug.active) {
             this.debugFolder = this.debug.ui.addFolder('Preload')
-            this.debugFolder.close()
         }
         
         // actions
@@ -108,6 +107,7 @@ export default class Preload extends EventEmitter {
     inAnimation() {
         this.playInAnimation.to('.preload__progress', {
             opacity: 0,
+            y: -10,
             scale: 0.8,
             filter: 'blur(0.1em)',
             ease: 'power3.out',
@@ -139,5 +139,12 @@ export default class Preload extends EventEmitter {
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
         }, '<+=60%')
+    }
+    resize() {
+        const aspect = this.experience.sizes.width / this.experience.sizes.height
+        this.mesh.material.uniforms.uAspect.value = aspect
+    }
+    update() {
+        this.mesh.material.uniforms.uTime.value = this.experience.time.elapsed / 1000
     }
 }
