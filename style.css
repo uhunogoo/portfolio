@@ -156,7 +156,6 @@ h1 {
 }
 
 .point__content {
-  background: var(--white);
   left: 50%;
   opacity: 0;
   place-items: center;
@@ -310,34 +309,45 @@ h1 {
 
 .menu {
   bottom: 15px;
-  display: grid;
-  display: none;
-  grid-template-columns: 1fr 1fr;
-  left: 50%;
-  padding-top: 10px;
+  height: 60px;
+  left: 15px;
   position: fixed;
-  max-width: 600px;
-  transform: translateX(-50%);
-  width: 90%;
+  width: 60px;
   &__item {
+    align-items: center;
+    border-radius: 50px;
     color: var(--white);
+    cursor: pointer;
     display: flex;
     justify-content: center;
-    align-items: center;
     text-shadow:
       -1px -1px 0 var(--dark),  
       1px -1px 0 var(--dark),
       -1px  1px 0 var(--dark),
       1px  1px 0 var(--dark);
-    border-radius: 50px;
-    cursor: pointer;
     padding: 10px;
-    position: relative;
+    position: absolute;
+    top: 0;
     text-align: center;
-    img {
+    &::before {
+      background: var(--dark);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 0.4em var(--dark);
+      border-radius: 50px;
       display: block;
-      margin-right: 15px;
-      width: 20px;
+      content: '';
+      height: 50px;
+      margin: 0 auto;
+      position: absolute;
+      top: 0;
+      transform: translateY(-100%);
+      width: 50px;
+    }
+    &_about {
+      transform: translate(180%, 50%);
+    }
+    &_works {
+      transform: translate(0, -120%);
     }
   }
 }

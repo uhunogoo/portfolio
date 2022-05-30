@@ -17,6 +17,8 @@ export default class PointsAnimation extends EventEmitter {
         this.points = this.experience.points.list
         this.camera = this.experience.camera.instance
         this.mouse = this.experience.mouse
+        this.preload = this.experience.preload.mesh
+        
         
         // Defaults
         this.pointInfoOpen = false
@@ -110,12 +112,17 @@ export default class PointsAnimation extends EventEmitter {
             autoAlpha: 1,
             duration: 0.1
         })
-        this.open.fromTo(target.element, { skewY: '5deg', y: '20%', clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' }, {
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-            skewY: 0,
-            y: 0,
-            duration: 1.2
+        this.open.to(this.preload.material.uniforms.uProgress, {
+            value: 1,
+            duration: 2.5,
+            ease: 'power1'
         })
+        // this.open.fromTo(target.element, { skewY: '5deg', y: '20%', clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' }, {
+        //     clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        //     skewY: 0,
+        //     y: 0,
+        //     duration: 1.2
+        // })
         this.open.fromTo('.work__info', {autoAlpha: 0}, {
             autoAlpha: 1,
             duration: 0.1

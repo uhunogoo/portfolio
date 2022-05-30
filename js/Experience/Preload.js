@@ -72,7 +72,7 @@ export default class Preload extends EventEmitter {
     }
     preloadBG() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height
-        const plane = new THREE.PlaneGeometry(2, 2, 200, 200)
+        const plane = new THREE.PlaneGeometry(2, 2, 400, 400)
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 uProgress: { value: 1 },

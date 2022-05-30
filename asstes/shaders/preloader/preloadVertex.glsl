@@ -64,5 +64,5 @@ void main() {
   gl_Position = vec4(position, 1.0);
   // varying
   vUv = uv;
-  vSmog = fbm( smogUV * 2.0 + uTime * 0.1 + progress * 0.1 + fbm(smogUV / 8.0 + uTime * 0.1 + progress * 0.1 ) + fbm(smogUV * 8.0  ) ) * 8.0;
+  vSmog = fbm( smogUV * 2.0 + uTime * 0.2 + fbm(smogUV * 2.0 + uTime * 0.2 ) + fbm(smogUV * 8.0 ) ) * 8.0;
 }
