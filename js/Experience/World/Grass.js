@@ -15,8 +15,8 @@ export default class Grass {
 
         // Parameters
         this.grassParameters = {
-            count: 100000,
-            size: 12
+            count: 40000,
+            size: 11.6
         }
         this.customUniform = {
             uTime: { value: 0 },

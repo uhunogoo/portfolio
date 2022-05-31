@@ -15,13 +15,13 @@ export default class Preload extends EventEmitter {
         // Setup
         this.experience = new Experience()
         this.scene = this.experience.scene
+        this.camera = this.experience.camera.instance
         this.resources = this.experience.resources
         
         // Defaults
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
         this.preloadHovered = false
-
         this.debug = this.experience.debug
 
         // Debug
@@ -34,10 +34,16 @@ export default class Preload extends EventEmitter {
         this.animationControll()  
     }
     animationControll() {
+        gsap.set('.preload', {autoAlpha: 1})
+
         // Create animations
         this.playOutAnimation = gsap.timeline({ 
-            paused: true, 
-            onComplete: () => this.trigger('preloadComplete') 
+            paused: true,
+            onStart: () => this.camera.layers.enable(0),
+            onComplete: () => {
+                this.trigger('preloadComplete')
+                this.camera.layers.disable(1)
+            } 
         })
         this.playInAnimation = gsap.timeline({ 
             paused: true,
@@ -54,7 +60,7 @@ export default class Preload extends EventEmitter {
         })
 
 
-        // Call base animations
+        // Call all base animations
         this.loading()
         this.inAnimation()
         this.outAnimation()
@@ -72,11 +78,10 @@ export default class Preload extends EventEmitter {
     }
     preloadBG() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height
-        const plane = new THREE.PlaneGeometry(2, 2, 400, 400)
+        const plane = new THREE.PlaneGeometry(2, 2, 300, 300)
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 uProgress: { value: 1 },
-                uTime: { value: 0 },
                 uAspect: { value: aspect }
             },
             transparent: true,
@@ -86,6 +91,7 @@ export default class Preload extends EventEmitter {
         })
         this.mesh = new THREE.Mesh( plane, material )
         this.mesh.position.copy( this.experience.camera.instance.position )
+        this.mesh.layers.set(1)
         this.scene.add( this.mesh )
 
         // Debug renderer
@@ -105,13 +111,19 @@ export default class Preload extends EventEmitter {
         })  
     }
     inAnimation() {
+        this.playInAnimation.to('.title-decor', {
+            rotate: '0',
+            scale: 0.85,
+            opacity: 0.025,
+            duration: 2
+        })
         this.playInAnimation.to('.preload__progress', {
             opacity: 0,
             y: -10,
             scale: 0.8,
             filter: 'blur(0.1em)',
             ease: 'power3.out',
-        })
+        }, '<')
         this.playInAnimation.from('.text-part', {
             scale: 1.3,
             y: 200,
@@ -130,12 +142,17 @@ export default class Preload extends EventEmitter {
         }, '<+=30%')
     }
     outAnimation() {
+        this.playOutAnimation.to('.title-decor', {
+            rotate: '180deg',
+            scale: 1.5,
+            opacity: 0,
+            duration: 2
+        })
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
             value: 0,
-            duration: 2.5,
+            duration: 1.5,
             ease: 'power1'
-        })
-
+        }, '<')
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
         }, '<+=60%')
@@ -143,8 +160,5 @@ export default class Preload extends EventEmitter {
     resize() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height
         this.mesh.material.uniforms.uAspect.value = aspect
-    }
-    update() {
-        this.mesh.material.uniforms.uTime.value = this.experience.time.elapsed / 1000
     }
 }

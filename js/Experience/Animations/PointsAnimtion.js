@@ -94,6 +94,7 @@ export default class PointsAnimation extends EventEmitter {
         if( this.pointInfoOpen ) {
             const closeBtn = target.querySelector('.close_btn')
             closeBtn.addEventListener('click', () => {
+                this.camera.layers.enable(0)
                 this.open.timeScale(2).reverse()
                 this.pointInfoOpen = false
             })
@@ -105,57 +106,56 @@ export default class PointsAnimation extends EventEmitter {
             defaults: {
               duration: 1,
               ease: 'power4.out'
-            }
-          })
+            },
+            onStart: () => this.camera.layers.enable(1),
+            onComplete: () => this.camera.layers.disable(0),
+            onReverseComplete: () => this.camera.layers.disable(1),
+        })
 
         this.open.to(target.element, {
             autoAlpha: 1,
             duration: 0.1
         })
+        
+        this.open.to('.ui-layer', {
+            scale: 1.1,
+            opacity: 0,
+            duration: 0.5
+        })
         this.open.to(this.preload.material.uniforms.uProgress, {
             value: 1,
-            duration: 2.5,
+            duration: 1.6,
             ease: 'power1'
-        })
-        // this.open.fromTo(target.element, { skewY: '5deg', y: '20%', clipPath: 'polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)' }, {
-        //     clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-        //     skewY: 0,
-        //     y: 0,
-        //     duration: 1.2
-        // })
-        this.open.fromTo('.work__info', {autoAlpha: 0}, {
-            autoAlpha: 1,
-            duration: 0.1
-        }, '<')
-        this.open.fromTo('.work', {y: '180%', skewY: '5deg'}, {
+        }, 0.15)
+        this.open.fromTo('.work', 
+        {
+            clipPath: 'inset(15% round 15px)',
+            y: '180%',
+            opacity: 0
+        }, {
+            clipPath: 'inset(0% round 15px)',
             y: 0,
-            skewY: 0,
-            duration: 2,
-            stagger: 0.11,
-        }, '<')
-        this.open.fromTo('.work__image', {clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'}, {
-            clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
-            stagger: 0.07,
-            duration: 1.5,
-            ease: 'power2'
-        }, '<')
-        this.open.fromTo('.work__image img', { filter: 'blur(0.1em)', scale: 1.6 },{
-            filter: 'blur(0em)',
-            scale: 1,
+            opacity: 1,
+            duration: 1.2,
             stagger: 0.1,
-            duration: 1.5,
-            transformOrigin: 'top center',
+        }, '<+=25%')
+        this.open.to('.work__image', {
+            scale: 1.1,
+            stagger: 0.07,
+            duration: 1.25,
             ease: 'power2'
         }, '<')
-        this.open.fromTo('.work__name span', { y: '150%', skewY: '5deg' }, {
+        this.open.fromTo('.work__name span', { y: '150%', skewY: '5deg', scale: 1.2 }, {
             y: 0,
+            scale: 1,
             skewY: 0,
-            stagger: 0.15,
-        }, '<+=55%')
-        this.open.fromTo('.work__technology', { y: '150%' }, {
+            transformOrigin: 'left center'
+        }, '<+=25%')
+        this.open.fromTo('.work__technology span', { y: '150%', scale: 1.4 }, {
             y: 0,
-            stagger: 0.15,
-        }, '<+=10%')
+            scale: 1,
+            transformOrigin: 'left center'
+        }, '<+=20%')
 
 
         this.open.play()
@@ -207,8 +207,5 @@ export default class PointsAnimation extends EventEmitter {
             }
             this.clean()
         }
-    }
-    update() {
-        // this.raycasterAnimation()
     }
 }

@@ -39,6 +39,7 @@ export default class World {
                 this.tower.towerGroup, 
                 this.fire.fireGroup
             )
+            sceneGroup.layers.set(0)
             this.scene.add( sceneGroup )
 
             this.environment = new Environment()
@@ -54,9 +55,6 @@ export default class World {
         }
         if(this.animation) {
             this.animation.update()
-        }
-        if(this.points) {
-            this.points.update()
         }
         if(this.tower) {
             this.tower.update()

@@ -21,12 +21,8 @@ void main(){
 	shape = smoothstep(0.0, 0.45, circleShape * 2.5 + (vSmog - 1.0));
 	shape += vSmog * (1.0 - progress) * shape;
 	shape = clamp(shape, 0.0, 1.0);
-
-	// shape = smoothstep(-0.1, 1.0, (vSmog + ((1.0 -circleShape2) + shape)) );
 	
 	
 	gl_FragColor = vec4( vec3( 1.0 + shape ), shape);
-	// gl_FragColor = vec4( vec3( mix(0.0, 1.0 +0.02 / (1.0 - abs(shape * 1.0) ), shape)), 1.0);
-	// gl_FragColor = vec4( vec3(shape), 1.0);
 
 }

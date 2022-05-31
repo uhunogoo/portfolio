@@ -29,6 +29,10 @@ export default class Camera {
         this.instance = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
         this.instance.position.copy( this.parameters.cameraPosition )
         this.instance.lookAt( this.parameters.lookAt )
+
+        // Layers setup
+        this.instance.layers.disable(0)
+        this.instance.layers.enable(1)
         
         this.instanceGroup.add(this.instance)
     }

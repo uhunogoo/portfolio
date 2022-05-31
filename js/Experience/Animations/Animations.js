@@ -29,8 +29,5 @@ export default class Animation {
         if ( this.cameraMove ) {
             this.cameraMove.update()
         }
-        if ( this.pointsAnimation ) {
-            this.pointsAnimation.update()
-        }
     }
 }
