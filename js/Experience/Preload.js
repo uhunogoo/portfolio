@@ -85,7 +85,7 @@ export default class Preload extends EventEmitter {
                 uAspect: { value: aspect }
             },
             transparent: true,
-            depthWrite: false,
+            // depthWrite: false,
             vertexShader,
             fragmentShader,
         })

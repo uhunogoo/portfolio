@@ -42,7 +42,7 @@ export default class World {
             sceneGroup.layers.set(0)
             this.scene.add( sceneGroup )
 
-            this.environment = new Environment()
+            // this.environment = new Environment()
             this.animation = new Animation( sceneGroup )
         })
     }

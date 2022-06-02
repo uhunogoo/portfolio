@@ -83,6 +83,7 @@ export default class PointsAnimation extends EventEmitter {
         this.closeBtn()
         this.showNav()
         this.navigationBtn() 
+        this.startStyles()
         
         const throttleFunction = _.throttle(() => {           
             this.raycasterAnimation() 
@@ -91,6 +92,14 @@ export default class PointsAnimation extends EventEmitter {
             throttleFunction()
         })
         
+    }
+    startStyles() {
+        gsap.set('.work', 
+        {
+            clipPath: 'inset(15% round 15px)',
+            y: '180%',
+            opacity: 0
+        })
     }
     showNav() {
         this.nav = gsap.timeline({})
@@ -137,12 +146,7 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.6,
             ease: 'power1'
         }, 0.15)
-        this.open.fromTo('.work', 
-        {
-            clipPath: 'inset(15% round 15px)',
-            y: '180%',
-            opacity: 0
-        }, {
+        this.open.to('.work', {
             clipPath: 'inset(0% round 15px)',
             y: 0,
             opacity: 1,

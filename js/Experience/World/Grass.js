@@ -20,10 +20,13 @@ export default class Grass {
         }
         this.customUniform = {
             uTime: { value: 0 },
-            uRotate: { value: 0.2 },
-            uColor1: { value: new THREE.Color('#d4a268') },
-            uColor2: { value: new THREE.Color('#533f28') },
+            uIntensive: { value: 0.5 },
+            uShadowSize: { value: 0.5 },
+            uShadow: { value: new THREE.Vector2() },
+            uColor1: { value: new THREE.Color('#e38935') },
+            uColor2: { value: new THREE.Color('#161a0a') },
         }
+        
 
         // Debug
         if (this.debug.active) {
@@ -58,8 +61,26 @@ export default class Grass {
                     this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
                 })
             this.debugFolder
-                .add(this.grassMaterial.uniforms.uRotate, 'value')
+                .add(this.grassMaterial.uniforms.uIntensive, 'value')
                 .name('grassRotation')
+                .min(-1)
+                .max(1)
+                .step(0.001)
+            this.debugFolder
+                .add(this.grassMaterial.uniforms.uShadowSize, 'value')
+                .name('shadowSize')
+                .min(0)
+                .max(1)
+                .step(0.001)
+            this.debugFolder
+                .add(this.grassMaterial.uniforms.uShadow.value, 'x')
+                .name('shadowPosition x')
+                .min(-1)
+                .max(1)
+                .step(0.001)
+            this.debugFolder
+                .add(this.grassMaterial.uniforms.uShadow.value, 'y')
+                .name('shadowPosition y')
                 .min(-1)
                 .max(1)
                 .step(0.001)
@@ -184,6 +205,7 @@ export default class Grass {
         // Bounding sphere for frustumculled 
         instancedGrassMesh.geometry.computeBoundingSphere()
         instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
+        instancedGrassMesh.receiveShadow = true
         
         this.grassGroup.add( instancedGrassMesh )
     }

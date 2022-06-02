@@ -88,6 +88,17 @@ export default class Tower {
         towerPart2.material = this.towerMaterial2
         towerPart3.material = this.towerMaterial3
         towerPart4.material = this.towerMaterial4
+
+        // Shadows
+        // garda.castShadow = true
+        // garda.receiveShadow = true
+        // knife.castShadow = true
+        // towerPart4.receiveShadow = true
+        // towerPart4.receiveShadow = true
+        towerPart1.castShadow = true
+        towerPart2.castShadow = true
+        towerPart3.castShadow = true
+        towerPart4.castShadow = true
         
         tower.add( towerPart1, towerPart2, towerPart3, towerPart4 )
         tower.scale.set( 0.47, 0.47, 0.47 )

@@ -1,14 +1,15 @@
 uniform float uTime;
+uniform float uIntensive;
 
 // varying
 varying vec2 vUv;
+varying vec2 vPosition;
+varying float vNoise;
 
 attribute vec3 offset;
 attribute vec2 rotation;
 attribute float scale;
 
-varying vec3 vPosition;
-varying float vNoise;
 
 mat2 get2dRotateMatrix(float _angle) {
 		return mat2(cos(_angle), - sin(_angle), sin(_angle), cos(_angle));
@@ -54,7 +55,11 @@ float cnoise(vec2 P){
 }
 
 void main(){
-	float noise = ( cnoise( offset.xz / vec2(2.0, 4.0) + vec2(0.0, uTime * 0.5) ) );
+  float intesity = uIntensive;
+  
+	float noise = ( cnoise( offset.xz / vec2(2.0, 4.0) + vec2(uTime * 0.4, uTime * 0.4) ) );
+  noise = (0.5 - noise * 2.0) * -1.0;
+
 	float staticNoise = 1.0 - abs( cnoise( offset.xz / vec2(5.0, 10.0) ) );
 	float staticNoise2 = 1.0 - cnoise( offset.xz / vec2(0.5, 0.8) );
 
@@ -62,13 +67,19 @@ void main(){
 	st *= 1.0 + staticNoise;
 	st *= 0.5 + staticNoise2 * 0.2;
 	st.xz *= get2dRotateMatrix( rotation.y );
+
 	st.zy *= get2dRotateMatrix( sin(rotation.y * 2.0) * 0.2 );
-	st += offset;
+
+  // Wind grass moving 
+	st.xy *= get2dRotateMatrix( (sin(noise) * 3.14 * 0.15) * intesity);
+	st.xy *= get2dRotateMatrix( (sin(noise) * 3.14 * 0.1 * step(0.6, uv.y)) * intesity);
+	st.zy *= get2dRotateMatrix( (cos(noise) * 3.14 * 0.3) * intesity);
+	st.zy *= get2dRotateMatrix( (cos(noise) * 3.14 * 0.1 * step(0.6, uv.y)) * intesity);
+	
+  st += offset;
+
 	vec4 modelPosition = modelMatrix * vec4(st, 1.0);
-
-
-	modelPosition.xz *= get2dRotateMatrix( noise * uv.y * 0.01 );
-	modelPosition.xz *= get2dRotateMatrix(noise * step(0.6, uv.y) * 0.01);
+	// modelPosition.xz *= get2dRotateMatrix( noise * uv.y * 0.02 );
 
 
 	vec4 viewPosition = viewMatrix * modelPosition;
@@ -76,7 +87,9 @@ void main(){
 
 
 	gl_Position = projectionPosition;
-	
+  
+  // Varuing
 	vUv = uv;
-	vNoise = staticNoise;
+	vNoise = noise;
+  vPosition = (offset.xz - 0.5) / 6.0 + 0.5;
 }

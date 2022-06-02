@@ -63,7 +63,7 @@ export default class Fire {
         // const fireGeometry
         const swordFireMaterial = new THREE.ShaderMaterial({
             uniforms: this.fireUniform,
-            transparent: true,
+            // transparent: true,
             side: THREE.DoubleSide,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment

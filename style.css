@@ -313,6 +313,25 @@ h1 {
   transform: translate(-100px, 100px);
   position: fixed;
   width: 60px;
+  &::after,
+  &::before {
+    background: url(./asstes/backgrounds/target.svg) no-repeat 50% 50%;
+    content: '';
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  &::before {
+    height: 110%;
+    width: 110%;
+  }
+  &::after {
+    height: 300%;
+    width: 300%;
+    z-index: -1;
+  }
   &__icon {
     background: linear-gradient(223.26deg, #2A445F 15.12%, #2C4763 59.94%, #365575 91.58%);
     border: 2px solid var(--gold);
