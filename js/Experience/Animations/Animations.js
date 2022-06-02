@@ -2,6 +2,7 @@ import Experience from '../Experience'
 import CameraMove from './CameraMove'
 import followingCursor from './MouseFollow'
 import PointsAnimation from './PointsAnimtion'
+import UIAnimation from './UIanimations'
 
 export default class Animation {
     constructor (target) {
@@ -10,6 +11,7 @@ export default class Animation {
         this.preload = this.experience.preload
         this.followingCursor = new followingCursor()
         this.cameraMove = new CameraMove( target )
+        this.uiAnimation = new UIAnimation()
 
         // Wait while preload animation will finished
         this.preload.on('preloadComplete', () => {

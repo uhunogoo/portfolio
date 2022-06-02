@@ -156,6 +156,10 @@ h1 {
   outline: none;
 }
 
+.informationPart {
+  overflow: hidden;
+  opacity: 0;
+}
 .point__content {
   height: 100vh;
   left: 50%;
@@ -237,7 +241,7 @@ h1 {
       display: inline-block;
       overflow: clip;
       span {
-        font-size: .9rem;
+        font-size: 14px;
         letter-spacing: 0.015em;
         display: inline-block;
       }
@@ -251,30 +255,22 @@ h1 {
 
 .close_btn {
   cursor: pointer;
-  height: 30px;
+  height: 40px;
   position: absolute;
   right: 25px;
   top: 25px;
   transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-  width: 30px;
-  z-index: 2;
-  &::before,
-  &::after {
-    background: var(--dark);
-    content: '';
-    display: block;
-    height: 2px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%) rotate(-45deg);
-    transform-origin: center;
-    width: 100%;
+  width: 40px;
+  z-index: 6;
+  #square {
+    fill: var(--gold);
   }
-  &::after {
-    transform: translateY(-50%) rotate(45deg);
-  }
-  &:hover {
-    transform: scale(1.2);
+  .st0{
+    fill:none;
+    stroke: var(--gold);
+    stroke-width: 100;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 0;
   }
 }
 
@@ -312,7 +308,10 @@ h1 {
   bottom: 30px;
   height: 60px;
   left: 30px;
-  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-100px, 100px);
+  position: fixed;
   width: 60px;
   &__icon {
     background: linear-gradient(223.26deg, #2A445F 15.12%, #2C4763 59.94%, #365575 91.58%);
@@ -350,10 +349,4 @@ h1 {
       transform: translate(0, -170%);
     }
   }
-}
-.ui-layer {
-  height: 100%;
-  position: absolute;
-  top: 0;
-  width: 100%;
 }

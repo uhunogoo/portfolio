@@ -81,6 +81,8 @@ export default class PointsAnimation extends EventEmitter {
         })
 
         this.closeBtn()
+        this.showNav()
+        this.navigationBtn() 
         
         const throttleFunction = _.throttle(() => {           
             this.raycasterAnimation() 
@@ -90,9 +92,17 @@ export default class PointsAnimation extends EventEmitter {
         })
         
     }
-    closeBtn(target) {
+    showNav() {
+        this.nav = gsap.timeline({})
+        this.nav.to('.menu', {
+            autoAlpha: 1,
+            x: 0,
+            y: 0
+        })
+    }
+    closeBtn() {
         if( this.pointInfoOpen ) {
-            const closeBtn = target.querySelector('.close_btn')
+            const closeBtn = document.querySelector('.close_btn')
             closeBtn.addEventListener('click', () => {
                 this.camera.layers.enable(0)
                 this.open.timeScale(2).reverse()
@@ -112,14 +122,14 @@ export default class PointsAnimation extends EventEmitter {
             onReverseComplete: () => this.camera.layers.disable(1),
         })
 
-        this.open.to(target.element, {
+        this.open.to([ '.informationPart', target.element], {
             autoAlpha: 1,
             duration: 0.1
         })
         
-        this.open.to('.ui-layer', {
-            scale: 1.1,
-            opacity: 0,
+        this.open.to('.menu', {
+            x: -150,
+            y: 150,
             duration: 0.5
         })
         this.open.to(this.preload.material.uniforms.uProgress, {
@@ -145,17 +155,17 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.25,
             ease: 'power2'
         }, '<')
-        this.open.fromTo('.work__name span', { y: '150%', skewY: '5deg', scale: 1.2 }, {
-            y: 0,
-            scale: 1,
-            skewY: 0,
-            transformOrigin: 'left center'
-        }, '<+=25%')
-        this.open.fromTo('.work__technology span', { y: '150%', scale: 1.4 }, {
-            y: 0,
-            scale: 1,
-            transformOrigin: 'left center'
-        }, '<+=20%')
+        // this.open.fromTo('.work__name span', { y: '150%', skewY: '5deg', scale: 1.2 }, {
+        //     y: 0,
+        //     scale: 1,
+        //     skewY: 0,
+        //     transformOrigin: 'left center'
+        // }, '<+=25%')
+        // this.open.fromTo('.work__technology span', { y: '150%', scale: 1.4 }, {
+        //     y: 0,
+        //     scale: 1,
+        //     transformOrigin: 'left center'
+        // }, '<+=20%')
 
 
         this.open.play()
@@ -207,5 +217,18 @@ export default class PointsAnimation extends EventEmitter {
             }
             this.clean()
         }
+    }
+    navigationBtn() {
+        const navigationBtn = document.querySelectorAll('.menu__item')
+        navigationBtn.forEach( button => {
+            button.addEventListener('click', () => {                
+                if (!this.pointInfoOpen) {
+                    this.pointInfoOpen = true
+                    const name = button.dataset.name
+                    const targetPoint = this.points.find( point => point.name === name )
+                    this.clickHandler( targetPoint )
+                }
+            })
+        })
     }
 }

@@ -54,7 +54,7 @@ float cnoise(vec2 P){
 }
 
 void main(){
-	float noise = ( cnoise( offset.xz * vec2(2.0, 4.0) + vec2(0.0, uTime * 0.5) ) );
+	float noise = ( cnoise( offset.xz / vec2(2.0, 4.0) + vec2(0.0, uTime * 0.5) ) );
 	float staticNoise = 1.0 - abs( cnoise( offset.xz / vec2(5.0, 10.0) ) );
 	float staticNoise2 = 1.0 - cnoise( offset.xz / vec2(0.5, 0.8) );
 
@@ -78,5 +78,5 @@ void main(){
 	gl_Position = projectionPosition;
 	
 	vUv = uv;
-	vNoise = noise;
+	vNoise = staticNoise;
 }
