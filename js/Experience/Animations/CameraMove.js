@@ -2,12 +2,9 @@ import gsap from 'gsap'
 import * as THREE from 'three'
 
 import Experience from '../Experience'
-import EventEmitter from '../Utils/EventEmitter'
 
-export default class CameraMove extends EventEmitter {
-    constructor ( target ) {
-        super()
-        
+export default class CameraMove {
+    constructor ( target ) {        
         // Setup 
         this.target = target        
         this.experience = new Experience()
@@ -34,7 +31,6 @@ export default class CameraMove extends EventEmitter {
                 ease: 'power2.inOut'
             },
             onComplete: () => {
-                this.trigger('animationComplete')
                 this.animationComplete = true
             }
         })

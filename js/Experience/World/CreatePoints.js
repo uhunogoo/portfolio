@@ -27,7 +27,7 @@ export default class Createpoints {
             const sprite = new THREE.Sprite( material.clone() )
             
             sprite.position.copy( point.position )
-            sprite.scale.setScalar(0.1)
+            sprite.scale.setScalar(0)
             sprite.geometry.computeBoundingBox()
             points.add(sprite)
         })

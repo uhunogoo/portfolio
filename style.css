@@ -310,7 +310,6 @@ h1 {
   left: 30px;
   opacity: 0;
   visibility: hidden;
-  transform: translate(-100px, 100px);
   position: fixed;
   width: 60px;
   &::after,
@@ -319,6 +318,7 @@ h1 {
     content: '';
     display: block;
     left: 50%;
+    opacity: 0.6;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);

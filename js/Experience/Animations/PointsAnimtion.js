@@ -83,15 +83,7 @@ export default class PointsAnimation extends EventEmitter {
         this.closeBtn()
         this.showNav()
         this.navigationBtn() 
-        this.startStyles()
-        
-        const throttleFunction = _.throttle(() => {           
-            this.raycasterAnimation() 
-        }, 90)
-        this.mouse.on('mouseMove', () => {
-            throttleFunction()
-        })
-        
+        this.startStyles()        
     }
     startStyles() {
         gsap.set('.work', 
@@ -102,17 +94,21 @@ export default class PointsAnimation extends EventEmitter {
         })
     }
     showNav() {
-        this.nav = gsap.timeline({})
-        this.nav.to('.menu', {
-            autoAlpha: 1,
-            x: 0,
-            y: 0
+        this.showPoints = gsap.timeline({ paused: true })        
+        const pointsScale = this.pointsGroup.children[0].children.map( el => el.scale )
+        this.showPoints.to( pointsScale, {
+            x: 0.1,
+            y: 0.1,
+            ease: 'back',
+            stagger: 0.2
         })
     }
     closeBtn() {
         if( this.pointInfoOpen ) {
             const closeBtn = document.querySelector('.close_btn')
             closeBtn.addEventListener('click', () => {
+                this.trigger('menuWasClose')
+
                 this.camera.layers.enable(0)
                 this.open.timeScale(2).reverse()
                 this.pointInfoOpen = false
@@ -134,12 +130,6 @@ export default class PointsAnimation extends EventEmitter {
         this.open.to([ '.informationPart', target.element], {
             autoAlpha: 1,
             duration: 0.1
-        })
-        
-        this.open.to('.menu', {
-            x: -150,
-            y: 150,
-            duration: 0.5
         })
         this.open.to(this.preload.material.uniforms.uProgress, {
             value: 1,
@@ -175,6 +165,7 @@ export default class PointsAnimation extends EventEmitter {
         this.open.play()
     }
     clickHandler(target) {
+        this.trigger('menuWasOpen')
         this.openMenu(target)
         this.closeBtn(target.element)
     }
@@ -187,6 +178,20 @@ export default class PointsAnimation extends EventEmitter {
 
             this.intersect = null
         }
+    }
+    
+    navigationBtn() {
+        const navigationBtn = document.querySelectorAll('.menu__item')
+        navigationBtn.forEach( button => {
+            button.addEventListener('click', () => {                
+                if (!this.pointInfoOpen) {
+                    this.pointInfoOpen = true
+                    const name = button.dataset.name
+                    const targetPoint = this.points.find( point => point.name === name )
+                    this.clickHandler( targetPoint )
+                }
+            })
+        })
     }
     raycasterAnimation() {
         const mouse = new THREE.Vector2( this.mouse.x, this.mouse.y )
@@ -222,17 +227,12 @@ export default class PointsAnimation extends EventEmitter {
             this.clean()
         }
     }
-    navigationBtn() {
-        const navigationBtn = document.querySelectorAll('.menu__item')
-        navigationBtn.forEach( button => {
-            button.addEventListener('click', () => {                
-                if (!this.pointInfoOpen) {
-                    this.pointInfoOpen = true
-                    const name = button.dataset.name
-                    const targetPoint = this.points.find( point => point.name === name )
-                    this.clickHandler( targetPoint )
-                }
-            })
+    mouseMove() {
+        const throttleFunction = _.throttle(() => {           
+            this.raycasterAnimation() 
+        }, 90)
+        this.mouse.on('mouseMove', () => {
+            throttleFunction()
         })
     }
 }

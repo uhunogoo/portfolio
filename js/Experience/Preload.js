@@ -41,7 +41,6 @@ export default class Preload extends EventEmitter {
             paused: true,
             onStart: () => this.camera.layers.enable(0),
             onComplete: () => {
-                this.trigger('preloadComplete')
                 this.camera.layers.disable(1)
             } 
         })
