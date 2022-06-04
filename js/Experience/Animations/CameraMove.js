@@ -38,8 +38,16 @@ export default class CameraMove {
     }
     animation() {
         this.towerInAnimation.to(this.parameters.lookAt, {
-            y: 1,
-            ease: 'power1'
+            keyframes: {
+                '50%': {
+                    y: 0.4,
+                    ease: 'power1'
+                },
+                '100%': {
+                    y: 1,
+                    ease: 'power1.in'
+                }
+            }
         })
         this.towerInAnimation.to(this.target.rotation, {
             keyframes: {
@@ -49,7 +57,7 @@ export default class CameraMove {
                 },
                 '100%': {
                     y: Math.PI * this.parameters.angle,
-                    ease: 'power1.out'
+                    ease: 'back(1.05).out'
                 }
             }
         }, '<')
@@ -61,16 +69,29 @@ export default class CameraMove {
                 },
                 '100%': {
                     z: 0,
-                    ease: 'back(1.4)'
+                    ease: 'back(3.4)'
                 }
             }
         }, '<')
         this.towerInAnimation.to(this.camera.position, {
-            x: this.parameters.radius,
-            y: 0.75,
-            z: this.parameters.radius,
-            ease: 'power1.inOut'
+            keyframes: {
+                '30%': {
+                    x: this.parameters.radius * 0.5,
+                    y: 0.75 + (this.camera.position.y - 0.75) / 2,
+                    z: this.parameters.radius * 0.5,
+                    ease: 'power2'
+                },
+                '100%': {
+                    x: this.parameters.radius,
+                    y: 0.75,
+                    z: this.parameters.radius,
+                    ease: 'back(3.4).in'
+                },
+                // easeEach: "power4.inOut"
+                // easeEach: "none"
+            },
         }, '<')
+        
     }
     update() {
         // if (!this.animationComplete) return

@@ -19,12 +19,14 @@ export default class Animation {
         // Setup
         this.mainTimeline = gsap.timeline({ 
             paused: true,
+            // repeat: -1,
+            // yoyo: true,
             onComplete: () => {
                 this.mainTimeline.kill()
                 this.pointsAnimation.mouseMove()
             }
         })
-        this.mainTimeline.add( this.cameraMove.towerInAnimation.play().timeScale(1.1) )
+        this.mainTimeline.add( this.cameraMove.towerInAnimation.play().timeScale(1.15) )
         this.mainTimeline.add( this.uiAnimation.showMenu().timeScale(2), '-=1')
         this.mainTimeline.add( this.pointsAnimation.showPoints.play(), '<')
         
