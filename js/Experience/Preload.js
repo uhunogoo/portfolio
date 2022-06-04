@@ -3,6 +3,7 @@ import * as THREE from 'three'
 
 import Experience from './Experience'
 import EventEmitter from './Utils/EventEmitter'
+import bell from '../../asstes/sounds/CinematicStrike.wav?url'
 
 // Preload shaders
 import vertexShader from '../../asstes/shaders/preloader/preloadVertex.glsl?raw'
@@ -23,6 +24,7 @@ export default class Preload extends EventEmitter {
         this.progressBlock = document.querySelector('.loader span')
         this.preloadHovered = false
         this.debug = this.experience.debug
+        this.hitSound = new Audio( bell )
 
         // Debug
         if (this.debug.active) {
@@ -35,13 +37,20 @@ export default class Preload extends EventEmitter {
     }
     animationControll() {
         gsap.set('.preload', {autoAlpha: 1})
+        const playHitSound = () => {
+            this.hitSound.currentTime = 0
+            this.hitSound.play()
+        }
 
         // Create animations
         this.playOutAnimation = gsap.timeline({ 
             paused: true,
-            onStart: () => this.camera.layers.enable(0),
+            onStart: () => {
+                playHitSound()
+                // this.camera.layers.enable(0)
+            },
             onComplete: () => {
-                this.camera.layers.disable(1)
+                // this.camera.layers.disable(1)
             } 
         })
         this.playInAnimation = gsap.timeline({ 
@@ -141,20 +150,24 @@ export default class Preload extends EventEmitter {
         }, '<+=30%')
     }
     outAnimation() {
+        this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
+            value: 0,
+            duration: 2,
+            ease: 'power3'
+        })
         this.playOutAnimation.to('.title-decor', {
             rotate: '180deg',
             scale: 1.5,
             opacity: 0,
-            duration: 2
-        })
-        this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
-            value: 0,
-            duration: 1.5,
-            ease: 'power1'
-        }, '<')
+            duration: 4,
+            ease: 'power4'
+        }, 0)
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
+            duration: 0.4,
+            ease: 'power4'
         }, '<+=60%')
+        this.playOutAnimation.timeScale(1.25)
     }
     resize() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height

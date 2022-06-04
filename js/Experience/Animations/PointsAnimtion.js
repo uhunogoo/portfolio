@@ -5,6 +5,10 @@ import gsap from 'gsap'
 
 import Experience from '../Experience'
 import EventEmitter from '../Utils/EventEmitter'
+import UIAnimation from './UIanimations'
+
+import bell from '../../../asstes/sounds/intro.mp3?url'
+import splash from '../../../asstes/sounds/splash.mp3?url'
 
 export default class PointsAnimation extends EventEmitter {
     constructor (world) {
@@ -18,15 +22,18 @@ export default class PointsAnimation extends EventEmitter {
         this.camera = this.experience.camera.instance
         this.mouse = this.experience.mouse
         this.preload = this.experience.preload.mesh
+        this.uiAnimation = new UIAnimation()
         
         
         // Defaults
         this.pointInfoOpen = false
+        this.closeButtonClicked = false
         this.pointsGroup = this.world.children.find( child => child.name === 'pointsGroup' )
-        
         this.raycaster = new THREE.Raycaster()
         this.intersect = null
         this.clickedPoint = null
+        this.hitSound = new Audio( bell )
+        this.outSound = new Audio( splash )
 
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
@@ -104,29 +111,42 @@ export default class PointsAnimation extends EventEmitter {
         })
     }
     closeBtn() {
+        const playHitSound = () => {
+            this.outSound.currentTime = 0
+            this.outSound.play()
+        }
         if( this.pointInfoOpen ) {
             const closeBtn = document.querySelector('.close_btn')
             closeBtn.addEventListener('click', () => {
+                this.closeButtonClicked = true
                 this.trigger('menuWasClose')
 
+                playHitSound()
                 this.camera.layers.enable(0)
-                this.open.timeScale(2).reverse()
+                this.open.reverse()
                 this.pointInfoOpen = false
             })
         }
     }
     openMenu(target) {
+        const playHitSound = () => {
+            this.hitSound.currentTime = 0
+            this.hitSound.play()
+        }
         this.open = gsap.timeline({
             paused: true,
             defaults: {
               duration: 1,
               ease: 'power4.out'
             },
-            onStart: () => this.camera.layers.enable(1),
+            onStart: () => {
+                playHitSound()
+                this.camera.layers.enable(1)
+            },
             onComplete: () => this.camera.layers.disable(0),
             onReverseComplete: () => this.camera.layers.disable(1),
         })
-
+        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse() )
         this.open.to([ '.informationPart', target.element], {
             autoAlpha: 1,
             duration: 0.1
@@ -149,25 +169,17 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.25,
             ease: 'power2'
         }, '<')
-        // this.open.fromTo('.work__name span', { y: '150%', skewY: '5deg', scale: 1.2 }, {
-        //     y: 0,
-        //     scale: 1,
-        //     skewY: 0,
-        //     transformOrigin: 'left center'
-        // }, '<+=25%')
-        // this.open.fromTo('.work__technology span', { y: '150%', scale: 1.4 }, {
-        //     y: 0,
-        //     scale: 1,
-        //     transformOrigin: 'left center'
-        // }, '<+=20%')
 
 
-        this.open.play()
+        this.open.timeScale(2).play()
     }
     clickHandler(target) {
         this.trigger('menuWasOpen')
         this.openMenu(target)
-        this.closeBtn(target.element)
+
+        if(!this.closeButtonClicked) {
+            this.closeBtn()
+        }
     }
     clean() {
         if (this.intersect) {

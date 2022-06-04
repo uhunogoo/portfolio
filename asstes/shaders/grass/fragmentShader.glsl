@@ -2,9 +2,6 @@ varying vec2 vUv;
 varying float vNoise;
 varying vec2 vPosition;
 
-uniform float uShadowSize;
-uniform vec2 uShadow;
-uniform float uIntensive;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 
@@ -57,6 +54,7 @@ void main() {
     
     vec3 color = mix(finalColor, finalColor * 0.7, mixShadows * 10.0 );
     finalColor = color - noise * 0.1 * st.y;
+    finalColor = clamp(finalColor, 0.0, 1.0);
 
     gl_FragColor = vec4( finalColor, 1.0);
 }

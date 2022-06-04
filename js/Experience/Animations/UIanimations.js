@@ -44,9 +44,6 @@ export default class UIAnimation {
         this.closeBtn.addEventListener('mouseleave', () =>{
             closeAnimation.reverse()
         })
-
-        // Create UI animation
-        this.showMenu()
     }
     showMenu() {
         gsap.set('.menu', {
@@ -59,8 +56,8 @@ export default class UIAnimation {
         gsap.set('.menu__item', { opacity: 0, scale: 0.2 })
         gsap.set('.menu__item span', { opacity: 0, y: 30, scale: 0.6 })
 
-        this.menuAimation = gsap.timeline({ paused: true })
-        this.menuAimation.to('.menu', {
+        const menuAimation = gsap.timeline()
+        menuAimation.to('.menu', {
             autoAlpha: 1,
             scale: 1,
             x: 0,
@@ -69,19 +66,21 @@ export default class UIAnimation {
             ease: 'power2',
             duration: 1
         })
-        this.menuAimation.to('.menu__item', {
+        menuAimation.to('.menu__item', {
             opacity: 1,
             scale: 1,
             duration: 0.6,
             ease: 'power1',
             stagger: 0.2
         }, '<+=80%')
-        this.menuAimation.to('.menu__item span', {
+        menuAimation.to('.menu__item span', {
             opacity: 1,
             y: 0,
             scale: 1,
             ease: 'power1',
             stagger: 0.2
         }, '<+=60%')
+
+        return menuAimation
     }
 }

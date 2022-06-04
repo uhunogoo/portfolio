@@ -15,7 +15,7 @@ export default class Camera {
         // Wait for environment
         this.parameters = {}
         this.parameters.cameraPosition = new THREE.Vector3(1, 3, 1)
-        this.parameters.lookAt = new THREE.Vector3(0, 3, 0)
+        this.parameters.lookAt = new THREE.Vector3(0, 3.5, 0)
 
         // call method
         this.setInstance()
@@ -31,14 +31,14 @@ export default class Camera {
         this.instance.lookAt( this.parameters.lookAt )
 
         // Layers setup
-        this.instance.layers.disable(0)
+        // this.instance.layers.disable(0)
         this.instance.layers.enable(1)
         
         this.instanceGroup.add(this.instance)
     }
     setControl() {
-        this.controls = new OrbitControls(this.instance, this.canvas)
-        this.controls.enableDamping = true
+        // this.controls = new OrbitControls(this.instance, this.canvas)
+        // this.controls.enableDamping = true
     }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
@@ -46,7 +46,7 @@ export default class Camera {
     }
     
     update() {
-        this.controls.update()
+        // this.controls.update()
         this.instance.lookAt( this.parameters.lookAt )
     }
 }

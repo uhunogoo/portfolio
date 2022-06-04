@@ -39,20 +39,38 @@ export default class CameraMove {
     animation() {
         this.towerInAnimation.to(this.parameters.lookAt, {
             y: 1,
-        }, '<')
+            ease: 'power1'
+        })
         this.towerInAnimation.to(this.target.rotation, {
-            y: Math.PI * this.parameters.angle
+            keyframes: {
+                '35%': {
+                    y: Math.PI * this.parameters.angle * 0.45,
+                    ease: 'power1.in'
+                },
+                '100%': {
+                    y: Math.PI * this.parameters.angle,
+                    ease: 'power1.out'
+                }
+            }
+        }, '<')
+        this.towerInAnimation.to(this.scene.rotation, {
+            keyframes: {
+                '25%': {
+                    z: -Math.PI * 0.1,
+                    ease: 'back(1.2)'
+                },
+                '100%': {
+                    z: 0,
+                    ease: 'back(1.4)'
+                }
+            }
         }, '<')
         this.towerInAnimation.to(this.camera.position, {
             x: this.parameters.radius,
             y: 0.75,
             z: this.parameters.radius,
-            ease: 'power3.inOut'
+            ease: 'power1.inOut'
         }, '<')
-        this.towerInAnimation.to(this.target.rotation, {
-            y: Math.PI * this.parameters.angle,
-            ease: 'circ'
-        }, '<+=60%')
     }
     update() {
         // if (!this.animationComplete) return

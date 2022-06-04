@@ -21,8 +21,6 @@ export default class Grass {
         this.customUniform = {
             uTime: { value: 0 },
             uIntensive: { value: 0.5 },
-            uShadowSize: { value: 0.5 },
-            uShadow: { value: new THREE.Vector2() },
             uColor1: { value: new THREE.Color('#e38935') },
             uColor2: { value: new THREE.Color('#161a0a') },
         }
@@ -63,24 +61,6 @@ export default class Grass {
             this.debugFolder
                 .add(this.grassMaterial.uniforms.uIntensive, 'value')
                 .name('grassRotation')
-                .min(-1)
-                .max(1)
-                .step(0.001)
-            this.debugFolder
-                .add(this.grassMaterial.uniforms.uShadowSize, 'value')
-                .name('shadowSize')
-                .min(0)
-                .max(1)
-                .step(0.001)
-            this.debugFolder
-                .add(this.grassMaterial.uniforms.uShadow.value, 'x')
-                .name('shadowPosition x')
-                .min(-1)
-                .max(1)
-                .step(0.001)
-            this.debugFolder
-                .add(this.grassMaterial.uniforms.uShadow.value, 'y')
-                .name('shadowPosition y')
                 .min(-1)
                 .max(1)
                 .step(0.001)
@@ -127,7 +107,7 @@ export default class Grass {
             const scale = 0.5 + Math.random() * 0.5
 
             const r = size * 0.5 * Math.random()
-            if( r > 2 ) {
+            if( r > 2.05 ) {
                 const theta = Math.random() * 2 * PI
                 
                 const x = r * Math.cos(theta)

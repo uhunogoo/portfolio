@@ -63,25 +63,24 @@ void main(){
 	float staticNoise = 1.0 - abs( cnoise( offset.xz / vec2(5.0, 10.0) ) );
 	float staticNoise2 = 1.0 - cnoise( offset.xz / vec2(0.5, 0.8) );
 
+  // Scaling
 	vec3 st = position * scale;
 	st *= 1.0 + staticNoise;
 	st *= 0.5 + staticNoise2 * 0.2;
+  
+  // Base rotation
 	st.xz *= get2dRotateMatrix( rotation.y );
-
 	st.zy *= get2dRotateMatrix( sin(rotation.y * 2.0) * 0.2 );
 
   // Wind grass moving 
 	st.xy *= get2dRotateMatrix( (sin(noise) * 3.14 * 0.15) * intesity);
 	st.xy *= get2dRotateMatrix( (sin(noise) * 3.14 * 0.1 * step(0.6, uv.y)) * intesity);
-	st.zy *= get2dRotateMatrix( (cos(noise) * 3.14 * 0.3) * intesity);
+	st.zy *= get2dRotateMatrix( (cos(noise * 2.0) * 3.14 * 0.3) * intesity);
 	st.zy *= get2dRotateMatrix( (cos(noise) * 3.14 * 0.1 * step(0.6, uv.y)) * intesity);
 	
   st += offset;
 
 	vec4 modelPosition = modelMatrix * vec4(st, 1.0);
-	// modelPosition.xz *= get2dRotateMatrix( noise * uv.y * 0.02 );
-
-
 	vec4 viewPosition = viewMatrix * modelPosition;
 	vec4 projectionPosition = projectionMatrix * viewPosition;
 
