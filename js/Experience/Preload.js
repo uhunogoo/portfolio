@@ -47,11 +47,7 @@ export default class Preload extends EventEmitter {
             paused: true,
             onStart: () => {
                 playHitSound()
-                // this.camera.layers.enable(0)
             },
-            onComplete: () => {
-                // this.camera.layers.disable(1)
-            } 
         })
         this.playInAnimation = gsap.timeline({ 
             paused: true,
@@ -152,14 +148,20 @@ export default class Preload extends EventEmitter {
     outAnimation() {
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
             value: 0,
-            duration: 2,
-            ease: 'power3'
+            duration: 0.6,
+            ease: 'power1.in'
         })
-        this.playOutAnimation.to('.title-decor', {
-            rotate: '180deg',
-            scale: 1.5,
+        this.playOutAnimation.to('.text-part', {
+            scale: 3,
             opacity: 0,
-            duration: 4,
+            duration: 0.5,
+            ease: 'power1.in'
+        }, 0)
+        this.playOutAnimation.to('.title-decor', {
+            rotate: '360deg',
+            scale: 2.5,
+            opacity: 0,
+            duration: 1,
             ease: 'power4'
         }, 0)
         this.playOutAnimation.to('.preload', {

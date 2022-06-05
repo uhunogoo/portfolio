@@ -37,8 +37,8 @@ export default class Camera {
         this.instanceGroup.add(this.instance)
     }
     setControl() {
-        // this.controls = new OrbitControls(this.instance, this.canvas)
-        // this.controls.enableDamping = true
+        this.controls = new OrbitControls(this.instance, this.canvas)
+        this.controls.enableDamping = true
     }
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
@@ -46,7 +46,7 @@ export default class Camera {
     }
     
     update() {
-        // this.controls.update()
+        this.controls.update()
         this.instance.lookAt( this.parameters.lookAt )
     }
 }

@@ -77,9 +77,9 @@ export default class PointsAnimation extends EventEmitter {
                     y: Math.PI * parameters.angle
                 }, '<')
                 tl.to(this.camera.position, {
-                    x: parameters.radius,
+                    x: parameters.x,
                     y: parameters.y + 0.75,
-                    z: parameters.radius,
+                    z: parameters.z,
                     ease: 'power3.inOut'
                 }, '<')
 
@@ -146,7 +146,35 @@ export default class PointsAnimation extends EventEmitter {
             onComplete: () => this.camera.layers.disable(0),
             onReverseComplete: () => this.camera.layers.disable(1),
         })
-        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse() )
+        this.open.to(this.world.rotation, {
+            keyframes: {
+                '25%': {
+                    z: 0
+                },
+                '75%': {
+                    x: Math.PI * 0.1,
+                    // z: -Math.PI * 0.1,
+                    ease: 'back(1.4)'
+                },
+                '100%': {
+                    z: 0
+                }
+            },
+            duration: 1,
+        })
+        this.open.to(this.parameters.lookAt, {
+            duration: 0.5,
+            y: target.position.y,
+        }, '<')
+        this.open.to(this.camera.position, {
+            duration: 0.5,
+            x: target.position.x + ( this.camera.position.x - target.position.x ) * 0.4,
+            y: target.position.y + 0.75,
+            z: target.position.z + ( this.camera.position.z - target.position.z ) * 0.4,
+            ease: 'power3.inOut'
+        }, '<')
+
+        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse(), '<+=10%')
         this.open.to([ '.informationPart', target.element], {
             autoAlpha: 1,
             duration: 0.1

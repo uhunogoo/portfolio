@@ -19,8 +19,6 @@ export default class Animation {
         // Setup
         this.mainTimeline = gsap.timeline({ 
             paused: true,
-            // repeat: -1,
-            // yoyo: true,
             onComplete: () => {
                 this.mainTimeline.kill()
                 this.pointsAnimation.mouseMove()
