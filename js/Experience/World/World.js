@@ -39,7 +39,6 @@ export default class World {
                 this.tower.towerGroup, 
                 this.fire.fireGroup
             )
-            sceneGroup.layers.set(0)
             this.scene.add( sceneGroup )
 
             // this.environment = new Environment()

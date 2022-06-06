@@ -8,7 +8,7 @@ export default class Points {
                 element: document.getElementById('point-0'),
                 position: new THREE.Vector3( 0, 1, 0 ),
                 animationParameters: {
-                    angle: 1.75,
+                    angle: 0,
                     radius: 1
                 }
             },
@@ -17,7 +17,7 @@ export default class Points {
                 element: document.getElementById('point-1'),
                 position: new THREE.Vector3( 0, 3.2, 0 ),
                 animationParameters: {
-                    angle: 0,
+                    angle: Math.PI,
                     radius: 2
                 }
             },
@@ -26,7 +26,7 @@ export default class Points {
                 element: document.getElementById('point-2'),
                 position: new THREE.Vector3( 3.8, 0.85, -1.8 ),
                 animationParameters: {
-                    angle: 1.56,
+                    angle: Math.PI * 0.1,
                     radius: 4
                 }
             }

@@ -5,6 +5,8 @@ import Experience from './Experience'
 import EventEmitter from './Utils/EventEmitter'
 import bell from '../../asstes/sounds/CinematicStrike.wav?url'
 
+// Postprocessing
+
 // Preload shaders
 import vertexShader from '../../asstes/shaders/preloader/preloadVertex.glsl?raw'
 import fragmentShader from '../../asstes/shaders/preloader/preloadFragment.glsl?raw'
@@ -88,15 +90,15 @@ export default class Preload extends EventEmitter {
                 uProgress: { value: 1 },
                 uAspect: { value: aspect }
             },
+            depthTest: false,
             transparent: true,
-            // depthWrite: false,
             vertexShader,
             fragmentShader,
         })
         this.mesh = new THREE.Mesh( plane, material )
         this.mesh.position.copy( this.experience.camera.instance.position )
-        this.mesh.layers.set(1)
         this.scene.add( this.mesh )
+        
 
         // Debug renderer
         if (this.debug.active) {

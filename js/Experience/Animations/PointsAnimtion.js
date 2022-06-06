@@ -103,6 +103,7 @@ export default class PointsAnimation extends EventEmitter {
     showNav() {
         this.showPoints = gsap.timeline({ paused: true })        
         const pointsScale = this.pointsGroup.children[0].children.map( el => el.scale )
+        
         this.showPoints.to( pointsScale, {
             x: 0.1,
             y: 0.1,
@@ -122,7 +123,6 @@ export default class PointsAnimation extends EventEmitter {
                 this.trigger('menuWasClose')
 
                 playHitSound()
-                this.camera.layers.enable(0)
                 this.open.reverse()
                 this.pointInfoOpen = false
             })
@@ -141,26 +141,13 @@ export default class PointsAnimation extends EventEmitter {
             },
             onStart: () => {
                 playHitSound()
-                this.camera.layers.enable(1)
             },
-            onComplete: () => this.camera.layers.disable(0),
-            onReverseComplete: () => this.camera.layers.disable(1),
         })
+
         this.open.to(this.world.rotation, {
-            keyframes: {
-                '25%': {
-                    z: 0
-                },
-                '75%': {
-                    x: Math.PI * 0.1,
-                    // z: -Math.PI * 0.1,
-                    ease: 'back(1.4)'
-                },
-                '100%': {
-                    z: 0
-                }
-            },
-            duration: 1,
+            y: '-=' + target.animationParameters.angle,
+            duration: 0.5,
+            ease: 'back(1.2)'
         })
         this.open.to(this.parameters.lookAt, {
             duration: 0.5,
@@ -168,13 +155,13 @@ export default class PointsAnimation extends EventEmitter {
         }, '<')
         this.open.to(this.camera.position, {
             duration: 0.5,
-            x: target.position.x + ( this.camera.position.x - target.position.x ) * 0.4,
+            x: target.animationParameters.radius + 0.2,
             y: target.position.y + 0.75,
-            z: target.position.z + ( this.camera.position.z - target.position.z ) * 0.4,
+            z: target.animationParameters.radius + 0.2,
             ease: 'power3.inOut'
         }, '<')
 
-        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse(), '<+=10%')
+        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse(), 0)
         this.open.to([ '.informationPart', target.element], {
             autoAlpha: 1,
             duration: 0.1

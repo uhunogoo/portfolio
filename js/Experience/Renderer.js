@@ -15,6 +15,7 @@ export default class Renderer {
         this.experience = new Experience()
         this.sizes = this.experience.sizes
         this.scene = this.experience.scene
+        this.scene1 = this.experience.scene1
         this.canvas = this.experience.canvas
         this.camera = this.experience.camera
         this.debug = this.experience.debug
@@ -37,7 +38,6 @@ export default class Renderer {
         })
 
         this.instance.outputEncoding = THREE.sRGBEncoding
-        // this.instance.toneMapping = THREE.CineonToneMapping
 
         // Shadows
         // this.instance.shadowMap.enabled = true
@@ -100,8 +100,7 @@ export default class Renderer {
         this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     }
     update() {
-        // this.instance.render(this.scene, this.camera.instance)
-
+        // this.instance.clear()
         this.effectComposer.render()
     }
 }

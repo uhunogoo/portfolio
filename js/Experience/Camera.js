@@ -31,8 +31,7 @@ export default class Camera {
         this.instance.lookAt( this.parameters.lookAt )
 
         // Layers setup
-        // this.instance.layers.disable(0)
-        this.instance.layers.enable(1)
+        // this.instance.layers.enable(1)
         
         this.instanceGroup.add(this.instance)
     }
