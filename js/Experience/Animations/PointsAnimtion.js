@@ -87,8 +87,8 @@ export default class PointsAnimation extends EventEmitter {
             }
         })
 
-        this.closeBtn()
         this.showNav()
+        this.closeBtn()
         this.navigationBtn() 
         this.startStyles()        
     }
@@ -102,9 +102,9 @@ export default class PointsAnimation extends EventEmitter {
     }
     showNav() {
         this.showPoints = gsap.timeline({ paused: true })        
-        const pointsScale = this.pointsGroup.children[0].children.map( el => el.scale )
+        this.pointsScale = this.pointsGroup.children[0].children.map( el => el.scale )
         
-        this.showPoints.to( pointsScale, {
+        this.showPoints.to( this.pointsScale, {
             x: 0.1,
             y: 0.1,
             ease: 'back',
@@ -142,19 +142,30 @@ export default class PointsAnimation extends EventEmitter {
             onStart: () => {
                 playHitSound()
             },
+            onReverseComplete: () => {
+                const tl = gsap.timeline()
+                tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
+            }
         })
 
+        this.open.to(this.pointsScale, {
+            x: 0,
+            y: 0,
+            stagger: 0.1,
+            ease: 'power3.inOut'
+        })
         this.open.to(this.world.rotation, {
             y: '-=' + target.animationParameters.angle,
-            duration: 0.5,
-            ease: 'back(1.2)'
-        })
+            duration: 1,
+            ease: 'power3.inOut'
+        }, '<')
         this.open.to(this.parameters.lookAt, {
-            duration: 0.5,
+            duration: 1,
             y: target.position.y,
+            ease: 'power3.inOut'
         }, '<')
         this.open.to(this.camera.position, {
-            duration: 0.5,
+            duration: 1,
             x: target.animationParameters.radius + 0.2,
             y: target.position.y + 0.75,
             z: target.animationParameters.radius + 0.2,
@@ -199,9 +210,9 @@ export default class PointsAnimation extends EventEmitter {
     clean() {
         if (this.intersect) {
             this.tl.kill()
-            
+
             this.tl = gsap.timeline()
-            this.tl.pointsShow( this.intersect.scale, {x: 0.1, y: 0.1} )
+            this.tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
 
             this.intersect = null
         }
