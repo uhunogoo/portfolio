@@ -86,9 +86,7 @@ export default class CameraMove {
                     y: 0.75,
                     z: this.parameters.radius,
                     ease: 'back(2.5).in'
-                },
-                // easeEach: "power4.inOut"
-                // easeEach: "none"
+                }
             },
         }, '<')
         

@@ -20,7 +20,8 @@ export default class Grass {
         }
         this.customUniform = {
             uTime: { value: 0 },
-            uIntensive: { value: 0.5 },
+            uIntensive: { value: 0.19 },
+            uNoiseSize: { value: new THREE.Vector2() },
             uColor1: { value: new THREE.Color('#e38935') },
             uColor2: { value: new THREE.Color('#161a0a') },
         }

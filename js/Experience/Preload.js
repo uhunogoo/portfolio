@@ -150,18 +150,20 @@ export default class Preload extends EventEmitter {
     outAnimation() {
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
             value: 0,
-            duration: 0.6,
+            duration: 1,
             ease: 'power1.in'
         })
-        this.playOutAnimation.to('.text-part', {
+        this.playOutAnimation.to('.text', {
             scale: 3,
+            y: 30,
             opacity: 0,
             duration: 0.5,
+            stagger: 0.07,
             ease: 'power1.in'
         }, 0)
         this.playOutAnimation.to('.title-decor', {
             rotate: '360deg',
-            scale: 2.5,
+            scale: 0.7,
             opacity: 0,
             duration: 1,
             ease: 'power4'

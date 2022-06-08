@@ -128,6 +128,62 @@ export default class PointsAnimation extends EventEmitter {
             })
         }
     }
+    towerAnimation(target) {
+        const tl = gsap.timeline()
+        tl.to(this.pointsScale, {
+            x: 0,
+            y: 0,
+            stagger: 0.1,
+            ease: 'power3.inOut'
+        })
+        tl.to(this.world.rotation, {
+            y: '-=' + target.animationParameters.angle,
+            duration: 1,
+            ease: 'power3.inOut'
+        }, '<')
+        tl.to(this.parameters.lookAt, {
+            duration: 1,
+            y: target.position.y,
+            ease: 'power3.inOut'
+        }, '<')
+        tl.to(this.camera.position, {
+            duration: 1,
+            x: target.animationParameters.radius + 0.2,
+            y: target.position.y + 0.75,
+            z: target.animationParameters.radius + 0.2,
+            ease: 'power3.inOut'
+        }, '<')
+
+        return tl
+    }
+    descriptionBlockAnimation( target, sound ) {
+        const tl = gsap.timeline({
+            onStart: sound
+        })
+        tl.to(this.preload.material.uniforms.uProgress, {
+            value: 1,
+            duration: 1.6,
+            ease: 'power3'
+        })
+        tl.to([ '.informationPart', target.element], {
+            autoAlpha: 1,
+            duration: 0.1
+        }, '<')
+        tl.to('.work', {
+            clipPath: 'inset(0% round 15px)',
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            stagger: 0.1,
+        }, '<+=25%')
+        tl.to('.work__image', {
+            scale: 1.1,
+            stagger: 0.07,
+            duration: 1.25,
+            ease: 'power2'
+        }, '<')
+        return tl
+    }
     openMenu(target) {
         const playHitSound = () => {
             this.hitSound.currentTime = 0
@@ -139,65 +195,19 @@ export default class PointsAnimation extends EventEmitter {
               duration: 1,
               ease: 'power4.out'
             },
-            onStart: () => {
-                playHitSound()
-            },
             onReverseComplete: () => {
                 const tl = gsap.timeline()
                 tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
             }
         })
-
-        this.open.to(this.pointsScale, {
-            x: 0,
-            y: 0,
-            stagger: 0.1,
-            ease: 'power3.inOut'
-        })
-        this.open.to(this.world.rotation, {
-            y: '-=' + target.animationParameters.angle,
-            duration: 1,
-            ease: 'power3.inOut'
-        }, '<')
-        this.open.to(this.parameters.lookAt, {
-            duration: 1,
-            y: target.position.y,
-            ease: 'power3.inOut'
-        }, '<')
-        this.open.to(this.camera.position, {
-            duration: 1,
-            x: target.animationParameters.radius + 0.2,
-            y: target.position.y + 0.75,
-            z: target.animationParameters.radius + 0.2,
-            ease: 'power3.inOut'
-        }, '<')
-
-        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse(), 0)
-        this.open.to([ '.informationPart', target.element], {
-            autoAlpha: 1,
-            duration: 0.1
-        })
-        this.open.to(this.preload.material.uniforms.uProgress, {
-            value: 1,
-            duration: 1.6,
-            ease: 'power1'
-        }, 0.15)
-        this.open.to('.work', {
-            clipPath: 'inset(0% round 15px)',
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            stagger: 0.1,
-        }, '<+=25%')
-        this.open.to('.work__image', {
-            scale: 1.1,
-            stagger: 0.07,
-            duration: 1.25,
-            ease: 'power2'
-        }, '<')
+        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse())
+        this.open.add( this.towerAnimation(target), 0)
+        this.open.add( this.descriptionBlockAnimation(target, playHitSound).timeScale(2.4), '<+=25%')
+        
 
 
-        this.open.timeScale(2).play()
+        // this.open.play()
+        this.open.play()
     }
     clickHandler(target) {
         this.trigger('menuWasOpen')
