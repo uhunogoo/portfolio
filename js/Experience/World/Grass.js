@@ -15,7 +15,7 @@ export default class Grass {
 
         // Parameters
         this.grassParameters = {
-            count: 90000,
+            count: 120000,
             size: 12
         }
         this.customUniform = {
