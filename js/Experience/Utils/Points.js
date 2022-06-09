@@ -21,15 +21,6 @@ export default class Points {
                     radius: 2
                 }
             },
-            {
-                name: 'point-3',
-                element: document.getElementById('point-2'),
-                position: new THREE.Vector3( 3.8, 0.85, -1.8 ),
-                animationParameters: {
-                    angle: Math.PI * 0.1,
-                    radius: 4
-                }
-            }
         ]
     }
 }

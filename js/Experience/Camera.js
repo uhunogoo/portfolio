@@ -14,8 +14,8 @@ export default class Camera {
         
         // Wait for environment
         this.parameters = {}
-        this.parameters.cameraPosition = new THREE.Vector3(1, 3, 1)
-        this.parameters.lookAt = new THREE.Vector3(0, 3.5, 0)
+        this.parameters.cameraPosition = new THREE.Vector3(2, 2, 2)
+        this.parameters.lookAt = new THREE.Vector3(0, 2.5, 0)
 
         // call method
         this.setInstance()

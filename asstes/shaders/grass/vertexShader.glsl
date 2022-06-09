@@ -94,6 +94,6 @@ void main(){
   
   // Varuing
 	vUv = uv;
-	vNoise = wind;
+	vNoise = clamp(wind, 0.0, 1.0) * 0.1 + staticNoise;
   vPosition = (offset.xz - 0.5) / 6.0 + 0.5;
 }

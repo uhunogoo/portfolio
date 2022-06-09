@@ -15,15 +15,15 @@ export default class Grass {
 
         // Parameters
         this.grassParameters = {
-            count: 120000,
+            count: 100000,
             size: 12
         }
         this.customUniform = {
             uTime: { value: 0 },
             uIntensive: { value: 0.19 },
             uNoiseSize: { value: new THREE.Vector2() },
-            uColor1: { value: new THREE.Color('#e38935') },
-            uColor2: { value: new THREE.Color('#161a0a') },
+            uColor1: { value: new THREE.Color('#b76e2a') },
+            uColor2: { value: new THREE.Color('#864a18') },
         }
         
 
@@ -169,6 +169,22 @@ export default class Grass {
         const floorMaterial = new THREE.MeshBasicMaterial({
             map: this.resources.items.sandTexture
         })
+        floorMaterial.onBeforeCompile = (shader) => {
+            shader.fragmentShader = shader.fragmentShader.replace(
+                '#include <dithering_fragment>',
+                `
+                    #include <dithering_fragment>
+
+                    // Calculate road shadow
+                    float rect = length(vUv.y - 2.98);
+                    rect = smoothstep(0.25, 0.4, rect);
+                    rect = (1.0 - step(0.5, vUv.x - 3.0)) + rect;
+                    rect = clamp(rect, 0.0, 1.0);
+
+                    gl_FragColor.rgb = mix(gl_FragColor.rgb * 0.3, gl_FragColor.rgb * 0.698, rect);
+                `
+            )
+        }
         
         const floor = new THREE.Mesh(
             floorGeometry,

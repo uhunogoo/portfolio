@@ -127,7 +127,6 @@ export default class Preload extends EventEmitter {
             opacity: 0,
             y: -10,
             scale: 0.8,
-            filter: 'blur(0.1em)',
             ease: 'power3.out',
         }, '<')
         this.playInAnimation.from('.text-part', {
@@ -140,7 +139,6 @@ export default class Preload extends EventEmitter {
         this.playInAnimation.from('.text', {
             y: 40,
             scale: 1.2,
-            filter: 'blur(0.1em)',
             opacity: 0,
             stagger: {
                 amount: 0.2
@@ -150,12 +148,11 @@ export default class Preload extends EventEmitter {
     outAnimation() {
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
             value: 0,
-            duration: 1,
-            ease: 'power1.in'
+            duration: 1.4,
+            ease: 'power1'
         })
         this.playOutAnimation.to('.text', {
-            scale: 3,
-            y: 30,
+            scale: 2,
             opacity: 0,
             duration: 0.5,
             stagger: 0.07,
@@ -166,13 +163,13 @@ export default class Preload extends EventEmitter {
             scale: 0.7,
             opacity: 0,
             duration: 1,
-            ease: 'power4'
+            ease: 'power1'
         }, 0)
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
             duration: 0.4,
-            ease: 'power4'
-        }, '<+=60%')
+            ease: 'power1'
+        }, '<+=80%')
         this.playOutAnimation.timeScale(1.25)
     }
     resize() {
