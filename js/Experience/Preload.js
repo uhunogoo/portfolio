@@ -149,7 +149,7 @@ export default class Preload extends EventEmitter {
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
             value: 0,
             duration: 1.4,
-            ease: 'power1'
+            ease: 'power2'
         })
         this.playOutAnimation.to('.text', {
             scale: 2,

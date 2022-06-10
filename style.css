@@ -155,11 +155,11 @@ h1 {
   left: 0;
   outline: none;
 }
-
+/**
 .informationPart {
   overflow: hidden;
   opacity: 0;
-}
+} **/
 .point__content {
   height: 100vh;
   left: 50%;
@@ -171,6 +171,11 @@ h1 {
   visibility: hidden;
   width: 100%;
   z-index: 5;
+  &.db {
+    background: #fff;
+    opacity: 1;
+    visibility: visible;
+  }
 }
 .works-wrap {
   height: 100%;
@@ -252,6 +257,83 @@ h1 {
   }
 }
 
+.content {
+  display: grid;
+  grid-template-columns: 38% 45%;
+  grid-template-areas: 'image text' 'image text1' 'image .';
+  justify-content: space-between;
+  max-width: 1500px;
+  left: 50%;
+  position: relative;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0 30px;
+  width: 100%;
+  & > div {
+    min-width: 0;
+  }
+  &__image {
+    grid-area: image;
+    img {
+      height: auto;
+      display: block;
+      width: 100%;
+    }
+  }
+  &__text {
+    grid-area: text;
+    &_1 {
+      grid-area: text1;
+    }
+    h2, h3 {
+      font-weight: normal;
+      line-height: 1;
+      margin: 0;
+      text-transform: uppercase;
+    }
+    p {
+      letter-spacing: 0.025em;
+      line-height: 1.3;
+    }
+    h2 {
+      font-size: clamp(30px, 4vw, 60px);
+      + p {
+        margin-top: 40px;
+      }
+    }
+    h3 {
+      font-size: clamp(20px, 2.2vw, 28px);
+      margin-top: 50px;
+      + p, + ul {
+        margin-top: 25px;
+      }
+    }
+    ul {
+      list-style: none;
+      padding-left: 40px;
+      li {
+        position: relative;
+        + li {
+          margin-top: 15px;
+        }
+        p {
+          margin: 0;
+        }
+        &::before {
+          background: url(/asstes/backgrounds/dot.svg) no-repeat center;
+          content: '';
+          display: block;
+          height: 1em;
+          left: 0;
+          position: absolute;
+          top: 50%;
+          transform: translate(-200%, -50%);
+          width: 1em;
+        }
+      }
+    }
+  }
+}
 
 .close_btn {
   cursor: pointer;

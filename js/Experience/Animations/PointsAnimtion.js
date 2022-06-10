@@ -202,11 +202,9 @@ export default class PointsAnimation extends EventEmitter {
         })
         this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse())
         this.open.add( this.towerAnimation(target), 0)
-        this.open.add( this.descriptionBlockAnimation(target, playHitSound).timeScale(2.4), '<+=25%')
+        this.open.add( this.descriptionBlockAnimation(target, playHitSound).timeScale(2.6), '<+=25%')
         
 
-
-        // this.open.play()
         this.open.play()
     }
     clickHandler(target) {
