@@ -89,8 +89,6 @@ export default class CameraMove {
                 }
             },
         }, '<')
-        
-        console.log(this.towerInAnimation.totalDuration() / 1.15)
     }
     update() {
         // if (!this.animationComplete) return

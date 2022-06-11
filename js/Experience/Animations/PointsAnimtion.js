@@ -61,6 +61,27 @@ export default class PointsAnimation extends EventEmitter {
             }
         })
         gsap.registerEffect({
+            name: "pointInfocontainer",
+            extendTimeline:true,
+            effect: (target, parameters) => {                
+                const tl = gsap.timeline({
+                    defaults: {
+                      duration: 1,
+                      ease: 'power4.out'
+                    },
+                    onReverseComplete: () => {
+                        const tl = gsap.timeline()
+                        tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
+                    }
+                })
+                tl.add( this.uiAnimation.showMenu().timeScale(3).reverse())                
+                tl.add( this.towerAnimation(target[0]), 0)                
+                tl.add( parameters.function.play(), '<+=25%' )
+
+                return tl
+            }
+        })
+        gsap.registerEffect({
             name: "clickEffect",
             extendTimeline:true,
             effect: (target, parameters) => {                
@@ -90,7 +111,7 @@ export default class PointsAnimation extends EventEmitter {
         this.showNav()
         this.closeBtn()
         this.navigationBtn() 
-        this.startStyles()        
+        this.startStyles()
     }
     startStyles() {
         gsap.set('.work', 
@@ -99,6 +120,9 @@ export default class PointsAnimation extends EventEmitter {
             y: '180%',
             opacity: 0
         })
+        gsap.set( '#myPhoto', { scale: 1.4, yPercent: -120 })
+        gsap.set( '.content__title span', { yPercent: 100 })
+        gsap.set( '.content__text p', { opacity: 0 })
     }
     showNav() {
         this.showPoints = gsap.timeline({ paused: true })        
@@ -129,6 +153,8 @@ export default class PointsAnimation extends EventEmitter {
         }
     }
     towerAnimation(target) {
+        console.log( target )
+        
         const tl = gsap.timeline()
         tl.to(this.pointsScale, {
             x: 0,
@@ -189,22 +215,15 @@ export default class PointsAnimation extends EventEmitter {
             this.hitSound.currentTime = 0
             this.hitSound.play()
         }
-        this.open = gsap.timeline({
-            paused: true,
-            defaults: {
-              duration: 1,
-              ease: 'power4.out'
-            },
-            onReverseComplete: () => {
-                const tl = gsap.timeline()
-                tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
-            }
-        })
-        this.open.add( this.uiAnimation.showMenu().timeScale(3).reverse())
-        this.open.add( this.towerAnimation(target), 0)
-        this.open.add( this.descriptionBlockAnimation(target, playHitSound).timeScale(2.6), '<+=25%')
-        
+        this.open = gsap.timeline({ paused: true })
 
+        const parameters = {}
+        if (target.name === 'point-1') {   
+            parameters.function = this.descriptionBlockAnimation(target, playHitSound).timeScale(2.6).pause()
+        } else if (target.name === 'point-2') {   
+            parameters.function = this.aboutMeAnimation(target, playHitSound).timeScale(1.6).pause()
+        }
+        this.open.pointInfocontainer( target, parameters )
         this.open.play()
     }
     clickHandler(target) {
@@ -224,6 +243,41 @@ export default class PointsAnimation extends EventEmitter {
 
             this.intersect = null
         }
+    }
+
+    aboutMeAnimation(target, sound) {
+        const tl = gsap.timeline({ onStart: sound })
+
+        tl.to(this.preload.material.uniforms.uProgress, {
+            value: 1,
+            duration: 1.6,
+            ease: 'power3'
+        })
+        tl.to([ '.informationPart', target.element], {
+            autoAlpha: 1,
+            duration: 0.1
+        }, '<')
+        tl.to('#myPhoto', {
+            scale: 1,
+            yPercent: 0,
+            duration: 1,
+            ease: 'power2'
+        }, '<+=50%')
+        tl.to('.content__title span', {
+            yPercent: 0,
+            stagger: {
+                amount: 0.4,
+                ease: 'power2'
+            }
+        }, '<')
+        tl.to('.content__text p', {
+            opacity: 1,
+            stagger: {
+                amount: 0.7,
+                ease: 'power2'
+            }
+        }, '<')
+        return tl
     }
     
     navigationBtn() {
