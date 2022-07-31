@@ -78,23 +78,37 @@ export default class Skybox {
             count: 40,
             size: 19
         }
+        
+        const images = [
+            this.resources.items.cloud,
+            this.resources.items.cloud2
+        ]
         const geometry = new THREE.PlaneBufferGeometry( 1, 1 )
-        const material = new THREE.MeshBasicMaterial({ map: this.resources.items.cloud, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
+        const material = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
 
         // Generate clouds
         for (let i = 0; i < cloudsParameters.count; i++) {
+            const cloudTexture = material.clone()
+            
+            cloudTexture.map = images[ i % 2 ]
+
             const cloud = new THREE.Mesh( 
                 geometry.clone(), 
-                material.clone() 
+                cloudTexture
             )
 
             // Cloud parameters
             cloud.position.set(
                 (Math.random() - 0.5) * cloudsParameters.size * 2,
-                (Math.random() - 0.1) * cloudsParameters.size * 0.6,
+                0.5 + Math.random() * cloudsParameters.size * 0.6,
                 Math.random() * 6.0 * -1.0
             )
-            cloud.scale.set( (1.0 + Math.random()) * 2, 0.5 + Math.random() * 0.5, 0 )
+            let scale = cloud.position.y / (cloudsParameters.size * 0.6)
+            cloud.scale.set( 
+                (1.0 + Math.random()) * 2 + scale * 1.5, 
+                0.5 + Math.random() * 0.5 + scale, 
+                0 
+            )
 
             this.cloudsGroup.add(cloud)
         }

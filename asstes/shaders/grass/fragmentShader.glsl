@@ -55,7 +55,7 @@ void main() {
     // calculate tower shadow
     float towershadowIntersects = shadow1 * shadow2;
     float towerShadow = (shadow1 * 0.125 + shadow2 * 0.1) * (1.0 - towershadowIntersects) + towershadowIntersects * 0.15;
-    towerShadow += shadow3 * 0.125;
+    towerShadow = towerShadow * (1.0 - shadow3) + shadow3 * 0.125;
 
     // Shadow near fire
     float shadow4 = length(vPosition - 0.5 - fireShadowPosition);

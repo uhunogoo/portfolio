@@ -1,14 +1,8 @@
 export default [
     // MODELS
     {
-        name: 'swordModel',
-        type: 'gltfLoader',
-        path: '/asstes/geometry/knife.glb?url'
-    },
-    {
         name: 'towerModel',
         type: 'gltfLoader',
-        // path: '/asstes/geometry/postament-2.glb?url'
         path: '/asstes/geometry/postament.glb?url'
     },
     //  TOWER
@@ -43,5 +37,10 @@ export default [
         name: 'cloud',
         type: 'texture',
         path: '/asstes/backgrounds/cloud.png?url'
+    },
+    {
+        name: 'cloud2',
+        type: 'texture',
+        path: '/asstes/backgrounds/cloud-2.png?url'
     },
 ]
