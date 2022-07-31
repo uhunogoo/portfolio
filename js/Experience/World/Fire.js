@@ -2,8 +2,6 @@ import * as THREE from 'three'
 import Experience from '../Experience'
 
 // Sword shaders
-import swordParticlesVertex from '../../../asstes/shaders/sword/particlesVertex.glsl?raw'
-import swordParticlesFragment from '../../../asstes/shaders/sword/particlesFragment.glsl?raw'
 import swordFireVertex from '../../../asstes/shaders/sword/fireVertex.glsl?raw'
 import swordFireFragment from '../../../asstes/shaders/sword/fireFragment.glsl?raw'
 
@@ -23,9 +21,9 @@ export default class Fire {
         
         // Setup
         this.options = {}
-        this.options.x = 3.8
-        this.options.y = 0.64
-        this.options.z = -1.8
+        this.options.x = 3.82
+        this.options.y = 0.6
+        this.options.z = -1.77
         this.fireUniform = {
             uTime: { value: 0 },
             uColor1: { value: new THREE.Color('#ff0000') },
@@ -41,29 +39,12 @@ export default class Fire {
     }
     createFire() {
         // Shape around te sword
-        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.15, 0.25, 10, 10)
-
-        // Generate particles around the sword
-        const swordParticlesMaterial = new THREE.ShaderMaterial({
-            uniforms: this.particlesUniform,
-            transparent: true,
-            depthWrite: false,
-            blending: THREE.AdditiveBlending,
-            vertexShader: swordParticlesVertex,
-            fragmentShader: swordParticlesFragment
-        })
-        
-        const particlesMesh = new THREE.Points( geometry, swordParticlesMaterial )
-        particlesMesh.position.x = this.options.x
-        particlesMesh.position.y = this.options.y
-        particlesMesh.position.z = this.options.z
-
+        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.165, 0.25, 10, 10)
         
         // Generate fire around the sword
         // const fireGeometry
         const swordFireMaterial = new THREE.ShaderMaterial({
             uniforms: this.fireUniform,
-            // transparent: true,
             side: THREE.DoubleSide,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
@@ -73,7 +54,7 @@ export default class Fire {
         fireMesh.position.y = this.options.y
         fireMesh.position.z = this.options.z
 
-        this.fireGroup.add(particlesMesh, fireMesh)
+        this.fireGroup.add(fireMesh)
 
         // Debug shader material
         if (this.debug.active) {

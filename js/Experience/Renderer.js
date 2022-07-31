@@ -2,12 +2,13 @@ import * as THREE from 'three'
 import Experience from './Experience'
 
 // Post Processing
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
-import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js'
-import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js'
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
+import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass'
 
 
 export default class Renderer {
@@ -81,19 +82,19 @@ export default class Renderer {
         this.effectComposer.addPass(renderPass)
 
         // Bloom pass
-        const unrealBloomPass = new UnrealBloomPass()
-        unrealBloomPass.strength = 0.15
-        unrealBloomPass.radius = 0.42
-        unrealBloomPass.threshold = 0
-        unrealBloomPass.enabled = false
+        this.unrealBloomPass = new UnrealBloomPass()
+        this.unrealBloomPass.strength = 1
+        this.unrealBloomPass.radius = 0.05
+        this.unrealBloomPass.threshold = 0
+        this.unrealBloomPass.enabled = true
         
         if (this.debug.active) {
-            this.debugFolder.add(unrealBloomPass, 'enabled')
-            this.debugFolder.add(unrealBloomPass, 'strength').min(0).max(2).step(0.001)
-            this.debugFolder.add(unrealBloomPass, 'radius').min(0).max(2).step(0.001)
-            this.debugFolder.add(unrealBloomPass, 'threshold').min(0).max(1).step(0.001)
+            this.debugFolder.add(this.unrealBloomPass, 'enabled').name('bloom enabled')
+            this.debugFolder.add(this.unrealBloomPass, 'strength').name('bloom strength').min(0).max(2).step(0.001)
+            this.debugFolder.add(this.unrealBloomPass, 'radius').name('bloom radius').min(0).max(2).step(0.001)
+            this.debugFolder.add(this.unrealBloomPass, 'threshold').name('bloom threshold').min(0).max(1).step(0.001)
         }
-        this.effectComposer.addPass(unrealBloomPass)
+        this.effectComposer.addPass(this.unrealBloomPass)    
 
         // Displacement pass
         const DisplacementShader = {
@@ -101,6 +102,7 @@ export default class Renderer {
             {
                 tDiffuse: { value: null },
                 uBokhe: { value: null },
+                uAspect: { value: this.sizes.width / this.sizes.height }
             },
             vertexShader: `
                 varying vec2 vUv;
@@ -115,33 +117,62 @@ export default class Renderer {
             fragmentShader: `
                 uniform sampler2D tDiffuse;
                 uniform vec2 uBokhe;
+                uniform float uAspect;
 
                 varying vec2 vUv;
+
+                float random (vec2 st) {
+                    return fract(
+                        sin( 
+                            dot( 
+                                st.xy, 
+                                vec2( 12.9898,78.233 ) 
+                            ) 
+                        ) * 43758.5453123 
+                    );
+                }
 
                 void main()
                 {
                     vec2 st = vUv;
+
+                    float scale = 400.0;
+                    vec2 scaleXY = vec2( scale, scale / uAspect );
+
+                    vec2 ipos = floor( st * scaleXY );
+                    vec2 fpos = fract( st * scaleXY );
+                    vec2 xyStep = ipos / scaleXY;
                     
                     // Bokhe
                     vec2 newUV = (st - 0.5) / 2.0 + 0.5;
                     float bokhe = 1.0 - length(newUV - 0.5);
                     bokhe = smoothstep( uBokhe.x, uBokhe.y, bokhe);
+                    bokhe = clamp(bokhe, 0.0, 1.0);
                     
-                    vec4 texture = texture2D(tDiffuse, st);
-                    vec3 color = mix( texture.rgb - vec3(1.0) * 0.8, texture.rgb, bokhe );
+                    
+                    float noise = random( st + xyStep );
+                    noise = clamp(noise, 0.0, 1.0);
 
+                    vec4 texture = texture2D(tDiffuse, st + (1.0 - noise) * 0.0006 );
+                    float grey = (texture.r + texture.g + texture.b) / 3.0;
+                    float greyMap = 1.0 - floor(grey);
 
-                    gl_FragColor = vec4(color, 1.0);
+                    vec3 color = mix( texture.rgb, texture.rgb - (1.0 - bokhe) * 0.8, greyMap );
+                    color = mix( color, color - (noise * 0.1), greyMap );
+                    color = mix( color, color + vec3(grey, 0.0, 0.0) * 0.2, greyMap );
+                    color = clamp( color, vec3(0.0), vec3(1.0) );
+
+                    gl_FragColor = vec4( color, 1.0);
                 }
             `
         }
 
-        const displacementPass = new ShaderPass(DisplacementShader)
-        displacementPass.material.uniforms.uBokhe.value = new THREE.Vector2(0.24, 0.823)
-        this.effectComposer.addPass(displacementPass)
+        this.displacementPass = new ShaderPass(DisplacementShader)
+        this.displacementPass.material.uniforms.uBokhe.value = new THREE.Vector2(0.4, 0.823)
+        this.effectComposer.addPass(this.displacementPass)
         if (this.debug.active) {
-            this.debugFolder.add(displacementPass.material.uniforms.uBokhe.value, 'x').min(-1).max(1).step(0.001)
-            this.debugFolder.add(displacementPass.material.uniforms.uBokhe.value, 'y').min(-1).max(1).step(0.001)
+            this.debugFolder.add(this.displacementPass.material.uniforms.uBokhe.value, 'x').name('bokeh width').min(-1).max(1).step(0.001)
+            this.debugFolder.add(this.displacementPass.material.uniforms.uBokhe.value, 'y').name('bokeh height').min(-1).max(1).step(0.001)
         }
         
         // Gamma correction pass
@@ -165,6 +196,9 @@ export default class Renderer {
         // Update effect composer
         this.effectComposer.setSize(this.sizes.width, this.sizes.height)
         this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+        // Update bokhe shader
+        this.displacementPass.material.uniforms.uAspect.value = this.sizes.width / this.sizes.height
     }
     update() {
         // Tick effect composer

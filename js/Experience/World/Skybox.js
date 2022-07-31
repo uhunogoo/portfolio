@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Sky } from 'three/examples/jsm/objects/Sky'
-
+import gsap from 'gsap'
 
 import Experience from '../Experience'
 
@@ -8,6 +8,8 @@ export default class Skybox {
     constructor() {
         this.experience = new Experience()
         this.skyGroup = new THREE.Group()
+        this.cloudsGroup = new THREE.Group()
+        this.cloudsGroup.name = 'cloudsGroup'
         this.renderer = this.experience.renderer
         this.camera = this.experience.camera
         this.resources = this.experience.resources
@@ -20,6 +22,7 @@ export default class Skybox {
         }
 
         this.createSky()
+        this.createClouds()
     }
     createSky() {
         // Add Sky
@@ -69,6 +72,49 @@ export default class Skybox {
             this.debugFolder.add( effectController, 'azimuth').min(-180).max(180).step(0.001).onChange( guiChanged )
             this.debugFolder.add( effectController, 'exposure').min(0).max(2).step(0.001).onChange( guiChanged )
         }
+    }
+    createClouds() {
+        const cloudsParameters = {
+            count: 40,
+            size: 19
+        }
+        const geometry = new THREE.PlaneBufferGeometry( 1, 1 )
+        const material = new THREE.MeshBasicMaterial({ map: this.resources.items.cloud, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
+
+        // Generate clouds
+        for (let i = 0; i < cloudsParameters.count; i++) {
+            const cloud = new THREE.Mesh( 
+                geometry.clone(), 
+                material.clone() 
+            )
+
+            // Cloud parameters
+            cloud.position.set(
+                (Math.random() - 0.5) * cloudsParameters.size * 2,
+                (Math.random() - 0.1) * cloudsParameters.size * 0.6,
+                Math.random() * 6.0 * -1.0
+            )
+            cloud.scale.set( (1.0 + Math.random()) * 2, 0.5 + Math.random() * 0.5, 0 )
+
+            this.cloudsGroup.add(cloud)
+        }
+        // Clouds global parameters
+        this.cloudsGroup.rotation.y = Math.PI * 0.5
+        this.cloudsGroup.position.x = -6.25
+
+        // Animate clouds
+        const positiontoanimate = this.cloudsGroup.children.map( cloud => cloud.position )
+        let animation = gsap.to(positiontoanimate, {
+            duration: 24, 
+            paused: true,
+            x: "+=" + cloudsParameters.size * 2,
+            ease: "none",
+            repeat: -1,
+            modifiers: {
+              x: gsap.utils.wrap(-cloudsParameters.size, cloudsParameters.size)
+            }
+        })
+        animation.play()
     }
 }
 

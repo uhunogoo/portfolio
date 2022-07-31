@@ -4,6 +4,7 @@ varying vec2 vPosition;
 
 uniform vec3 uColor1;
 uniform vec3 uColor2;
+uniform vec2 uNoiseSize;
 
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718
@@ -30,10 +31,16 @@ void main() {
     float bottomShadowSize = 0.373;
     // FirePlace shadow
     vec2 fireShadowPosition = vec2(0.53, -0.327);
-    float fireShadowSize = 0.1;
+    float fireShadowSize = 0.08;
     // Steps shadow
     vec2 stepsShadowPosition = vec2(0.115, 0.164);
     float stepsShadowSize = 0.09;
+    // Stella
+    vec2 stellaShadowPosition = vec2(0.459, 0.287);
+    float stellaShadowSize = 0.05;
+    vec2 stellaShadow2Position = vec2(0.41, 0.336);
+    // vec2 stellaShadow2Position = uNoiseSize;
+    float stellaShadow2Size = 0.14;
 
     // TowerShadow
     float shadow1 = length(vPosition - 0.5 - bottomShadowPosition);
@@ -54,8 +61,14 @@ void main() {
     float shadow4 = length(vPosition - 0.5 - fireShadowPosition);
     shadow4 = 1.0 - smoothstep( fireShadowSize - 0.01, fireShadowSize, shadow4 );
 
+    // Stella
+    float shadow5 = step(stellaShadowSize, max(abs(vPosition.x - 0.5 - stellaShadowPosition.x), abs(vPosition.y - 0.5 - stellaShadowPosition.y)));
+    vec2 shadow6UV = (vPosition - 0.5 - stellaShadow2Position) * get2dRotateMatrix(-PI * 0.25);
+    float shadow6 = step(stellaShadow2Size, max(abs(shadow6UV.x) * 7.0, abs(shadow6UV.y)));
+    float stellaShadow = (1.0 - shadow5 * shadow6) * 0.1;
+
     // Final calculation shadow
-    float mixShadows = towerShadow + shadow4 * 0.15;
+    float mixShadows = towerShadow + shadow4 * 0.15 + stellaShadow;
 
     
 

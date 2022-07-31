@@ -1,6 +1,4 @@
 import * as THREE from 'three'
-import Stats from 'three/examples/jsm/libs/stats.module'
-
 import Experience from '../Experience'
 import Environment from './Environment'
 import Fire from './Fire'
@@ -16,8 +14,6 @@ export default class World {
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.preload = this.experience.preload
-        this.stats = new Stats()
-        document.body.appendChild( this.stats.dom )
         
         const sceneGroup = new THREE.Group()
         sceneGroup.name = 'worldGroup'
@@ -33,7 +29,8 @@ export default class World {
             
             // Add all scene group to main 
             sceneGroup.add( 
-                this.sky.skyGroup, 
+                this.sky.skyGroup,
+                this.sky.cloudsGroup,
                 this.grass.grassGroup,
                 this.points.pointsGroup,
                 this.tower.towerGroup, 
@@ -58,6 +55,5 @@ export default class World {
         if(this.tower) {
             this.tower.update()
         }
-        this.stats.update()
     }
 }

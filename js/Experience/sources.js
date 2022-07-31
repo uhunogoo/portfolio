@@ -38,4 +38,10 @@ export default [
         type: 'texture',
         path: '/asstes/textures/runes/point.png?url'
     },
+    //  Clouds
+    {
+        name: 'cloud',
+        type: 'texture',
+        path: '/asstes/backgrounds/cloud.png?url'
+    },
 ]

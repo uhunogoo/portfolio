@@ -57,6 +57,7 @@ export default class Experience {
         this.preload.resize()
     }
     update() {
+        this.debug.update()
         this.camera.update()
         this.world.update()
         this.renderer.update()

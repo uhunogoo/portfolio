@@ -12,53 +12,14 @@ export default class Environment {
             this.debugFolder = this.debug.ui.addFolder('Environment')
             this.debugFolder.close()
         }
-
         this.setSunLight()
     }
     setSunLight() {
-        this.sunLight = new THREE.DirectionalLight( 0xffffff, 0.5 )
-        this.sunLight.position.set( 0.9, 3.1, -1.8 )
+        const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 )
+        hemiLight.color.setHSL( 0.6, 1, 0.6 )
+        hemiLight.groundColor.setHSL( 0.095, 1, 0.75 )
+        hemiLight.position.set( 0, 50, 0 )
         
-        this.sunLight.castShadow = true
-        this.sunLight.shadow.camera.far = 9
-        this.sunLight.shadow.mapSize.set(1024, 1024)
-        this.sunLight.shadow.normalBias = 0.05
-        
-        // const directionalLightCameraHelper = new THREE.CameraHelper(this.sunLight.shadow.camera)
-        // this.scene.add(directionalLightCameraHelper)
-        
-        this.ambientLight = new THREE.AmbientLight( 0xffffff, 0.5)
-        
-        this.scene.add( this.sunLight, this.ambientLight )
-
-        // Debug light
-        if (this.debug.active) {
-            this.debugFolder
-                .add(this.sunLight, 'intensity')
-                .name('sunIntensity')
-                .min(0)
-                .max(10)
-                .step(0.001)
-
-            // position
-            this.debugFolder
-                .add(this.sunLight.position, 'x')
-                .name('light x')
-                .min(-10)
-                .max(10)
-                .step(0.001)
-            this.debugFolder
-                .add(this.sunLight.position, 'y')
-                .name('light y')
-                .min(-10)
-                .max(10)
-                .step(0.001)
-            this.debugFolder
-                .add(this.sunLight.position, 'z')
-                .name('light z')
-                .min(-10)
-                .max(10)
-                .step(0.001)
-        }
+        this.scene.add( hemiLight )
     }
 }

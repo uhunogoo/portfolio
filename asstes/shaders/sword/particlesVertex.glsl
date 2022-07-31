@@ -1,38 +1,33 @@
 uniform float uTime;
 uniform float uPixelRatio;
 
+attribute float vSpeed;
+
 // varying
 varying vec2 vUv;
-varying vec3 vPosition;
+varying float vInterval;
 
-
-mat2 get2dRotateMatrix(float _angle)
-{
-    return mat2(cos(_angle), - sin(_angle), sin(_angle), cos(_angle));
+mat2 get2dRotateMatrix(float _angle) {
+		return mat2(cos(_angle), - sin(_angle), sin(_angle), cos(_angle));
 }
+void main(){
+  // Scaling
+	vec3 st = position;
+  float speed = vSpeed * 0.6;
+  st.xz *= get2dRotateMatrix(-uTime * speed + (sin(position.z) + cos(position.x)) * 20.0);
+  st.y += (sin(st.z) + cos(st.x) + speed) * 0.2;
+  st.z += sin(uTime + st.x * 2.0) * speed;
 
-void main() {
-  float t = uTime;
-
-  vec4 st = vec4( position, 1.0 );
-
-  float combine = (1.0 + sin( uTime + (st.x + st.z) * 4.0 )) * uv.y / 20.0;
-  combine += (1.0 + cos( uTime + (st.x + st.z) * 4.0 )) * uv.y / 20.0;
-
-  st.xz *= 1.0 + (1.0 + sin(uTime * 6.0 + (combine * 2.0) * 8.0)) * uv.y * 0.2;
-  st.xz *= get2dRotateMatrix( st.y * 8.0  - uTime * 2.0 );
-
-  st.y += mod( uTime + st.x * st.z, st.y + 0.5 );
-
-  vec4 modelViewPosition = modelViewMatrix * st;
+	vec4 modelPosition = modelMatrix * vec4(st, 1.0);
+	vec4 viewPosition = viewMatrix * modelPosition;
+	vec4 projectionPosition = projectionMatrix * viewPosition;
 
   // Points 
-  gl_PointSize = (20.0 * (1.0 - uv.y)) * uPixelRatio;
-  gl_PointSize *= ( 1.0 / - modelViewPosition.z);
-
-  gl_Position = projectionMatrix * modelViewPosition;
-
-  // varying
-  vUv = uv;
-  vPosition = st.xyz;
+  gl_PointSize = 30.0 * uPixelRatio;
+  gl_PointSize *= ( 1.0 / - viewPosition.z);
+	gl_Position = projectionPosition;
+  
+  // Varuing
+	vUv = uv;
+  vInterval = vSpeed;
 }

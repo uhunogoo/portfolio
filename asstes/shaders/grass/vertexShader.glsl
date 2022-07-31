@@ -1,6 +1,5 @@
 uniform float uTime;
 uniform float uIntensive;
-uniform vec2 uNoiseSize;
 
 // varying
 varying vec2 vUv;
@@ -62,7 +61,7 @@ void main(){
   
   // Wind calculation
   float wind = sin( (offset.x * 4.0 - cos(offset.z * 2.0)) / 2.0 );
-  wind += cos( (offset.z * 2.0 - cos(offset.x * 2.0)) / 2.0 + uTime * 2.5);
+  wind += cos( (offset.z * 2.0 - cos(offset.x * 6.0)) / 2.0 + uTime * 2.5);
 	wind = mix(0.0, 1.0, wind * 2.5 + (noise -1.0));
 
 	float staticNoise = 1.0 - abs( cnoise( offset.xz / vec2(5.0, 10.0) ) );
@@ -70,19 +69,21 @@ void main(){
 
   // Scaling
 	vec3 st = position * scale;
-	st *= 1.0 + staticNoise;
-	st *= 0.5 + staticNoise2 * 0.2;
+	st *= 0.5 + staticNoise;
+	st *= clamp( staticNoise2, scale * 0.4 + (staticNoise * staticNoise2), 1.0);
+	st.x *= 2.0 - staticNoise2 + scale;
   
   // Base rotation
-	st.xz *= get2dRotateMatrix( rotation.y );
-	st.zy *= get2dRotateMatrix( sin(rotation.y * 2.0) * 0.2 );
+	st.xy *= get2dRotateMatrix( (rotation.y + staticNoise2) * 0.05);
+	st.zy *= get2dRotateMatrix( sin(rotation.y * 2.0) * staticNoise2 * 0.2 );
+	st.xz *= get2dRotateMatrix( rotation.y + staticNoise2 * 3.14 );
 
   // Wind grass moving 
 	st.xy *= get2dRotateMatrix( ( sin(uv.y * 2.0 + noise + uTime * 4.0) * scale * 3.14 * 0.05) * intesity);
 	st.xy *= get2dRotateMatrix( ( wind * sin(uv.y * 2.0 + noise + uTime * 4.0) * scale * 3.14 * 0.05 * step(0.6, uv.y)) * intesity);
-	st.zy *= get2dRotateMatrix( ( noise * 0.01 + ((wind + 1.0) / 2.0) * 3.14 * 0.3) * intesity);
-	st.zy *= get2dRotateMatrix( ( noise * 0.01 + ((wind + 1.0) / 2.0) * 3.14 * 0.1 * step(0.6, uv.y)) * intesity);
-	
+  st.zy *= get2dRotateMatrix( wind * noise * intesity);
+	st.zy *= get2dRotateMatrix( -noise * step(0.6, uv.y) * intesity);
+
   st += offset;
 
 	vec4 modelPosition = modelMatrix * vec4(st, 1.0);

@@ -20,7 +20,9 @@ export default class Preload extends EventEmitter {
         this.scene = this.experience.scene
         this.camera = this.experience.camera.instance
         this.resources = this.experience.resources
+        this.bloomPass = this.experience.renderer.unrealBloomPass
         
+
         // Defaults
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
@@ -51,10 +53,17 @@ export default class Preload extends EventEmitter {
                 playHitSound()
             },
         })
+        this.playOutAnimation.to('.preload__enter', {
+            scale: 0,
+            opacity: 0,
+            duration: 0.2,
+            ease: 'power4'
+        }, 0)
         this.playInAnimation = gsap.timeline({ 
             paused: true,
             onComplete: () => {
-                document.querySelector('.preload').addEventListener('click', () => {
+                document.querySelector('.preload__enter').addEventListener('click', (el) => {
+                    el.target.classList.add('active')
                     this.trigger( 'preloadWasClicked' )
                     this.playOutAnimation.play()
                 })
@@ -144,33 +153,50 @@ export default class Preload extends EventEmitter {
                 amount: 0.2
             }
         }, '<+=30%')
+        this.playInAnimation.to('.preload__enter', {
+            autoAlpha: 1,
+            scale: 1,
+            ease: 'power1.out',
+        }, 0.8)
     }
     outAnimation() {
-        this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
-            value: 0,
-            duration: 1.4,
-            ease: 'power2'
+        this.playOutAnimation.to('.text-part', {
+            scale: 0.7,
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power3'
         })
         this.playOutAnimation.to('.text', {
-            scale: 2,
+            scale: 0.2,
+            y: gsap.utils.wrap( [20, -20] ),
             opacity: 0,
-            duration: 0.5,
-            stagger: 0.07,
-            ease: 'power1.in'
+            duration: 0.6,
+            stagger: 0.15,
+            ease: 'power1'
         }, 0)
+        this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
+            value: 0,
+            duration: 2,
+            ease: 'power3'
+        }, 0.2)
+        this.playOutAnimation.to(this.bloomPass, {
+            strength: 0.15,
+            duration: 1.5,
+            ease: 'power3'
+        }, 0.2)
         this.playOutAnimation.to('.title-decor', {
             rotate: '360deg',
             scale: 0.7,
             opacity: 0,
-            duration: 1,
+            duration: 0.8,
             ease: 'power1'
         }, 0)
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
-            duration: 0.4,
+            duration: 0.6,
             ease: 'power1'
-        }, '<+=80%')
-        this.playOutAnimation.timeScale(1.25)
+        }, 0.6)
+        this.playOutAnimation.timeScale(1.3)
     }
     resize() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height

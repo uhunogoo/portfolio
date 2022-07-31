@@ -46,7 +46,6 @@ html, body {
     transform: translate(-50%, -50%);
     width: 100%;
     .title-decor {
-      background: url(./asstes/backgrounds/grece.svg) no-repeat center;
       display: block;
       height: 0;
       left: 50%;
@@ -56,6 +55,14 @@ html, body {
       top: 50%;
       transform: translate(-50%, -50%) rotate(180deg) scale(1.1);
       width: 110%;
+      div {
+        background: url(./asstes/backgrounds/grece.svg) no-repeat center;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
     }
     .text-part {
       padding: 4.6% 0 4%;
@@ -115,18 +122,38 @@ html, body {
       }
     }
   }
-  .code {
-    font-size: 0;
-    height: 4rem;
-    margin-top: -11.6%;
-    overflow: clip;
-    transform: translateX(1.5%) scaleX(1.03);
-    div {
-      font-size: 6.7vmin;
-      font-family: 'Libre Barcode 128', cursive;
-      display: inline-block;
-      line-height: 1;
-      transform: scaleY(0)
+  &__enter {
+    border: 1px solid var(--gold);
+    color: var(--dark);
+    cursor: pointer;
+    font-size: 1.5rem;
+    bottom: 10%;
+    left: 50%;
+    padding: 0.25em 1em;
+    position: absolute;
+    text-transform: uppercase;
+    transform: translateX(-50%) scale(1);
+    visibility: hidden;
+    &::after,
+    &::before {
+      background: url(/asstes/backgrounds/arrow.svg) no-repeat center;
+      content: '';
+      display: block;
+      left: 0;
+      position: absolute;
+      height: 2.4em;
+      top: 50%;
+      width: 100%;
+    }
+    &::after {
+      background-position: 0 0;
+      left: 0;
+      transform: translate(-6%, -50%);
+    }
+    &::before {
+      background-position: 0 0;
+      right: 0;
+      transform: translate(6%, -50%) rotate(180deg);
     }
   }
 }
@@ -436,8 +463,11 @@ h1 {
   right: 25px;
   top: 25px;
   transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform: scale(0);
   width: 40px;
   z-index: 6;
+  visibility: hidden;
+  opacity: 0;
   svg {
     pointer-events: none;
   }
