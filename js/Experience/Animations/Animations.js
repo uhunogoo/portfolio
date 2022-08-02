@@ -33,6 +33,11 @@ export default class Animation {
             this.mainTimeline.play()
         })
     }
+    mouseMove() {
+        if ( this.cameraMove ) {
+            this.cameraMove.mouseMove()
+        }
+    }
     update() {
         if ( this.cameraMove ) {
             this.cameraMove.update()

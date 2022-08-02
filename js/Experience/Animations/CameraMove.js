@@ -12,11 +12,15 @@ export default class CameraMove {
         this.camera = this.experience.camera.instance
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
-
+        
         // Defaults
+        this.cloudsGroup = target.children.find( child => child.name === 'cloudsGroup' )
+        this.tempMouseCoords = {
+            x: 0,
+            y: 0
+        }
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
-        this.parameters.cameraY = ( this.camera.aspect < 1) ? Math.max( 1.25, 2 / this.camera.aspect ) : 1.25
 
         // Add parameters
         this.previousTime = 0
@@ -33,6 +37,41 @@ export default class CameraMove {
                 this.animationComplete = true
             }
         })
+        this.xRotation = gsap.timeline({
+            paused: true,
+            duration: 1,
+            ease: 'power1'
+        })
+        this.xRotation.to(this.cameraGroup.rotation, {
+            keyframes: {
+                '0%': {
+                    x: Math.PI * 0.03
+                },
+                '100%': {
+                    x: -Math.PI * 0.03
+                }
+            }
+        }, 0)
+        this.yRotation = gsap.timeline({
+            paused: true,
+            duration: 1,
+            ease: 'power1'
+        })
+        this.yRotation.to(this.cameraGroup.rotation, {
+            keyframes: {
+                '0%': {
+                    y: -Math.PI * 0.03
+                },
+                '100%': {
+                    y: Math.PI * 0.03
+                }
+            }
+        }, 0)
+
+        this.rotatioMatrix = new THREE.Matrix4()
+        this.rotatioMatrix.copy( this.camera.matrixWorld )
+        this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
+
         this.animation()
     }
     animation() {
@@ -89,16 +128,33 @@ export default class CameraMove {
             },
         }, '<')
     }
-    update() {
+    mouseMove() {
+        // Play when animation was complete 
         if (!this.animationComplete) return
-        const elapsedTime = this.clock.getElapsedTime()
-        const deltaTime = elapsedTime - this.previousTime
-        this.previousTime = elapsedTime
 
-        const parallaxY = - this.mouse.y * 0.1
-        const parallaxX = this.mouse.x * 0.05
+        // Get mouse coordinates 
+        let { x, y } = this.mouse       
 
-        this.cameraGroup.rotation.x += (parallaxY - this.cameraGroup.rotation.x) * 3 * deltaTime
-        this.cameraGroup.rotation.y += (parallaxX - this.cameraGroup.rotation.y) * 3 * deltaTime       
+        // Smoothing function
+        gsap.to(this.tempMouseCoords, {
+            x: x,
+            y: y,
+            ease: 'power1',
+            onUpdate: () => {
+                // Mouse position as progress parameter
+                this.yRotation.progress( (this.tempMouseCoords.x + 1) / 4 )
+                this.xRotation.progress( (this.tempMouseCoords.y + 1) / 4 ) 
+            }
+        })  
+    }
+    update() {
+        let vector = new THREE.Vector3()
+        this.camera.getWorldPosition(vector)
+        vector.applyMatrix4(this.rotatioMatrix)
+        vector.negate()
+
+        this.cloudsGroup.position.x = vector.x
+        this.cloudsGroup.position.z = vector.z
+        this.cloudsGroup.lookAt( 0, 0, 0 )
     }
 }

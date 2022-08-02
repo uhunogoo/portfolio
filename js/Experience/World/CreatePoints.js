@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import gsap from 'gsap'
 import Experience from '../Experience'
 
 export default class Createpoints {
@@ -33,6 +34,23 @@ export default class Createpoints {
         })
         points.scale.divideScalar( this.pointsGroup.scale.x )
         this.pointsGroup.add(points)
+    }
+    resize() {
+        const windowWidth = document.documentElement.clientWidth
+        const x = ( w ) => {
+            if ( w > 767.5 ) {
+                if ( w < 991.5 ) {
+                    return '6.5vw'
+                } else if (w < 1499.5){
+                    return '10vw'
+                } else {
+                    return '450%'
+                }
+            } else return 0
+        }
+        const y = (windowWidth > 767.5) ? -50 : 0
+        
+        gsap.set( '.content__links', { x: x( windowWidth ), yPercent: y })
     }
     update() {
     }

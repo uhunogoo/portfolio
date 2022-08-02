@@ -6,8 +6,8 @@ export default class Mouse extends EventEmitter {
         this.sizes = new Sizes()
 
         // Setup
-        this.x = document.documentElement.clientWidth
-        this.y = window.innerHeight
+        this.x = 0
+        this.y = 0
 
         // Resize
         this.mouseMove()
@@ -15,9 +15,6 @@ export default class Mouse extends EventEmitter {
     mouseMove() {
         // Mouse move
         window.addEventListener('mousemove', (event) => {
-            // this.x = event.clientX / this.sizes.width - 0.5
-            // this.y = event.clientY / this.sizes.height - 0.5
-
             this.x = ( event.clientX / this.sizes.width ) * 2 - 1
             this.y = - ( event.clientY / this.sizes.height ) * 2 + 1
 

@@ -173,7 +173,7 @@ export default class Preload extends EventEmitter {
             duration: 0.6,
             stagger: 0.15,
             ease: 'power1'
-        }, 0)
+        }, 0.2)
         this.playOutAnimation.to(this.mesh.material.uniforms.uProgress, {
             value: 0,
             duration: 2,
@@ -185,18 +185,18 @@ export default class Preload extends EventEmitter {
             ease: 'power3'
         }, 0.2)
         this.playOutAnimation.to('.title-decor', {
-            rotate: '360deg',
-            scale: 0.7,
+            rotate: '180deg',
+            scale: 4,
             opacity: 0,
-            duration: 0.8,
+            duration: 1.2,
             ease: 'power1'
-        }, 0)
+        }, 0.2)
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,
-            duration: 0.6,
+            duration: 0.8,
             ease: 'power1'
-        }, 0.6)
-        this.playOutAnimation.timeScale(1.3)
+        }, 0.8)
+        this.playOutAnimation.timeScale(0.9)
     }
     resize() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height

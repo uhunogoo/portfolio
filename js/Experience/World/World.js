@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import Experience from '../Experience'
-import Environment from './Environment'
 import Fire from './Fire'
 import Grass from './Grass'
 import Tower from './Tower'
@@ -41,6 +40,16 @@ export default class World {
             // this.environment = new Environment()
             this.animation = new Animation( sceneGroup )
         })
+    }
+    resize() {
+        if(this.points) {
+            this.points.resize()
+        }
+    }
+    mouseMove() {
+        if(this.animation) {
+            this.animation.mouseMove()
+        }
     }
     update() {
         if(this.grass) {

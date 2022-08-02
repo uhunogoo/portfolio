@@ -14,6 +14,7 @@ export default class Camera {
         
         // Wait for environment
         this.parameters = {}
+        this.parameters.cameraY = null
         this.parameters.cameraPosition = new THREE.Vector3(2, 2, 2)
         this.parameters.lookAt = new THREE.Vector3(0, 2.5, 0)
 
@@ -31,6 +32,7 @@ export default class Camera {
         this.instance.lookAt( this.parameters.lookAt )
 
         this.parameters.radius = ( this.instance.aspect < 1) ? Math.max( 5, 4 / this.instance.aspect ) : 5
+        this.parameters.cameraY = Math.max(1.25, ( this.instance.aspect < 1) ? 3 / this.instance.aspect : 1.25)
 
         // Layers setup
         // this.instance.layers.enable(1)

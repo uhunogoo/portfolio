@@ -46,15 +46,24 @@ export default class Experience {
             this.resize()
         })
 
+        // Mosue move event
+        this.mouse.on('mouseMove', () => {
+            this.mouseMove()
+        })
+
         // Time tick event
         this.time.on('tick', () => {
             this.update()
         })
     }
     resize() {
+        this.world.resize()
         this.camera.resize()
         this.renderer.resize()
         this.preload.resize()
+    }
+    mouseMove() {
+        this.world.mouseMove()
     }
     update() {
         this.debug.update()
@@ -65,5 +74,6 @@ export default class Experience {
     destroy() {
         this.sizes.off('resize')
         this.time.off('tick')
+        this.mouse.off('mouseMove')
     }
 }

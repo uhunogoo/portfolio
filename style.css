@@ -334,11 +334,19 @@ h1 {
     }
   }
   &__links {
-    position: absolute;
-    right: 0;
-    top: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: relative;
+    margin: 30px auto 0;
+    width: 150px;
     @media screen and (min-width: 767.5px) {
+      flex-direction: column;
+      position: absolute;
+      right: 0;
+      top: 50%;
       transform: translate(6.5vw, -50%);
+      width: auto;
     }
     @media screen and (min-width: 991.5px) {
       transform: translate(10vw, -50%);
@@ -353,19 +361,30 @@ h1 {
       content: '';
       display: block;
       height: 88px;
-      left: 50%;
       position: absolute;
       width: 14px;
     }
     &::before {
       background-position: 50% 100%;
-      top: 0;
-      transform: translate(-50%, -140%);
+      top: 50%;
+      left: 0;
+      transform: translate(-70px, -50%) rotate(-90deg);
+      @media screen and (min-width: 767.5px) {
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -140%);
+      }
     }
     &::after {
       background-position: 50% 100%;
-      bottom: 0;
-      transform: translate(-50%, 140%) rotate(180deg);
+      left: auto;
+      right: 0;
+      top: 50%;
+      transform: translate(70px, -50%) rotate(90deg);
+      @media screen and (min-width: 767.5px) {
+        bottom: 0;
+        transform: translate(-50%, 140%) rotate(180deg);
+      }
     }
     a {
       display: block;
@@ -374,7 +393,9 @@ h1 {
       position: relative;
       width: 35px;
       + a {
-        margin-top: 30px;
+        @media screen and (min-width: 767.5px) {
+          margin-top: 30px;
+        }
       }
       img {
         display: block;
@@ -386,7 +407,7 @@ h1 {
         display: block;
         height: 160%;
         left: 50%;
-        opacity: 0.2;
+        opacity: 0.3;
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
