@@ -50,6 +50,9 @@ export default class World {
         if(this.animation) {
             this.animation.mouseMove()
         }
+        if(this.sky) {
+            this.sky.mouseMove()
+        }
     }
     update() {
         if(this.grass) {

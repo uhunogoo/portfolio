@@ -189,7 +189,7 @@ export default class Preload extends EventEmitter {
             scale: 4,
             opacity: 0,
             duration: 1.2,
-            ease: 'power1'
+            ease: 'none'
         }, 0.2)
         this.playOutAnimation.to('.preload', {
             autoAlpha: 0,

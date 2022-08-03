@@ -15,6 +15,11 @@ export default class Skybox {
         this.resources = this.experience.resources
         this.debug = this.experience.debug
 
+        // Defaults
+        this.parameters = {
+            timescale: 1
+        }
+
         // Debug
         if (this.debug.active) {
             this.debugFolder = this.debug.ui.addFolder('Sky')
@@ -118,17 +123,40 @@ export default class Skybox {
 
         // Animate clouds
         const positiontoanimate = this.cloudsGroup.children.map( cloud => cloud.position )
-        let animation = gsap.to(positiontoanimate, {
-            duration: 24, 
+        this.cloudsAnimation = gsap.timeline({
             paused: true,
-            x: "+=" + cloudsParameters.size * 2,
-            ease: "none",
             repeat: -1,
+            defaults: {
+                duration: 20, 
+                ease: "none",
+            }
+        })
+        this.cloudsAnimation.to(positiontoanimate, {
+            x: "+=" + cloudsParameters.size * 2,
             modifiers: {
               x: gsap.utils.wrap(-cloudsParameters.size, cloudsParameters.size)
             }
         })
-        animation.play()
+        this.cloudsAnimation.play()
+    }
+    mouseMove() {
+        if (!this.cloudsAnimation) return
+
+        const tl = gsap.timeline({
+            onUpdate: () => this.cloudsAnimation.timeScale(this.parameters.timescale),
+            defaults: {
+                ease: 'power1.out',
+                duration: 1.5,
+            }
+        })
+        tl.to( this.parameters, {
+            timescale: 4,
+        }, 0)
+        tl.to( this.parameters, {
+            timescale: 1,
+            duration: 1,
+            ease: 'power1.in',
+        }, 0.8)
     }
 }
 

@@ -37,13 +37,13 @@ export default class Animation {
         if ( this.cameraMove ) {
             this.cameraMove.mouseMove()
         }
+        if ( this.uiAnimation ) {
+            this.uiAnimation.mouseMove()
+        }
     }
     update() {
         if ( this.cameraMove ) {
             this.cameraMove.update()
-        }
-        if ( this.uiAnimation ) {
-            this.uiAnimation.update()
         }
     }
 }

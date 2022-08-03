@@ -37,36 +37,6 @@ export default class CameraMove {
                 this.animationComplete = true
             }
         })
-        this.xRotation = gsap.timeline({
-            paused: true,
-            duration: 1,
-            ease: 'power1'
-        })
-        this.xRotation.to(this.cameraGroup.rotation, {
-            keyframes: {
-                '0%': {
-                    x: Math.PI * 0.03
-                },
-                '100%': {
-                    x: -Math.PI * 0.03
-                }
-            }
-        }, 0)
-        this.yRotation = gsap.timeline({
-            paused: true,
-            duration: 1,
-            ease: 'power1'
-        })
-        this.yRotation.to(this.cameraGroup.rotation, {
-            keyframes: {
-                '0%': {
-                    y: -Math.PI * 0.03
-                },
-                '100%': {
-                    y: Math.PI * 0.03
-                }
-            }
-        }, 0)
 
         this.rotatioMatrix = new THREE.Matrix4()
         this.rotatioMatrix.copy( this.camera.matrixWorld )
@@ -133,19 +103,15 @@ export default class CameraMove {
         if (!this.animationComplete) return
 
         // Get mouse coordinates 
-        let { x, y } = this.mouse       
+        const { x, y } = this.mouse       
 
-        // Smoothing function
-        gsap.to(this.tempMouseCoords, {
-            x: x,
-            y: y,
+        // Camera animation
+        gsap.to(this.cameraGroup.rotation, {
+            y: Math.PI * 0.03 * x,
+            x: - Math.PI * 0.03 * y,
             ease: 'power1',
-            onUpdate: () => {
-                // Mouse position as progress parameter
-                this.yRotation.progress( (this.tempMouseCoords.x + 1) / 4 )
-                this.xRotation.progress( (this.tempMouseCoords.y + 1) / 4 ) 
-            }
-        })  
+            duration: 0.4
+        })
     }
     update() {
         let vector = new THREE.Vector3()
@@ -155,6 +121,7 @@ export default class CameraMove {
 
         this.cloudsGroup.position.x = vector.x
         this.cloudsGroup.position.z = vector.z
+        this.cloudsGroup.position.y = vector.y + 2
         this.cloudsGroup.lookAt( 0, 0, 0 )
     }
 }
