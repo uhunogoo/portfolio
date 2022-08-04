@@ -15,13 +15,14 @@ export default class Animation {
         this.cameraMove = new CameraMove( target )
         this.uiAnimation = new UIAnimation()
         this.pointsAnimation = new PointsAnimation( target, this.uiAnimation ) 
+        this.load = false
 
         // Setup
         this.mainTimeline = gsap.timeline({ 
             paused: true,
             onComplete: () => {
                 this.mainTimeline.kill()
-                this.pointsAnimation.mouseMove()   
+                this.load = true
             }
         })
         this.mainTimeline.add( this.cameraMove.towerInAnimation.play().timeScale(1) )
@@ -39,6 +40,13 @@ export default class Animation {
         }
         if ( this.uiAnimation ) {
             this.uiAnimation.mouseMove()
+        }
+        if ( this.followingCursor ) {
+            this.followingCursor.mouseMove()
+        }
+        if ( this.pointsAnimation ) {
+            if (!this.load) return
+            this.pointsAnimation.mouseMove()
         }
     }
     update() {

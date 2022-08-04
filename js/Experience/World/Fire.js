@@ -30,10 +30,6 @@ export default class Fire {
             uColor2: { value: new THREE.Color('#fff700') },
             uColor3: { value: new THREE.Color('#e6893d') },
         }
-        this.particlesUniform = {
-            uTime: { value: 0 },
-            uPixelRatio: { value: this.sizes.pixelRatio }
-        }
 
         this.createFire()
     }
@@ -70,7 +66,6 @@ export default class Fire {
         }
     }
     update() {
-        this.particlesUniform.uTime.value = this.experience.time.elapsed / 1000
         this.fireUniform.uTime.value = this.experience.time.elapsed / 1000
     }
 }

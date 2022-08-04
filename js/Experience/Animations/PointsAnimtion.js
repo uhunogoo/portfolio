@@ -420,11 +420,6 @@ export default class PointsAnimation extends EventEmitter {
         }
     }
     mouseMove() {
-        const throttleFunction = _.throttle(() => {           
-            this.raycasterAnimation() 
-        }, 90)
-        this.mouse.on('mouseMove', () => {
-            throttleFunction()
-        })
+        this.raycasterAnimation()
     }
 }

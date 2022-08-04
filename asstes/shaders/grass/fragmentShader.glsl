@@ -4,7 +4,6 @@ varying vec2 vPosition;
 
 uniform vec3 uColor1;
 uniform vec3 uColor2;
-uniform vec2 uNoiseSize;
 
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718
@@ -39,7 +38,6 @@ void main() {
     vec2 stellaShadowPosition = vec2(0.459, 0.287);
     float stellaShadowSize = 0.05;
     vec2 stellaShadow2Position = vec2(0.41, 0.336);
-    // vec2 stellaShadow2Position = uNoiseSize;
     float stellaShadow2Size = 0.14;
 
     // TowerShadow

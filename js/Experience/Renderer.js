@@ -35,16 +35,10 @@ export default class Renderer {
     setInstance() {
         this.instance = new THREE.WebGLRenderer({
             canvas: this.canvas,
-            antialias: true,
             powerPreference: "high-performance"
         })
 
         this.instance.outputEncoding = THREE.sRGBEncoding
-
-        // Shadows
-        // this.instance.shadowMap.enabled = true
-        // this.instance.shadowMap.type = THREE.PCFSoftShadowMap
-
         
         // Debug renderer
         if (this.debug.active) {
@@ -67,7 +61,7 @@ export default class Renderer {
                 minFilter: THREE.LinearFilter,
                 magFilter: THREE.LinearFilter,
                 format: THREE.RGBAFormat,
-                samples: this.instance.getPixelRatio() === 1 ? 3 : 0
+                samples: this.instance.getPixelRatio() === 1 ? 2 : 0
             }
         )
         
@@ -86,7 +80,7 @@ export default class Renderer {
         this.unrealBloomPass.strength = 1
         this.unrealBloomPass.radius = 0.05
         this.unrealBloomPass.threshold = 0
-        this.unrealBloomPass.enabled = true
+        // this.unrealBloomPass.enabled = false
         
         if (this.debug.active) {
             this.debugFolder.add(this.unrealBloomPass, 'enabled').name('bloom enabled')
@@ -168,6 +162,7 @@ export default class Renderer {
         }
 
         this.displacementPass = new ShaderPass(DisplacementShader)
+        // this.displacementPass.enabled = false
         this.displacementPass.material.uniforms.uBokhe.value = new THREE.Vector2(0.4, 0.823)
         this.effectComposer.addPass(this.displacementPass)
         if (this.debug.active) {

@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import * as _ from 'lodash-es'
 
 import Sizes from './Utils/Sizes'
 import Time from './Utils/Time'
@@ -47,8 +48,11 @@ export default class Experience {
         })
 
         // Mosue move event
+        const throttleFunction = _.throttle(() => {           
+            this.mouseMove() 
+        }, 40)
         this.mouse.on('mouseMove', () => {
-            this.mouseMove()
+            throttleFunction()
         })
 
         // Time tick event

@@ -10,10 +10,8 @@ export default class UIAnimation {
         
 
         // Defaults
+        this.preload = document.querySelector('.preload')        
         gsap.set('.title-decor div', { transformPerspective: '2000' })
-
-        
-       
     }
     showMenu() {
         gsap.set('.menu', {
@@ -54,6 +52,10 @@ export default class UIAnimation {
         return menuAimation
     }
     mouseMove() {
+        const isPreloadHiden = this.preload.classList.contains('close')
+        
+        if (isPreloadHiden) return
+
         gsap.to('.title-decor div', {
             rotationY: -10 * this.mouse.x,
             rotationX: -10 * this.mouse.y,

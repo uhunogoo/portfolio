@@ -20,7 +20,7 @@ export default class Camera {
 
         // call method
         this.setInstance()
-        this.setControl()
+        // this.setControl()
     }
     setInstance() {
         this.instanceGroup = new THREE.Group()
@@ -56,7 +56,7 @@ export default class Camera {
     }
     
     update() {
-        this.controls.update()
+        // this.controls.update()
         this.instance.lookAt( this.parameters.lookAt )
     }
 }

@@ -38,6 +38,7 @@ export default class CameraMove {
             }
         })
 
+
         this.rotatioMatrix = new THREE.Matrix4()
         this.rotatioMatrix.copy( this.camera.matrixWorld )
         this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
@@ -106,22 +107,25 @@ export default class CameraMove {
         const { x, y } = this.mouse       
 
         // Camera animation
-        gsap.to(this.cameraGroup.rotation, {
+        gsap.fromTo(this.cameraGroup.rotation, {
+            x: this.cameraGroup.rotation.x,
+            y: this.cameraGroup.rotation.y
+        }, {
             y: Math.PI * 0.03 * x,
             x: - Math.PI * 0.03 * y,
-            ease: 'power1',
-            duration: 0.4
+            ease: 'power1.out',
+            duration: 0.6
         })
     }
     update() {
-        let vector = new THREE.Vector3()
-        this.camera.getWorldPosition(vector)
-        vector.applyMatrix4(this.rotatioMatrix)
-        vector.negate()
+        // let vector = new THREE.Vector3()
+        // this.camera.getWorldPosition(vector)
+        // vector.applyMatrix4(this.rotatioMatrix)
+        // vector.negate()
 
-        this.cloudsGroup.position.x = vector.x
-        this.cloudsGroup.position.z = vector.z
-        this.cloudsGroup.position.y = vector.y + 2
-        this.cloudsGroup.lookAt( 0, 0, 0 )
+        // this.cloudsGroup.position.x = vector.x
+        // this.cloudsGroup.position.z = vector.z
+        // this.cloudsGroup.position.y = vector.y + 2
+        // this.cloudsGroup.lookAt( 0, 0, 0 )
     }
 }

@@ -23,7 +23,6 @@ export default class Grass {
         this.customUniform = {
             uTime: { value: 0 },
             uIntensive: { value: 0.19 },
-            uNoiseSize: { value: new THREE.Vector2(0.459, 0.287) },
             uColor1: { value: new THREE.Color('#b76e2a') },
             uColor2: { value: new THREE.Color('#864a18') },
         }
@@ -41,7 +40,6 @@ export default class Grass {
 
         this.materials()
         this.createGrassGeometry()
-        this.createGrass()
         this.createAmbientSparks()
         this.createFloor()
     }
@@ -72,24 +70,60 @@ export default class Grass {
                 .min(-1)
                 .max(1)
                 .step(0.001)
-            this.debugFolder
-                .add(this.grassMaterial.uniforms.uNoiseSize.value, 'x')
-                .name('shadowX')
-                .min(-1)
-                .max(1)
-                .step(0.001)
-            this.debugFolder
-                .add(this.grassMaterial.uniforms.uNoiseSize.value, 'y')
-                .name('shadowY')
-                .min(-1)
-                .max(1)
-                .step(0.001)
         }
     }
     createGrassGeometry() {
         const {size, count, roadGrassCount} = this.grassParameters
 
         // DEFAULTS
+        const grassParams = {
+            points: [
+                new Float32Array([
+                    -0.01, 0, 0,
+                    0.01, 0, 0,
+                    
+                    0.01, 0.125, 0,
+                    -0.01, 0.125, 0,
+        
+                    0, 0.25, 0,
+                ]),
+                new Float32Array([
+                    -0.01, 0, 0,
+                    0.01, 0, 0,
+        
+                    0, 0.25, 0,
+                ])
+            ],
+            indeces: [
+                [
+                    0, 1, 2, 
+                    2, 0, 3,
+                    3, 2, 4,
+                ],
+                [
+                    0, 1, 2
+                ]
+            ],
+            uv: [
+                new Float32Array([
+                    0.0, 0.0,
+                    1.0, 0.0,
+        
+                    1.0, 0.5,
+                    0.0, 0.5,
+                    
+                    0.5, 1.0
+                ]),
+                new Float32Array([
+                    0.0, 0.0,
+                    1.0, 0.0,
+                    
+                    0.5, 1.0
+                ])
+            ]
+
+        }
+        
         const points = new Float32Array([
             -0.01, 0, 0,
             0.01, 0, 0,
@@ -113,14 +147,30 @@ export default class Grass {
             
             0.5, 1.0
         ])
-        const offset = []
-        const scales = []
-        const rotations = []
+        const offset = [
+            [], []
+        ]
+        const scales = [
+            [], []
+        ]
+        const rotations = [
+            [], []
+        ]
 
         // Transform
         const PI = Math.PI
 
         // Calculation
+        const pushGeometryData = (x, z, scale) => {
+            const id = (scale > 0.8) ? 0 : 1
+            offset[ id ].push( x, 0, z )
+            scales[ id ].push( scale )
+            rotations[ id ].push( 
+                (Math.random() - 0.5) * PI * 0.1,
+                (Math.random() - 0.5) * PI
+            )
+        }
+
         let i = 0
         while (i < count) {
             const scale = 0.5 + Math.random() * 0.5
@@ -132,12 +182,8 @@ export default class Grass {
                 const x = r * Math.cos(theta)
                 const z = r * Math.sin(theta)
                 if ( x < 0) {
-                    offset.push( x, 0, z )
-                    scales.push( scale )
-                    rotations.push( 
-                        (Math.random() - 0.5) * PI * 0.1,
-                        (Math.random() - 0.5) * PI
-                    )
+                    pushGeometryData(x, z, scale)
+                    
                     // increase 
                     i++
                 } else {
@@ -145,21 +191,13 @@ export default class Grass {
                     const stelaArea = (z > 1.3 && z < 1.98 && x > 3.5 && x < 4.15)
                     
                     if (z < -0.7 && !fireArea) { 
-                        offset.push( x, 0, z )
-                        scales.push( scale )
-                        rotations.push( 
-                            (Math.random() - 0.5) * PI * 0.1,
-                            (Math.random() - 0.5) * PI
-                        )
+                        pushGeometryData(x, z, scale)
+
                         // increase 
                         i++
                     } else if (z > 0.7 && !stelaArea) {
-                        offset.push( x, 0, z )
-                        scales.push( scale )
-                        rotations.push( 
-                            (Math.random() - 0.5) * PI * 0.1,
-                            (Math.random() - 0.5) * PI
-                        )
+                        pushGeometryData(x, z, scale)
+
                         // increase 
                         i++
                     }
@@ -167,21 +205,35 @@ export default class Grass {
                 }
             }
         }
-        // Create grass instance 
-        this.grassBufferGeometry = new THREE.InstancedBufferGeometry()
-        this.grassBufferGeometry.instanceCount = count
-        
-        // Apply attributes
-        this.grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(points, 3))
-        this.grassBufferGeometry.setIndex( indeces )
-        this.grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( offset ), 3))
-        this.grassBufferGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute( new Float32Array( scales ), 1))
-        this.grassBufferGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute( new Float32Array( rotations ), 2))
-        this.grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2) )
+
+        // Create grass instance
+        const geometry = new THREE.InstancedBufferGeometry()
+        for (let i = 0; i < 2; i++ ) {
+            const grassBufferGeometry = geometry.clone()
+            grassBufferGeometry.instanceCount = offset[ i ].length
+            console.log( scales[ i ].length )
+            
+            // Apply attributes
+            grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(grassParams.points[ i ], 3))
+            grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(grassParams.uv[ i ], 2) )
+            grassBufferGeometry.setIndex( grassParams.indeces[ i ] )
+    
+            grassBufferGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute( new Float32Array( rotations[ i ] ), 2))
+            grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( offset[ i ] ), 3))
+            grassBufferGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute( new Float32Array( scales[ i ] ), 1))
+    
+            const instancedGrassMesh = new THREE.Mesh( grassBufferGeometry, this.grassMaterial )
+            
+            // Bounding sphere for frustumculled 
+            instancedGrassMesh.geometry.computeBoundingSphere()
+            instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
+            
+            this.grassGroup.add( instancedGrassMesh )
+        }
     }
     createAmbientSparks() {
         // Particles defaults
-        const count = 150
+        const count = 50
         const PI = Math.PI
         const offset = []
         const speed = []
@@ -219,7 +271,7 @@ export default class Grass {
         const instancedParticlesMesh = new THREE.Points( this.particlesBufferGeometry, ambientParticlesMaterial )
         instancedParticlesMesh.position.y = 0.4
         
-        this.grassGroup.add( instancedParticlesMesh )
+        // this.grassGroup.add( instancedParticlesMesh )
     }
     createFloor() {
         const floorGeometry = new THREE.CircleBufferGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 )
@@ -296,16 +348,6 @@ export default class Grass {
         floor.rotation.x = -Math.PI / 2
 
         this.grassGroup.add( floor )
-    }
-    createGrass() {
-        const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial )
-        
-        // Bounding sphere for frustumculled 
-        instancedGrassMesh.geometry.computeBoundingSphere()
-        instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
-        instancedGrassMesh.receiveShadow = true
-        
-        this.grassGroup.add( instancedGrassMesh )
     }
     update() {
         const time = this.experience.time.elapsed / 1000

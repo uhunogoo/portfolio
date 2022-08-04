@@ -26,6 +26,8 @@ export default class Preload extends EventEmitter {
         // Defaults
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
+        this.preloadBlock = document.querySelector('.preload')
+        
         this.preloadHovered = false
         this.debug = this.experience.debug
         this.hitSound = new Audio( bell )
@@ -64,6 +66,7 @@ export default class Preload extends EventEmitter {
             onComplete: () => {
                 document.querySelector('.preload__enter').addEventListener('click', (el) => {
                     el.target.classList.add('active')
+                    this.preloadBlock.classList.add('close')
                     this.trigger( 'preloadWasClicked' )
                     this.playOutAnimation.play()
                 })

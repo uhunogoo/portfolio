@@ -140,23 +140,23 @@ export default class Skybox {
         this.cloudsAnimation.play()
     }
     mouseMove() {
-        if (!this.cloudsAnimation) return
+        // if (!this.cloudsAnimation) return
 
-        const tl = gsap.timeline({
-            onUpdate: () => this.cloudsAnimation.timeScale(this.parameters.timescale),
-            defaults: {
-                ease: 'power1.out',
-                duration: 1.5,
-            }
-        })
-        tl.to( this.parameters, {
-            timescale: 4,
-        }, 0)
-        tl.to( this.parameters, {
-            timescale: 1,
-            duration: 1,
-            ease: 'power1.in',
-        }, 0.8)
+        // const tl = gsap.timeline({
+        //     onUpdate: () => this.cloudsAnimation.timeScale(this.parameters.timescale),
+        //     defaults: {
+        //         ease: 'power1.out',
+        //         duration: 1.5,
+        //     }
+        // })
+        // tl.to( this.parameters, {
+        //     timescale: 4,
+        // }, 0)
+        // tl.to( this.parameters, {
+        //     timescale: 1,
+        //     duration: 1,
+        //     ease: 'power1.in',
+        // }, 0.8)
     }
 }
 
