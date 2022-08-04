@@ -132,8 +132,6 @@ export default class PointsAnimation extends EventEmitter {
 
         this.showNav()
         this.startStyles()
-        
-        this.clickHandler()
     }
     startStyles() {
         gsap.set('.work', 
@@ -201,66 +199,56 @@ export default class PointsAnimation extends EventEmitter {
         return tl
     }
     
-    clickHandler() {
+    mouseClick() {
         const playHitSound = () => {
             this.outSound.currentTime = 0
             this.outSound.play()
         }
         const openInformationBlock = (targetPoint) => {
             this.trigger('menuWasOpen')
-            gsap.to('.close_btn svg g', {
-                duration: 0.4,
-                rotate: 0,
-                transformOrigin: '50% 50%',
-                ease: 'power1'
-            })
+            
             this.showInformation(targetPoint)
         }
-        document.addEventListener('click', (e) => {
-            const clicked = e.target
-            document.querySelector('.close_btn').classList.remove('active')
-            // Click targets
-            const clickOnCanvas = clicked.classList.contains('webgl')
-            const clickOnCloseButton = clicked.classList.contains('close_btn')
-            const clickOnNavigationButton = clicked.classList.contains('menu__item')
+        
+        // Click part
+        const clicked =  this.mouse.clickTarget
+        
+        document.querySelector('.close_btn').classList.remove('active')
+        // Click targets
+        const clickOnCanvas = clicked.classList.contains('webgl')
+        const clickOnCloseButton = clicked.classList.contains('close_btn')
+        const clickOnNavigationButton = clicked.classList.contains('menu__item')
 
-            if ( clickOnCanvas ) {
-                if (this.intersect && !this.pointInfoOpen) {
-                    this.pointInfoOpen = true
-                    const targetPoint = this.points.find( point => point.position.equals( this.intersect.position ) )
-                    
-                    openInformationBlock(targetPoint)
-                }
-            } 
-            if ( clickOnCloseButton ) {
-                if( this.pointInfoOpen ) {
-                    this.trigger('menuWasClose')
-                    
-                    // Close button
-                    clicked.classList.add('active')
-                    gsap.to('.close_btn svg g', {
-                        duration: 0.4,
-                        rotate: gsap.utils.wrap([ -45, 45 ]),
-                        transformOrigin: '50% 50%',
-                        ease: 'power4'
-                    })
-
-                    playHitSound()
-                    this.open.reverse()
-                    this.pointInfoOpen = false
-                }
+        if ( clickOnCanvas ) {
+            if (this.intersect && !this.pointInfoOpen) {
+                this.pointInfoOpen = true
+                const targetPoint = this.points.find( point => point.position.equals( this.intersect.position ) )
+                
+                openInformationBlock(targetPoint)
             }
-            if(clickOnNavigationButton) {
-                if (!this.pointInfoOpen) {
-                    this.pointInfoOpen = true
+        } 
+        if ( clickOnCloseButton ) {
+            if( this.pointInfoOpen ) {
+                this.trigger('menuWasClose')
+                
+                // Close button
+                clicked.classList.add('active')
 
-                    const name = clicked.dataset.name
-                    const targetPoint = this.points.find( point => point.name === name )
-                    
-                    openInformationBlock(targetPoint)
-                }
-            }         
-        })
+                playHitSound()
+                this.open.reverse()
+                this.pointInfoOpen = false
+            }
+        }
+        if(clickOnNavigationButton) {
+            if (!this.pointInfoOpen) {
+                this.pointInfoOpen = true
+
+                const name = clicked.dataset.name
+                const targetPoint = this.points.find( point => point.name === name )
+                
+                openInformationBlock(targetPoint)
+            }
+        }
 
         
     }
@@ -270,7 +258,10 @@ export default class PointsAnimation extends EventEmitter {
             this.hitSound.currentTime = 0
             this.hitSound.play()
         }
-        this.open = gsap.timeline({ paused: true })
+        const clear = () => {
+            this.open.kill()
+        }
+        this.open = gsap.timeline({ paused: true, onComplete: clear })
 
         const parameters = {}
         parameters.function = this.informationBlockAnimation(target, playHitSound)

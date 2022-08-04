@@ -34,6 +34,11 @@ export default class Animation {
             this.mainTimeline.play()
         })
     }
+    mouseClick() {
+        if ( this.pointsAnimation ) {
+            this.pointsAnimation.mouseClick()
+        }
+    }
     mouseMove() {
         if ( this.cameraMove ) {
             this.cameraMove.mouseMove()

@@ -8,7 +8,6 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass'
 
 
 export default class Renderer {

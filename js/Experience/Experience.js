@@ -50,9 +50,12 @@ export default class Experience {
         // Mosue move event
         const throttleFunction = _.throttle(() => {           
             this.mouseMove() 
-        }, 40)
+        }, 90)
         this.mouse.on('mouseMove', () => {
             throttleFunction()
+        })
+        this.mouse.on('mouseClick', () => {
+            this.mouseClick()
         })
 
         // Time tick event
@@ -65,6 +68,10 @@ export default class Experience {
         this.camera.resize()
         this.renderer.resize()
         this.preload.resize()
+    }
+    mouseClick() {
+        this.preload.mouseClick()
+        this.world.mouseClick()
     }
     mouseMove() {
         this.world.mouseMove()

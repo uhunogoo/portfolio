@@ -114,7 +114,7 @@ export default class CameraMove {
             y: Math.PI * 0.03 * x,
             x: - Math.PI * 0.03 * y,
             ease: 'power1.out',
-            duration: 0.6
+            duration: 0.3
         })
     }
     update() {

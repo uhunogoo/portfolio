@@ -46,6 +46,11 @@ export default class World {
             this.points.resize()
         }
     }
+    mouseClick() {
+        if(this.animation) {
+            this.animation.mouseClick()
+        }
+    }
     mouseMove() {
         if(this.animation) {
             this.animation.mouseMove()

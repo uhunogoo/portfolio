@@ -22,7 +22,6 @@ export default class Grass {
         }
         this.customUniform = {
             uTime: { value: 0 },
-            uIntensive: { value: 0.19 },
             uColor1: { value: new THREE.Color('#b76e2a') },
             uColor2: { value: new THREE.Color('#864a18') },
         }
@@ -64,35 +63,30 @@ export default class Grass {
                 .onChange( () => {
                     this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
                 })
-            this.debugFolder
-                .add(this.grassMaterial.uniforms.uIntensive, 'value')
-                .name('grassRotation')
-                .min(-1)
-                .max(1)
-                .step(0.001)
         }
     }
     createGrassGeometry() {
-        const {size, count, roadGrassCount} = this.grassParameters
+        const { size, count } = this.grassParameters
 
         // DEFAULTS
         const grassParams = {
             points: [
-                new Float32Array([
+                [
                     -0.01, 0, 0,
                     0.01, 0, 0,
                     
-                    0.01, 0.125, 0,
-                    -0.01, 0.125, 0,
+                    0.0075, 0.125, 0,
+                    -0.0075, 0.125, 0,
         
                     0, 0.25, 0,
-                ]),
-                new Float32Array([
+                ],
+                [
                     -0.01, 0, 0,
                     0.01, 0, 0,
         
-                    0, 0.25, 0,
-                ])
+                    0.005, 0.25, 0,
+                    -0.005, 0.25, 0,
+                ]
             ],
             indeces: [
                 [
@@ -101,52 +95,30 @@ export default class Grass {
                     3, 2, 4,
                 ],
                 [
-                    0, 1, 2
+                    0, 1, 2,
+                    2, 0 , 3
                 ]
             ],
             uv: [
-                new Float32Array([
+                [
                     0.0, 0.0,
                     1.0, 0.0,
         
-                    1.0, 0.5,
-                    0.0, 0.5,
+                    0.875, 0.5,
+                    0.125, 0.5,
                     
-                    0.5, 1.0
-                ]),
-                new Float32Array([
+                    0.5, 1.0,
+                ],
+                [
                     0.0, 0.0,
                     1.0, 0.0,
                     
-                    0.5, 1.0
-                ])
+                    0.75, 1.0,
+                    0.25, 1.0,
+                ]
             ]
 
         }
-        
-        const points = new Float32Array([
-            -0.01, 0, 0,
-            0.01, 0, 0,
-            
-            0.01, 0.125, 0,
-            -0.01, 0.125, 0,
-
-            0, 0.25, 0,
-        ])
-        const indeces = [
-            0, 1, 2, 
-            2, 0, 3,
-            3, 2, 4,
-        ]
-        const uv = new Float32Array([
-            0.0, 0.0,
-            1.0, 0.0,
-
-            1.0, 0.5,
-            0.0, 0.5,
-            
-            0.5, 1.0
-        ])
         const offset = [
             [], []
         ]
@@ -162,7 +134,7 @@ export default class Grass {
 
         // Calculation
         const pushGeometryData = (x, z, scale) => {
-            const id = (scale > 0.8) ? 0 : 1
+            const id = (scale > 0.65) ? 0 : 1
             offset[ id ].push( x, 0, z )
             scales[ id ].push( scale )
             rotations[ id ].push( 
@@ -210,18 +182,17 @@ export default class Grass {
         const geometry = new THREE.InstancedBufferGeometry()
         for (let i = 0; i < 2; i++ ) {
             const grassBufferGeometry = geometry.clone()
-            grassBufferGeometry.instanceCount = offset[ i ].length
-            console.log( scales[ i ].length )
-            
+            grassBufferGeometry.instanceCount = scales[ i ].length
+
             // Apply attributes
-            grassBufferGeometry.setAttribute('position', new THREE.BufferAttribute(grassParams.points[ i ], 3))
-            grassBufferGeometry.setAttribute('uv', new THREE.BufferAttribute(grassParams.uv[ i ], 2) )
+            grassBufferGeometry.setAttribute('position', new THREE.Float32BufferAttribute(grassParams.points[ i ], 3))
+            grassBufferGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(grassParams.uv[ i ], 2) )
             grassBufferGeometry.setIndex( grassParams.indeces[ i ] )
     
             grassBufferGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute( new Float32Array( rotations[ i ] ), 2))
             grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( offset[ i ] ), 3))
             grassBufferGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute( new Float32Array( scales[ i ] ), 1))
-    
+
             const instancedGrassMesh = new THREE.Mesh( grassBufferGeometry, this.grassMaterial )
             
             // Bounding sphere for frustumculled 
@@ -352,6 +323,6 @@ export default class Grass {
     update() {
         const time = this.experience.time.elapsed / 1000
         this.customUniform.uTime.value = time
-        this.particlesUniform.uTime.value = time
+        // this.particlesUniform.uTime.value = time
     }
 }

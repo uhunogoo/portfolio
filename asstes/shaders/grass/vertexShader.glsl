@@ -55,7 +55,7 @@ float cnoise(vec2 P){
 }
 
 void main(){
-  float intesity = uIntensive;
+  float intesity = 0.19;
   
 	float noise = cnoise( offset.xz / vec2(1.5, 7.0) + vec2(0.0, uTime * 0.6) );
   

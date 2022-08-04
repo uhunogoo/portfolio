@@ -89,7 +89,7 @@ export default class Skybox {
             this.resources.items.cloud2
         ]
         const geometry = new THREE.PlaneBufferGeometry( 1, 1 )
-        const material = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })
+        const material = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })
 
         // Generate clouds
         for (let i = 0; i < cloudsParameters.count; i++) {

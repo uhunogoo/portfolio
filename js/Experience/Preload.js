@@ -19,6 +19,7 @@ export default class Preload extends EventEmitter {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.camera = this.experience.camera.instance
+        this.mouse = this.experience.mouse
         this.resources = this.experience.resources
         this.bloomPass = this.experience.renderer.unrealBloomPass
         
@@ -27,6 +28,7 @@ export default class Preload extends EventEmitter {
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
         this.preloadBlock = document.querySelector('.preload')
+        this.playInAnimationComplete = false
         
         this.preloadHovered = false
         this.debug = this.experience.debug
@@ -41,19 +43,38 @@ export default class Preload extends EventEmitter {
         this.preloadBG()
         this.animationControll()  
     }
+    mouseClick() {
+        if (this.playInAnimationComplete) {
+            const target = this.mouse.clickTarget
+            
+            // Check target 
+            if ( target && target.classList.contains('preload__enter') ) {
+
+                target.classList.add('active')
+                this.preloadBlock.classList.add('close')
+                this.trigger( 'preloadWasClicked' )
+                this.playOutAnimation.play()
+            }
+
+        }
+    }
     animationControll() {
         gsap.set('.preload', {autoAlpha: 1})
-        const playHitSound = () => {
+        const beforeOut = () => {
+            this.preload.kill()
+            this.playInAnimation.kill()
             this.hitSound.currentTime = 0
             this.hitSound.play()
+        }
+        const clear = () => {
+            this.playOutAnimation.kill()
         }
 
         // Create animations
         this.playOutAnimation = gsap.timeline({ 
             paused: true,
-            onStart: () => {
-                playHitSound()
-            },
+            onStart: beforeOut,
+            onComplete: clear
         })
         this.playOutAnimation.to('.preload__enter', {
             scale: 0,
@@ -63,13 +84,9 @@ export default class Preload extends EventEmitter {
         }, 0)
         this.playInAnimation = gsap.timeline({ 
             paused: true,
+
             onComplete: () => {
-                document.querySelector('.preload__enter').addEventListener('click', (el) => {
-                    el.target.classList.add('active')
-                    this.preloadBlock.classList.add('close')
-                    this.trigger( 'preloadWasClicked' )
-                    this.playOutAnimation.play()
-                })
+                this.playInAnimationComplete = true
             }
         })
         this.preload = gsap.timeline({

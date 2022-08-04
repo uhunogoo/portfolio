@@ -8,6 +8,7 @@ export default class Debug {
 
         if (this.active) {
             this.ui = new dat.GUI()
+            this.ui.close()
 
             this.stats = new Stats()
             document.body.appendChild( this.stats.dom )
