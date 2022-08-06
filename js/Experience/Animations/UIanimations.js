@@ -4,12 +4,14 @@ import * as THREE from 'three'
 import Experience from '../Experience'
 
 export default class UIAnimation {
-    constructor() {
+    constructor( mouseFollow ) {
         this.experience = new Experience()
         this.mouse = this.experience.mouse
         
 
         // Defaults
+        this.closeButtonHover = false
+        this.mouseFollowAnimation = mouseFollow.followButtonIn
         this.preload = document.querySelector('.preload')        
         gsap.set('.title-decor div', { transformPerspective: '2000' })
     }
@@ -53,15 +55,28 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
+        const isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
         
-        if (isPreloadHiden) return
-
-        gsap.to('.title-decor div', {
-            rotationY: -10 * this.mouse.x,
-            rotationX: -10 * this.mouse.y,
-            duration: 0.2, 
-            ease: 'power1',
-            transformOrigin:'50% 50%'
-        })
+        if (!isPreloadHiden) {
+            gsap.to('.title-decor div', {
+                rotationY: -10 * this.mouse.x,
+                rotationX: -10 * this.mouse.y,
+                duration: 0.2, 
+                ease: 'power1',
+                transformOrigin:'50% 50%'
+            })
+        }
+        
+        if ( isCloseButton ) {            
+            if (!this.closeButtonHover) {
+                this.mouseFollowAnimation.play(0).timeScale(2)
+                this.closeButtonHover = true
+            }
+        } else {
+            if (this.closeButtonHover) {
+                this.mouseFollowAnimation.reverse()
+                this.closeButtonHover = false
+            }
+        }
     }
 }

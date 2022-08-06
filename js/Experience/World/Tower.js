@@ -50,12 +50,13 @@ export default class Tower {
         this.towerMaterial3 = new THREE.MeshBasicMaterial({
             map: this.resources.items.towerTexture3
         })
-        this.towerMaterial4 = new THREE.ShaderMaterial({
-            uniforms: this.customUniform,
-            side: THREE.DoubleSide,
-            vertexShader,
-            fragmentShader,
-        })
+        this.towerMaterial4 = new THREE.MeshBasicMaterial()
+        // this.towerMaterial4 = new THREE.ShaderMaterial({
+        //     uniforms: this.customUniform,
+        //     side: THREE.DoubleSide,
+        //     vertexShader,
+        //     fragmentShader,
+        // })
 
         if (this.debug.active) {
             this.debugFolder

@@ -13,7 +13,7 @@ export default class Animation {
         this.preload = this.experience.preload
         this.followingCursor = new followingCursor()
         this.cameraMove = new CameraMove( target )
-        this.uiAnimation = new UIAnimation()
+        this.uiAnimation = new UIAnimation( this.followingCursor )
         this.pointsAnimation = new PointsAnimation( target, this.uiAnimation ) 
         this.load = false
 

@@ -35,6 +35,7 @@ export default class PointsAnimation extends EventEmitter {
         this.clickedPoint = null
         this.hitSound = new Audio( bell )
         this.outSound = new Audio( splash )
+        this.mouseFollowActive = this.uiAnimations.mouseFollowAnimation
 
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
@@ -149,7 +150,13 @@ export default class PointsAnimation extends EventEmitter {
         gsap.set( '.content__links', { opacity: 0, scale: 0.1 })
     }
     showNav() {
-        this.showPoints = gsap.timeline({ paused: true })        
+        const clear = () => {
+            this.showPoints.kill()
+        }
+        this.showPoints = gsap.timeline({ 
+            paused: true,
+            onComplete: clear
+        })        
         this.pointsScale = this.pointsGroup.children[0].children.map( el => el.scale )
         this.cloudssScale = this.cloudsGroup.children.map( el => el.scale )
         
@@ -211,6 +218,7 @@ export default class PointsAnimation extends EventEmitter {
         }
         
         // Click part
+        this.mouseFollowActive.reverse()
         const clicked =  this.mouse.clickTarget
         
         document.querySelector('.close_btn').classList.remove('active')
@@ -249,8 +257,6 @@ export default class PointsAnimation extends EventEmitter {
                 openInformationBlock(targetPoint)
             }
         }
-
-        
     }
 
     showInformation(target) {
@@ -379,7 +385,6 @@ export default class PointsAnimation extends EventEmitter {
 
             this.tl = gsap.timeline()
             this.tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
-
             this.intersect = null
         }
     }
@@ -400,7 +405,7 @@ export default class PointsAnimation extends EventEmitter {
                 if( this.tl ) this.tl.kill()
                 
                 this.tl = gsap.timeline()
-                this.tl.pointsShow( this.intersect.scale, {x: 0.2, y: 0.2} )
+                this.tl.pointsShow( this.intersect.scale, {x: 0.15, y: 0.15} )
             }
         } else {
             // Cursor default
@@ -412,5 +417,16 @@ export default class PointsAnimation extends EventEmitter {
     }
     mouseMove() {
         this.raycasterAnimation()
+
+        if ( this.intersect && !this.pointInfoOpen ) {
+            if (this.mouseFollowActive.progress() === 0) {
+                this.mouseFollowActive.play(0).timeScale(2)
+            }
+        } else if (!this.pointInfoOpen) {
+            if (this.mouseFollowActive.progress() === 1) {
+                this.mouseFollowActive.reverse()
+            }
+        }
+
     }
 }

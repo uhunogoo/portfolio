@@ -50,7 +50,7 @@ export default class Experience {
         // Mosue move event
         const throttleFunction = _.throttle(() => {           
             this.mouseMove() 
-        }, 90)
+        }, 40)
         this.mouse.on('mouseMove', () => {
             throttleFunction()
         })

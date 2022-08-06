@@ -12,12 +12,13 @@ export default class Grass {
     constructor () {
         this.experience = new Experience()
         this.grassGroup = new THREE.Group()
+        this.sizes = this.experience.sizes
         this.resources = this.experience.resources
         this.debug = this.experience.debug
 
         // Parameters
         this.grassParameters = {
-            count: 100000,
+            count: (this.sizes.width < 767.5) ? 55000 : 90000,
             size: 11.78
         }
         this.customUniform = {
@@ -84,8 +85,7 @@ export default class Grass {
                     -0.01, 0, 0,
                     0.01, 0, 0,
         
-                    0.005, 0.25, 0,
-                    -0.005, 0.25, 0,
+                    0, 0.25, 0,
                 ]
             ],
             indeces: [
@@ -96,7 +96,6 @@ export default class Grass {
                 ],
                 [
                     0, 1, 2,
-                    2, 0 , 3
                 ]
             ],
             uv: [
@@ -113,8 +112,7 @@ export default class Grass {
                     0.0, 0.0,
                     1.0, 0.0,
                     
-                    0.75, 1.0,
-                    0.25, 1.0,
+                    0.5, 1.0,
                 ]
             ]
 
@@ -148,11 +146,12 @@ export default class Grass {
             const scale = 0.5 + Math.random() * 0.5
 
             const r = size * 0.5 * Math.random()
+            // const thetaX = -Math.pow(Math.random(), 1.5) * size + size * 0.5
             if( r > 2.05 ) {
                 const theta = Math.random() * 2 * PI
                 
-                const x = r * Math.cos(theta)
-                const z = r * Math.sin(theta)
+                const x = r * Math.cos( theta )
+                const z = r * Math.sin( theta )
                 if ( x < 0) {
                     pushGeometryData(x, z, scale)
                     
@@ -242,7 +241,7 @@ export default class Grass {
         const instancedParticlesMesh = new THREE.Points( this.particlesBufferGeometry, ambientParticlesMaterial )
         instancedParticlesMesh.position.y = 0.4
         
-        // this.grassGroup.add( instancedParticlesMesh )
+        this.grassGroup.add( instancedParticlesMesh )
     }
     createFloor() {
         const floorGeometry = new THREE.CircleBufferGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 )
@@ -323,6 +322,6 @@ export default class Grass {
     update() {
         const time = this.experience.time.elapsed / 1000
         this.customUniform.uTime.value = time
-        // this.particlesUniform.uTime.value = time
+        this.particlesUniform.uTime.value = time
     }
 }

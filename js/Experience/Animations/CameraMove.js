@@ -107,15 +107,19 @@ export default class CameraMove {
         const { x, y } = this.mouse       
 
         // Camera animation
-        gsap.fromTo(this.cameraGroup.rotation, {
+        const tl = gsap.timeline()
+        tl.fromTo(this.cameraGroup.rotation, {
             x: this.cameraGroup.rotation.x,
             y: this.cameraGroup.rotation.y
         }, {
             y: Math.PI * 0.03 * x,
             x: - Math.PI * 0.03 * y,
             ease: 'power1.out',
-            duration: 0.3
-        })
+            duration: 0.6
+        }, 0)
+        tl.fromTo(this.cloudsGroup.rotation, {x: this.cloudsGroup.rotation.x}, {
+            x: x * 0.05,
+        }, 0)
     }
     update() {
         // let vector = new THREE.Vector3()

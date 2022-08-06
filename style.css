@@ -506,27 +506,17 @@ h1 {
 
 @media screen and (min-width: 767.5px) {
   .following {
-    background: var(--white);
     border-radius: 50%;
     height: 70px;
     pointer-events: none;
     position: fixed;
-    mix-blend-mode: hue;
     top: 0;
     width: 70px;
     z-index: 99;
-    &__look,
-    &__play {
-      visibility: hidden;
-    }
-    &_centered {
-      left: 50%;
-      line-height: 0.78;
-      padding: 10px;
-      position: absolute;
-      text-align: center;
-      top: 50%;
-      transform: translate(-50%, -50%);
+    &__look{
+      border-radius: 50%;
+      display: block;
+      height: 100%;
       width: 100%;
     }
   }

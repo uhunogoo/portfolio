@@ -150,7 +150,7 @@ export default class Skybox {
         //     }
         // })
         // tl.to( this.parameters, {
-        //     timescale: 4,
+        //     timescale: 3,
         // }, 0)
         // tl.to( this.parameters, {
         //     timescale: 1,

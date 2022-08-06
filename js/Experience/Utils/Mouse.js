@@ -9,6 +9,7 @@ export default class Mouse extends EventEmitter {
         this.x = 0
         this.y = 0
         this.clickTarget = null
+        this.moveTarget = null
 
         // Resize
         this.mouseMove()
@@ -25,9 +26,13 @@ export default class Mouse extends EventEmitter {
     }
     mouseMove() {
         // Mouse move
-        window.addEventListener('mousemove', (event) => {
-            this.x = ( event.clientX / this.sizes.width ) * 2 - 1
-            this.y = - ( event.clientY / this.sizes.height ) * 2 + 1
+        window.addEventListener('mousemove', (e) => {
+            // Set click tagret
+            this.moveTarget = e.target
+
+            // Set coordinates
+            this.x = ( e.clientX / this.sizes.width ) * 2 - 1
+            this.y = - ( e.clientY / this.sizes.height ) * 2 + 1
 
             // Add mouse event
             this.trigger('mouseMove')
