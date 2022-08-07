@@ -142,16 +142,25 @@ export default class Grass {
         }
 
         let i = 0
+
         while (i < count) {
             const scale = 0.5 + Math.random() * 0.5
 
             const r = size * 0.5 * Math.random()
-            // const thetaX = -Math.pow(Math.random(), 1.5) * size + size * 0.5
-            if( r > 2.05 ) {
+            
+            let x = size * (Math.random() - 0.5)
+            const thetaX = -Math.pow(x * 1.5, 1.5) + size * 0.5
+            x = thetaX
+
+            if( x > -size * 0.5 ) {
                 const theta = Math.random() * 2 * PI
                 
-                const x = r * Math.cos( theta )
-                const z = r * Math.sin( theta )
+                const z = size * (Math.random() - 0.5)
+                // const x = r * Math.cos( theta )
+                // const z = r * Math.sin( theta )
+
+
+
                 if ( x < 0) {
                     pushGeometryData(x, z, scale)
                     

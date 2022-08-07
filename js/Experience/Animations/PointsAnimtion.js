@@ -42,6 +42,8 @@ export default class PointsAnimation extends EventEmitter {
         this.parameters.radius = 4.5
         this.parameters.cameraY = 0.75
 
+        // gsap.set('.close_btn g', { rotate: gsap.utils.wrap([-45, 45]), transformOrigin: '50% 50%' })
+
         // Animation
         gsap.registerEffect({
             name: "pointsShow",
@@ -137,7 +139,7 @@ export default class PointsAnimation extends EventEmitter {
     startStyles() {
         gsap.set('.work', 
         {
-            clipPath: 'inset(15% round 15px)',
+            clipPath: 'inset(15%)',
             y: '180%',
             opacity: 0
         })
@@ -283,6 +285,13 @@ export default class PointsAnimation extends EventEmitter {
      * @returns timeline
      */
     informationBlockAnimation(target, sound) {
+        gsap.fromTo('.close_btn g', { rotate: gsap.utils.wrap([-45, 45]), transformOrigin: '50% 50%' },{ 
+            rotate: gsap.utils.wrap([0, 0]),
+            transformOrigin: '50% 50%',
+            duration: 0.8,
+            ease: 'power1'
+        }, 0.6)
+
         const tl = gsap.timeline({ paused: true, onStart: sound })
 
         tl.to(this.preload.material.uniforms.uProgress, {
@@ -319,7 +328,7 @@ export default class PointsAnimation extends EventEmitter {
         const tl = gsap.timeline()
 
         tl.to('.work', {
-            clipPath: 'inset(0% round 15px)',
+            clipPath: 'inset(0%)',
             y: 0,
             opacity: 1,
             duration: 1.2,

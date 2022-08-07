@@ -22,35 +22,33 @@ export default class followingCursor {
                 gsap.set( circle, {
                     attr: {
                         r: 180,
-                        cx: 200,
-                        cy: 200,
+                        cx: 250,
+                        cy: 250,
                     },
                 })
 
                 return circle
             }
         }
-        this.followButtonIn = gsap.timeline({ paused: true })
+        this.followButtonIn = gsap.timeline({ 
+            paused: true, 
+            // yoyo: true, repeat: -1
+        })
         
         this.createSvg( this.svgParameters )
     }
-    createSvg( parameters ) {
-        // Get circle
-        const color = getComputedStyle(document.documentElement).getPropertyValue('--dark')
-        
+    createSvg( parameters ) {        
         // Append circle to main SVG
-        for( let i = 0; i < parameters.count; i++ ) {
-            const circle = parameters.element()
-            const elementclass = (i < parameters.count - 1) ? 'ring' : 'circle'
-            circle.classList.add( elementclass )    
-            parameters.target.appendChild( circle )
-        }
+        const circle = parameters.element()
+        circle.classList.add( 'circle' )    
+        parameters.target.appendChild( circle )
+
         gsap.set( 'svg .ring', {
             attr: { 
                 fill: 'none', 
-                stroke: color,
-                strokeWidth: '8px',
+                stroke: '#ffffff',
             },
+            strokeWidth: 4
         })
         gsap.set( 'svg .circle', {
             attr: { 
@@ -59,19 +57,19 @@ export default class followingCursor {
         })
 
         // Animation
-        this.followButtonIn.fromTo('.following__look .circle', {scale: 1}, {
-            scale: 0,
-            duration: 0.5,
+        this.followButtonIn.fromTo('.following__look .ring', {scale: 1}, {
+            scale: .3,
+            stagger: 0.1,
+            duration: 0.4,
+            ease: 'power1',
+            transformOrigin: '50% 50%'
+        }, 0)
+        this.followButtonIn.fromTo('.following__look .circle', {scale: 0, transformOrigin: '50% 50%'}, {
+            scale: 0.3,
+            duration: 0.8,
             ease: 'power1.out',
             transformOrigin: '50% 50%'
         }, 0)
-        this.followButtonIn.from('.following__look .ring',{
-            scale: 0,
-            stagger: 0.1,
-            duration: 0.6,
-            ease: 'power1.out',
-            transformOrigin: '50% 50%'
-        }, 0.25)
 
     }
     mouseMove() {

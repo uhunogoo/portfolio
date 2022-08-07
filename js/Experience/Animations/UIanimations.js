@@ -8,12 +8,22 @@ export default class UIAnimation {
         this.experience = new Experience()
         this.mouse = this.experience.mouse
         
-
         // Defaults
         this.closeButtonHover = false
         this.mouseFollowAnimation = mouseFollow.followButtonIn
         this.preload = document.querySelector('.preload')        
         gsap.set('.title-decor div', { transformPerspective: '2000' })
+        
+        // Close button hover animation
+        const closeButton = gsap.fromTo('.close_btn g', { rotate: gsap.utils.wrap([0, 0]), transformOrigin: '50% 50%' },{ 
+            rotate: gsap.utils.wrap([-45, 45]),
+            transformOrigin: '50% 50%',
+            duration: 0.4,
+            ease: 'power1'
+        }, 0)
+
+        // Add close button animation to mouse follow timeline
+        this.mouseFollowAnimation.add( closeButton, 0 )
     }
     showMenu() {
         gsap.set('.menu', {
@@ -69,7 +79,7 @@ export default class UIAnimation {
         
         if ( isCloseButton ) {            
             if (!this.closeButtonHover) {
-                this.mouseFollowAnimation.play(0).timeScale(2)
+                this.mouseFollowAnimation.restart()
                 this.closeButtonHover = true
             }
         } else {

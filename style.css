@@ -221,7 +221,7 @@ h1 {
 }
 .work {
   position: relative;
-  clip-path: inset(0% round 15px);
+  clip-path: inset(0%);
   min-width: 0;
   &__image {
     height: 0;
@@ -508,6 +508,7 @@ h1 {
   .following {
     border-radius: 50%;
     height: 70px;
+    mix-blend-mode: exclusion;
     pointer-events: none;
     position: fixed;
     top: 0;
