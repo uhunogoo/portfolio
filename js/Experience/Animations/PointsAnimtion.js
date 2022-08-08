@@ -334,8 +334,8 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.2,
             stagger: 0.1,
         })
-        tl.to('.work__image', {
-            scale: 1.1,
+        tl.fromTo('.work__image', {scale: 0.6}, {
+            scale: 1,
             stagger: 0.07,
             duration: 1.25,
             ease: 'power2'

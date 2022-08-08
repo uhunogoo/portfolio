@@ -1,5 +1,6 @@
 import gsap from 'gsap'
-import * as THREE from 'three'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+gsap.registerPlugin( ScrollTrigger )
 
 import Experience from '../Experience'
 
@@ -7,6 +8,7 @@ export default class UIAnimation {
     constructor( mouseFollow ) {
         this.experience = new Experience()
         this.mouse = this.experience.mouse
+        this.sizes = this.experience.sizes
         
         // Defaults
         this.closeButtonHover = false
@@ -24,6 +26,30 @@ export default class UIAnimation {
 
         // Add close button animation to mouse follow timeline
         this.mouseFollowAnimation.add( closeButton, 0 )
+
+        // Scrolltrigger
+        const sections = gsap.utils.toArray('.works .work')
+        const firstBlock = sections[ 0 ]
+        const lastBlockLeft = sections[ sections.length - 1]
+        const percentLeft = () => {
+            const x = firstBlock.getBoundingClientRect().x * 2
+            console.log( x )
+            
+            return this.sizes.width - (lastBlockLeft.offsetLeft + lastBlockLeft.clientWidth + x + 30)
+        }
+
+        let scrollTween = gsap.to(sections, {
+            x: percentLeft,
+            ease: "none", // <-- IMPORTANT!
+            scrollTrigger: {
+                invalidateOnRefresh: true,
+                scroller: '.works',
+                trigger: ".works__wrap",
+                pin: true,
+                scrub: 1.1,
+                end: "+=1500"
+            }
+        });
     }
     showMenu() {
         gsap.set('.menu', {

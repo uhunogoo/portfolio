@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import Experience from '../Experience'
+import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler'
 
 // Grass shaders
 import vertexShader from '../../../asstes/shaders/grass/vertexShader.glsl?raw'
@@ -39,9 +40,9 @@ export default class Grass {
         }
 
         this.materials()
-        this.createGrassGeometry()
         this.createAmbientSparks()
         this.createFloor()
+        this.createGrassGeometry()
     }
     materials () {
         this.grassMaterial = new THREE.ShaderMaterial({
@@ -67,7 +68,14 @@ export default class Grass {
         }
     }
     createGrassGeometry() {
-        const { size, count } = this.grassParameters
+        // Defaults
+        const { count } = this.grassParameters
+        const sampler = new MeshSurfaceSampler( this.floor ).setWeightAttribute( null ).build()
+        
+        // resample basic
+        const dummy = new THREE.Object3D()
+        const _position = new THREE.Vector3()
+        const _normal = new THREE.Vector3()
 
         // DEFAULTS
         const grassParams = {
@@ -141,42 +149,44 @@ export default class Grass {
             )
         }
 
+        // for (let i = 0; i < 10; i++ ) {
+        //     const x = this.grassParameters.size * (Math.random() - 0.5)
+        //     const y = this.grassParameters.size * (Math.random() - 0.5)
+        //     console.log(  )
+        // }
+        
+
         let i = 0
-
         while (i < count) {
+            sampler.sample( _position, _normal )
+            _normal.add( _position )
+
+            dummy.position.copy( _position )
+            dummy.lookAt( _normal )
+            dummy.updateMatrix()
+
+            // Calculated
             const scale = 0.5 + Math.random() * 0.5
-
-            const r = size * 0.5 * Math.random()
+            const { x, y } = dummy.position
+            const r = dummy.position.distanceTo( new THREE.Vector3() )
             
-            let x = size * (Math.random() - 0.5)
-            const thetaX = -Math.pow(x * 1.5, 1.5) + size * 0.5
-            x = thetaX
-
-            if( x > -size * 0.5 ) {
-                const theta = Math.random() * 2 * PI
-                
-                const z = size * (Math.random() - 0.5)
-                // const x = r * Math.cos( theta )
-                // const z = r * Math.sin( theta )
-
-
-
+            if ( r > 2.05 ) {
                 if ( x < 0) {
-                    pushGeometryData(x, z, scale)
-                    
+                    pushGeometryData(x, y, scale)
+                        
                     // increase 
                     i++
                 } else {
-                    const fireArea = (-1.45 > z && z > -2.1 && x > 3.5 && x < 4.15)
-                    const stelaArea = (z > 1.3 && z < 1.98 && x > 3.5 && x < 4.15)
+                    const fireArea = (-1.45 > y && y > -2.1 && x > 3.5 && x < 4.15)
+                    const stelaArea = (y > 1.3 && y < 1.98 && x > 3.5 && x < 4.15)
                     
-                    if (z < -0.7 && !fireArea) { 
-                        pushGeometryData(x, z, scale)
+                    if (y < -0.7 && !fireArea) { 
+                        pushGeometryData(x, y, scale)
 
                         // increase 
                         i++
-                    } else if (z > 0.7 && !stelaArea) {
-                        pushGeometryData(x, z, scale)
+                    } else if (y > 0.7 && !stelaArea) {
+                        pushGeometryData(x, y, scale)
 
                         // increase 
                         i++
@@ -184,6 +194,11 @@ export default class Grass {
                         
                 }
             }
+        //     
+        //     let x = size * (Math.random() - 0.5)
+        //     const thetaX = -Math.pow(x * 1.5, 1.5) + size * 0.5
+        //     x = thetaX
+
         }
 
         // Create grass instance
@@ -253,12 +268,12 @@ export default class Grass {
         this.grassGroup.add( instancedParticlesMesh )
     }
     createFloor() {
-        const floorGeometry = new THREE.CircleBufferGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 )
-        
+        const floorGeometry = new THREE.CircleGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 ).toNonIndexed()
+
         this.resources.items.sandTexture.encoding = THREE.sRGBEncoding
-        this.resources.items.sandTexture.repeat.set(20, 20)
         this.resources.items.sandTexture.wrapS = THREE.RepeatWrapping
         this.resources.items.sandTexture.wrapT = THREE.RepeatWrapping
+        this.resources.items.sandTexture.repeat.set(20, 20)
 
         const floorMaterial = new THREE.MeshBasicMaterial({
             map: this.resources.items.sandTexture
@@ -318,15 +333,15 @@ export default class Grass {
             )
         }
         
-        const floor = new THREE.Mesh(
+        this.floor = new THREE.Mesh(
             floorGeometry,
             floorMaterial
         )
 
         // Transform
-        floor.rotation.x = -Math.PI / 2
+        this.floor.rotation.x = -Math.PI / 2
 
-        this.grassGroup.add( floor )
+        this.grassGroup.add( this.floor )
     }
     update() {
         const time = this.experience.time.elapsed / 1000
