@@ -204,10 +204,6 @@ h1 {
   overflow-y: scroll;
   &__wrap {
     height: 100%;
-    padding: 30px;
-    @media screen and (min-width: 1100px) {
-      padding: 40px;
-    }
   }
 }
 .work {
@@ -216,21 +212,45 @@ h1 {
   flex-direction: column-reverse;
   height: 100%;
   left: 0;
+  padding: 6vw;
+  padding-right: 0;
   min-width: 0;
   position: absolute;
   top: 0;
-  width: 35vw;
+  width: 80vw;
+  @media screen and (min-width: 1100px) {
+    padding: 2vw;
+    padding-right: 0;
+    width: 70vw;
+  }
+  @media screen and (min-width: 1400px) {
+    padding: 2vw;
+    padding-right: 0;
+    width: 55vw;
+  }
   &__image {
+    cursor: pointer;
     flex: 1;
     grid-area: image;
+    overflow: hidden;
     width: 100%;
     img {
       height: 100%;
       display: block;
       object-fit: cover;
       top: 0;
+      transition: filter 0.3s ease-in-out;
       width: 100%;
     }
+    &:hover {
+      img {
+        filter: brightness(0.4);
+      }
+    }
+  }
+  &__link {
+    display: block;
+    height: 100%;
   }
   &__info {
     bottom: 0;

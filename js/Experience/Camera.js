@@ -1,3 +1,4 @@
+import gsap from 'gsap'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
@@ -31,9 +32,12 @@ export default class Camera {
         this.instance.position.copy( this.parameters.cameraPosition )
         this.instance.lookAt( this.parameters.lookAt )
 
-        this.parameters.radius = ( this.instance.aspect < 1) ? Math.max( 5, 4 / this.instance.aspect ) : 5
-        this.parameters.cameraY = Math.max(1.25, ( this.instance.aspect < 1) ? 3 / this.instance.aspect : 1.25)
+        this.parameters.radius = (this.instance.aspect < 1) ? Math.max( 5, 4 / this.instance.aspect ) : 5
+        this.parameters.radius = gsap.utils.clamp( 5, 6.5, this.parameters.radius )
+        this.parameters.cameraY = Math.max(1.25, ( this.instance.aspect < 1) ? 2 / this.instance.aspect : 1.25)
 
+        console.log(2 / this.instance.aspect)
+        console.log(4 / this.instance.aspect)
         // Layers setup
         // this.instance.layers.enable(1)
         
@@ -46,8 +50,12 @@ export default class Camera {
     resize() {
         this.instance.aspect = this.sizes.width / this.sizes.height
         
-        const positionY = Math.max(1.25, ( this.instance.aspect < 1) ? 3 / this.instance.aspect : 1.25)
-        this.parameters.radius = Math.max(5, ( this.instance.aspect < 1) ? 4 / this.instance.aspect : 5)
+        let positionY = Math.max(1.25, ( this.instance.aspect < 1) ? 3 / this.instance.aspect : 1.25)
+        positionY = gsap.utils.clamp( 1.25, 3, positionY )
+
+        this.parameters.radius = ( this.instance.aspect < 1) ? 5 / this.instance.aspect : 5
+        this.parameters.radius = gsap.utils.clamp( 5, 6.5, this.parameters.radius )
+
         this.instance.position.y = positionY
         this.instance.position.z = this.parameters.radius
         this.instance.position.x = this.parameters.radius

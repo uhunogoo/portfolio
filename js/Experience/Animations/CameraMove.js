@@ -43,9 +43,10 @@ export default class CameraMove {
         this.rotatioMatrix.copy( this.camera.matrixWorld )
         this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
 
-        this.animation()
+        this.animations()
+        this.deviceOrientation()
     }
-    animation() {
+    animations() {
         this.towerInAnimation.to(this.parameters.lookAt, {
             keyframes: {
                 '50%': {
@@ -99,14 +100,7 @@ export default class CameraMove {
             },
         }, '<')
     }
-    mouseMove() {
-        // Play when animation was complete 
-        if (!this.animationComplete) return
-
-        // Get mouse coordinates 
-        const { x, y } = this.mouse       
-
-        // Camera animation
+    cameraRotation(x, y) {
         const tl = gsap.timeline()
         tl.fromTo(this.cameraGroup.rotation, {
             x: this.cameraGroup.rotation.x,
@@ -120,6 +114,26 @@ export default class CameraMove {
         tl.fromTo(this.cloudsGroup.rotation, {x: this.cloudsGroup.rotation.x}, {
             x: x * 0.05,
         }, 0)
+    }
+    mouseMove() {
+        // Play when animation was complete 
+        if (!this.animationComplete) return
+
+        // Get mouse coordinates 
+        const { x, y } = this.mouse       
+
+        this.cameraRotation(x, y)
+    }
+
+    deviceOrientation() {
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (event) => {
+                const leftToRight = - event.gamma
+                const frontToBack = - event.beta + 45
+                
+                this.cameraRotation( leftToRight * 0.05, frontToBack * 0.05)
+            })
+        }
     }
     update() {
         // let vector = new THREE.Vector3()

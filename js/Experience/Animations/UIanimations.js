@@ -32,103 +32,53 @@ export default class UIAnimation {
         this.maxScroll = ScrollTrigger.maxScroll(this.worksContainer) - 1
 
         this.scroll()
-        
-        gsap.to('.works img', {
-            repeat: -1,
-            ease: 'none',
-            x: "+=" + 1000,
-            duration: 10,
-            modifiers: {
-              x: gsap.utils.wrap(-1000, 1000)
-            }
-        })
     }
     scroll() {
         const sections = gsap.utils.toArray('.works .work')
-        const firstBlock = sections[ 0 ]
-        const lastBlockLeft = sections[ sections.length - 1]
-        const scrollX = () => {
-            const firstBlockX = firstBlock.getBoundingClientRect().x
-            return (lastBlockLeft.offsetLeft + lastBlockLeft.clientWidth + firstBlockX)
-        }
-        const scrollY = () => {
-            const firstBlockX = firstBlock.getBoundingClientRect().x
-            const widthProportion = (lastBlockLeft.offsetLeft + lastBlockLeft.clientWidth + firstBlockX) / this.sizes.width
-            const percentageValue = widthProportion * 100
-            return `+=${ percentageValue * 0.72 }%`
-        }
-
         const sliderItems = sections
         const numSlides = sliderItems.length
+        const lastBlockLeft = sections[ sections.length - 1]
 
         // slides positions
         for (let i = 0; i < numSlides; i++) {
             gsap.set(sliderItems[i], { xPercent: i * 100, y: 0 })
         }
+
+        const scrollX = () => {
+            return this.sizes.width - ( numSlides * lastBlockLeft.clientWidth + 40)
+        }
+        const scrollY = () => {
+            const widthProportion = (numSlides * lastBlockLeft.clientWidth + 40) / this.sizes.width
+            const percentageValue = widthProportion * 100
+            return `+=${ percentageValue * 0.72 }%`
+        }
         
-        const tween = gsap.to(sliderItems, {
-            xPercent: "-=" + (numSlides * 100),
+        let scrollTween = gsap.to(sections, {
+            x: scrollX,
             ease: "none",
-            onUpdate: () => {
-                sliderItems.forEach( slide => {
-                    const positonX = gsap.getProperty(slide, 'xPercent')
-                    const x = (positonX / 100) * slide.clientWidth
-                    const s = 1 - x / this.sizes.width
-                    console.log( s )
-                    
-                    const image = slide.querySelector('img')
-                    
-                    gsap.set( image, { objectPosition: s * 100 + '% 50%' })
-                    // return scale
-                })
-                // gsap.to('.works .work img', {
-                //     scale: ( index, target, targets ) => {
-                //     }
-                // })
-            },
-            modifiers: {
-                xPercent: gsap.utils.wrap(-100, (numSlides - 1) * 100)
+            scrollTrigger: {
+                invalidateOnRefresh: true,
+                scroller: '.works',
+                trigger: ".works__wrap",
+                pin: true,
+                scrub: 1.3,
+                end: scrollY
             }
         })
-        const scrollTriggerAnimation = ScrollTrigger.create({
-            animation: tween,
-            invalidateOnRefresh: true,
-            scroller: '.works',
-            trigger: ".works__wrap",
-            pin: true,
-            scrub: 1.1,
-            end: scrollY
-        })
-        // let scrollTween = gsap.to(sections, {
-        //     xPercent: "-=" + (numSlides * 100),
-        //     modifiers: {
-        //         xPercent: gsap.utils.wrap(-100, (numSlides - 1) * 100)
-        //     },
-        //     ease: "none", // <-- IMPORTANT!
-        //     scrollTrigger: {
-        //         invalidateOnRefresh: true,
-        //         scroller: '.works',
-        //         trigger: ".works__wrap",
-        //         pin: true,
-        //         scrub: 1.1,
-        //         end: scrollY
-        //     }
-        // })
         
-        // sections.forEach( section => {
-        //     gsap.fromTo( section.querySelector('img'), { objectPosition: '80% 50%', },{ 
-        //         objectPosition: '20% 50%',
-        //         ease: "none", // <-- IMPORTANT!
-        //         scrollTrigger: {
-        //             trigger: section,
-        //             containerAnimation: scrollTween,
-        //             scrub: 0.1,
-        //             start: "0% 100%",
-        //             end: "100% 0%",
-        //             markers: true
-        //         }
-        //     })
-        // })
+        sections.forEach( section => {
+            gsap.fromTo( section.querySelector('img'), { objectPosition: '90% 50%', },{ 
+                objectPosition: '10% 50%',
+                ease: "none",
+                scrollTrigger: {
+                    trigger: section,
+                    containerAnimation: scrollTween,
+                    scrub: 0.01,
+                    start: "0% 100%",
+                    end: "100% 0%",
+                }
+            })
+        })
     }
     showMenu() {
         gsap.set('.menu', {

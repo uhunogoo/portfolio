@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import gsap from 'gsap'
 import Experience from '../Experience'
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler'
 
@@ -19,7 +20,8 @@ export default class Grass {
 
         // Parameters
         this.grassParameters = {
-            count: (this.sizes.width < 767.5) ? 55000 : 90000,
+            count: 90000,
+            calculatedCount: [],
             size: 11.78
         }
         this.customUniform = {
@@ -30,6 +32,12 @@ export default class Grass {
         this.particlesUniform = {
             uTime: { value: 0 },
             uPixelRatio: { value: this.experience.sizes.pixelRatio }
+        }
+        this.percentage = () => {
+            let percentage = ( ( this.sizes.width * 100 ) / 850 ) / 100
+            percentage = gsap.utils.clamp( 0.45, 1, percentage )
+
+            return percentage
         }
         
 
@@ -148,12 +156,6 @@ export default class Grass {
                 (Math.random() - 0.5) * PI
             )
         }
-
-        // for (let i = 0; i < 10; i++ ) {
-        //     const x = this.grassParameters.size * (Math.random() - 0.5)
-        //     const y = this.grassParameters.size * (Math.random() - 0.5)
-        //     console.log(  )
-        // }
         
 
         let i = 0
@@ -194,18 +196,16 @@ export default class Grass {
                         
                 }
             }
-        //     
-        //     let x = size * (Math.random() - 0.5)
-        //     const thetaX = -Math.pow(x * 1.5, 1.5) + size * 0.5
-        //     x = thetaX
 
         }
 
         // Create grass instance
         const geometry = new THREE.InstancedBufferGeometry()
-        for (let i = 0; i < 2; i++ ) {
+        this.grass = new THREE.Group()
+        for (let i = 0; i < scales.length; i++ ) {
             const grassBufferGeometry = geometry.clone()
-            grassBufferGeometry.instanceCount = scales[ i ].length
+            grassBufferGeometry.instanceCount = scales[ i ].length * this.percentage()
+            this.grassParameters.calculatedCount.push( grassBufferGeometry.instanceCount )
 
             // Apply attributes
             grassBufferGeometry.setAttribute('position', new THREE.Float32BufferAttribute(grassParams.points[ i ], 3))
@@ -222,8 +222,9 @@ export default class Grass {
             instancedGrassMesh.geometry.computeBoundingSphere()
             instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
             
-            this.grassGroup.add( instancedGrassMesh )
+            this.grass.add( instancedGrassMesh )
         }
+        this.grassGroup.add( this.grass )
     }
     createAmbientSparks() {
         // Particles defaults
@@ -342,6 +343,11 @@ export default class Grass {
         this.floor.rotation.x = -Math.PI / 2
 
         this.grassGroup.add( this.floor )
+    }
+    resize() {
+        this.grass.children.forEach( (grassGroup, i) => {            
+            grassGroup.geometry.instanceCount = Math.round( this.grassParameters.calculatedCount[i] * this.percentage() )
+        })    
     }
     update() {
         const time = this.experience.time.elapsed / 1000

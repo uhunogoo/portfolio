@@ -3,8 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --host 192.168.31.122",
-    "work": "vite --host 192.168.31.147",
+    "dev": "vite --host 192.168.31.122 --https ",
+    "work": "vite --host 192.168.31.147 --https ",
     "build": "vite build",
     "preview": "vite preview"
   },
