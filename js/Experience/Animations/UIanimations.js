@@ -50,29 +50,31 @@ export default class UIAnimation {
         const scrollY = () => {
             const widthProportion = (numSlides * lastBlockLeft.clientWidth + 40) / this.sizes.width
             const percentageValue = widthProportion * 100
-            return `+=${ percentageValue * 0.72 }%`
+            return `${ percentageValue * 0.52 }%`
         }
-        
+        gsap.set('.works__wrap', {height: scrollY})
+
         let scrollTween = gsap.to(sections, {
             x: scrollX,
             ease: "none",
             scrollTrigger: {
-                invalidateOnRefresh: true,
                 scroller: '.works',
                 trigger: ".works__wrap",
-                pin: true,
-                scrub: 1.3,
-                end: scrollY
+                scrub: 1.1,
+                start: "top top",
+                end: 'bottom bottom',
+                invalidateOnRefresh: true
             }
         })
         
         sections.forEach( section => {
-            gsap.fromTo( section.querySelector('img'), { objectPosition: '90% 50%', },{ 
-                objectPosition: '10% 50%',
+            gsap.fromTo( section.querySelector('img'), { x: '-35%', },{ 
+                x: '-65%',
                 ease: "none",
                 scrollTrigger: {
                     trigger: section,
                     containerAnimation: scrollTween,
+                    invalidateOnRefresh: true,
                     scrub: 0.01,
                     start: "0% 100%",
                     end: "100% 0%",
@@ -120,7 +122,10 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
-        const isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
+        let isCloseButton = false 
+        if (this.mouse.moveTarget.lenght) {
+            isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
+        }
         
         if (!isPreloadHiden) {
             gsap.to('.title-decor div', {

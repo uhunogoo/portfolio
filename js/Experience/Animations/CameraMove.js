@@ -131,7 +131,7 @@ export default class CameraMove {
                 const leftToRight = - event.gamma
                 const frontToBack = - event.beta + 45
                 
-                this.cameraRotation( leftToRight * 0.05, frontToBack * 0.05)
+                this.cameraRotation( leftToRight * 0.085, frontToBack * 0.05)
             })
         }
     }
