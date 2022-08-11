@@ -11,7 +11,6 @@ export default class followingCursor {
         // Defaults
         this.body = document.body
         this.targteBlock = document.querySelector('.following')
-        this.targetBlockSizes = this.targteBlock.getBoundingClientRect()
         
         this.svgParameters = {
             count: 2,
@@ -74,11 +73,14 @@ export default class followingCursor {
     }
     mouseMove() {
         if ( this.body.clientWidth < 767.5 ) return 
+        
         const { x, y } = this.mouse
+        const targetBlockSizes = this.targteBlock.getBoundingClientRect()
+        
 
         gsap.to('.following', {
-            x: ( (x + 1) / 2 ) * this.size.width - this.targetBlockSizes.width * 0.5,
-            y: ( (- y + 1.0) / 2 ) * this.size.height - this.targetBlockSizes.height * 0.5,
+            x: ( (x + 1) / 2 ) * this.size.width - targetBlockSizes.width * 0.5,
+            y: ( (- y + 1.0) / 2 ) * this.size.height - targetBlockSizes.height * 0.5,
             ease: 'power4'
         })
         

@@ -36,8 +36,6 @@ export default class Camera {
         this.parameters.radius = gsap.utils.clamp( 5, 6.5, this.parameters.radius )
         this.parameters.cameraY = Math.max(1.25, ( this.instance.aspect < 1) ? 2 / this.instance.aspect : 1.25)
 
-        console.log(2 / this.instance.aspect)
-        console.log(4 / this.instance.aspect)
         // Layers setup
         // this.instance.layers.enable(1)
         

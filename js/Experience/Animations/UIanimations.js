@@ -50,7 +50,7 @@ export default class UIAnimation {
         const scrollY = () => {
             const widthProportion = (numSlides * lastBlockLeft.clientWidth + 40) / this.sizes.width
             const percentageValue = widthProportion * 100
-            return `${ percentageValue * 0.52 }%`
+            return `${ percentageValue * 0.6 }%`
         }
         gsap.set('.works__wrap', {height: scrollY})
 
@@ -62,6 +62,7 @@ export default class UIAnimation {
                 trigger: ".works__wrap",
                 scrub: 1.1,
                 start: "top top",
+                snap: 1 / (numSlides * 2),
                 end: 'bottom bottom',
                 invalidateOnRefresh: true
             }

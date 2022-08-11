@@ -72,6 +72,8 @@ void main(){
 	st *= 0.5 + staticNoise;
 	st *= clamp( staticNoise2, scale * 0.4 + (staticNoise * staticNoise2), 1.0);
 	st.x *= 2.0 - staticNoise2 + scale;
+
+  st.y *= 0.7;
   
   // Base rotation
 	st.xy *= get2dRotateMatrix( (rotation.y + staticNoise2) * 0.05);
