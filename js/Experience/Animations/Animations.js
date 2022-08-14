@@ -27,7 +27,7 @@ export default class Animation {
         })
         this.mainTimeline.add( this.cameraMove.towerInAnimation.play().timeScale(1) )
         this.mainTimeline.add( this.uiAnimation.showMenu().timeScale(2), '-=1')
-        this.mainTimeline.add( this.pointsAnimation.showPoints.play())
+        this.mainTimeline.add( this.pointsAnimation.showPoints.play(), '<')
         
         // Hide play text
         this.preload.on('preloadWasClicked', () => {

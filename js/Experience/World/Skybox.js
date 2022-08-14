@@ -80,7 +80,7 @@ export default class Skybox {
     }
     createClouds() {
         const cloudsParameters = {
-            count: 40,
+            count: 30,
             size: 19
         }
         

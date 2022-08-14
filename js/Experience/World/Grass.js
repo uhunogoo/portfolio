@@ -249,7 +249,7 @@ export default class Grass {
             if( r > 2.05 ) {
                 const x = r * Math.cos(theta)
                 const z = r * Math.sin(theta)
-                offset.push( x, Math.random(), z )
+                offset.push( x, Math.random() * 0.5, z )
                 speed.push( (0.2 + Math.random() ) / 1.2 )
                 
                 // increase 
@@ -264,7 +264,7 @@ export default class Grass {
         this.particlesBufferGeometry.setAttribute('vSpeed', new THREE.BufferAttribute( new Float32Array( speed ), 1))
 
         const instancedParticlesMesh = new THREE.Points( this.particlesBufferGeometry, ambientParticlesMaterial )
-        instancedParticlesMesh.position.y = 0.4
+        instancedParticlesMesh.position.y = 0.6
         
         this.grassGroup.add( instancedParticlesMesh )
     }

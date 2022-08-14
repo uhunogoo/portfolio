@@ -173,7 +173,7 @@ export default class PointsAnimation extends EventEmitter {
             y: 0,
             ease: 'back',
             stagger: 0.02
-        }, 0)
+        }, 0.15)
     }
     towerAnimation(target) {  
         const lookAt = (target.id > 0) ? 5 : 0   

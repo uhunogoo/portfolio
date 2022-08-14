@@ -50,7 +50,7 @@ export default class UIAnimation {
         const scrollY = () => {
             const widthProportion = (numSlides * lastBlockLeft.clientWidth + 40) / this.sizes.width
             const percentageValue = widthProportion * 100
-            return `${ percentageValue * 0.6 }%`
+            return `${ percentageValue }%`
         }
         gsap.set('.works__wrap', {height: scrollY})
 
@@ -62,7 +62,8 @@ export default class UIAnimation {
                 trigger: ".works__wrap",
                 scrub: 1.1,
                 start: "top top",
-                snap: 1 / (numSlides * 2),
+                // snap: [0, 0.3333, 0.6666, 1],
+                snap: 1 / (sections.length - 1),
                 end: 'bottom bottom',
                 invalidateOnRefresh: true
             }
@@ -123,8 +124,9 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
-        let isCloseButton = false 
-        if (this.mouse.moveTarget.lenght) {
+        let isCloseButton = false
+        
+        if (this.mouse.moveTarget) {
             isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
         }
         
