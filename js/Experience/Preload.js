@@ -113,7 +113,7 @@ export default class Preload extends EventEmitter {
     }
     preloadBG() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height
-        const plane = new THREE.PlaneGeometry(2, 2, 300, 300)
+        const plane = new THREE.PlaneGeometry(2, 2, 200, 200)
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 uProgress: { value: 1 },
@@ -124,10 +124,11 @@ export default class Preload extends EventEmitter {
             vertexShader,
             fragmentShader,
         })
+        
         this.mesh = new THREE.Mesh( plane, material )
         this.mesh.position.copy( this.experience.camera.instance.position )
+        this.mesh.renderOrder = 1
         this.scene.add( this.mesh )
-        
 
         // Debug renderer
         if (this.debug.active) {

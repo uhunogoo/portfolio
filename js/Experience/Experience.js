@@ -39,8 +39,8 @@ export default class Experience {
         this.resources = new Resources(sources)
         this.camera = new Camera()
         this.renderer = new Renderer()
-        this.world = new World()
         this.preload = new Preload()
+        this.world = new World()
 
         // Sizes resize event
         this.sizes.on('resize', () => {

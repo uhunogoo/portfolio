@@ -94,6 +94,7 @@ export default class Renderer {
             uniforms:
             {
                 tDiffuse: { value: null },
+                uProgress: { value: 1 },
                 uBokhe: { value: null },
                 uAspect: { value: this.sizes.width / this.sizes.height }
             },
@@ -111,9 +112,10 @@ export default class Renderer {
                 uniform sampler2D tDiffuse;
                 uniform vec2 uBokhe;
                 uniform float uAspect;
+                uniform float uProgress;
 
                 varying vec2 vUv;
-
+                
                 float random (vec2 st) {
                     return fract(
                         sin( 
@@ -159,11 +161,14 @@ export default class Renderer {
                 }
             `
         }
-
+        
+        
         this.displacementPass = new ShaderPass(DisplacementShader)
         // this.displacementPass.enabled = false
         this.displacementPass.material.uniforms.uBokhe.value = new THREE.Vector2(0.4, 0.823)
         this.effectComposer.addPass(this.displacementPass)
+        
+        // Debug renderer
         if (this.debug.active) {
             this.debugFolder.add(this.displacementPass.material.uniforms.uBokhe.value, 'x').name('bokeh width').min(-1).max(1).step(0.001)
             this.debugFolder.add(this.displacementPass.material.uniforms.uBokhe.value, 'y').name('bokeh height').min(-1).max(1).step(0.001)

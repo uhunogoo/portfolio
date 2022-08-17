@@ -32,6 +32,12 @@ export default [
         type: 'texture',
         path: '/asstes/textures/runes/point.png?url'
     },
+    //  Grass
+    {
+        name: 'grassTexture',
+        type: 'texture',
+        path: '/asstes/textures/runes/grass.png?url'
+    },
     //  Clouds
     {
         name: 'cloud',

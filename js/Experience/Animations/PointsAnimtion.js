@@ -24,6 +24,7 @@ export default class PointsAnimation extends EventEmitter {
         this.preload = this.experience.preload.mesh
         this.uiAnimations = UI
         this.bloomPass = this.experience.renderer.unrealBloomPass
+        this.bloomPass = this.experience.renderer.unrealBloomPass
         
         
         // Defaults

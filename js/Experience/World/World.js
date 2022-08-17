@@ -12,7 +12,6 @@ export default class World {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
-        this.preload = this.experience.preload
         
         const sceneGroup = new THREE.Group()
         sceneGroup.name = 'worldGroup'
@@ -35,6 +34,8 @@ export default class World {
                 this.tower.towerGroup, 
                 this.fire.fireGroup
             )
+            sceneGroup.renderOrder = 0
+            
             this.scene.add( sceneGroup )
 
             // this.environment = new Environment()
