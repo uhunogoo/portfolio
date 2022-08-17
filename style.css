@@ -55,7 +55,7 @@ html, body {
       transform: translate(-50%, -50%) rotate(180deg) scale(1.1);
       width: 110%;
       div {
-        background: url(./asstes/backgrounds/grece.svg) no-repeat center;
+        background: url(/public/backgrounds/grece.svg) no-repeat center;
         height: 100%;
         left: 0;
         position: absolute;
@@ -68,7 +68,7 @@ html, body {
       position: relative;
       &::after,
       &::before {
-        background: url(./asstes/backgrounds/title-line.svg) no-repeat 50% 100%;
+        background: url(/public/backgrounds/title-line.svg) no-repeat 50% 100%;
         content: '';
         display: block;
         height: 50%;
@@ -135,7 +135,7 @@ html, body {
     visibility: hidden;
     &::after,
     &::before {
-      background: url(/asstes/backgrounds/arrow.svg) no-repeat center;
+      background: url(/public/backgrounds/arrow.svg) no-repeat center;
       content: '';
       display: block;
       left: 0;
@@ -366,7 +366,7 @@ h1 {
     }
     &::before,
     &::after {
-      background: url(/asstes/backgrounds/curl.svg) no-repeat center;
+      background: url(/public/backgrounds/curl.svg) no-repeat center;
       background-size: contain;
       content: '';
       display: block;
@@ -412,7 +412,7 @@ h1 {
         width: 100%;
       }
       &::after {
-        background: url(/asstes/backgrounds/target.svg) no-repeat center;
+        background: url(/public/backgrounds/target.svg) no-repeat center;
         content: '';
         display: block;
         height: 160%;
@@ -473,7 +473,7 @@ h1 {
           margin: 0;
         }
         .icon {
-          background: url(/asstes/backgrounds/dot.svg) no-repeat center;
+          background: url(/public/backgrounds/dot.svg) no-repeat center;
           display: block;
           height: 1em;
           left: 0;
@@ -534,7 +534,7 @@ h1 {
 }
 
 .menu {
-  background: url(./asstes/backgrounds/menu.svg) no-repeat 50% 50%;
+  background: url(/public/backgrounds/menu.svg) no-repeat 50% 50%;
   background-size: 50% 50%;
   bottom: 30px;
   height: 60px;
@@ -548,7 +548,7 @@ h1 {
   }
   &::after,
   &::before {
-    background: url(./asstes/backgrounds/target.svg) no-repeat 50% 50%;
+    background: url(/public/backgrounds/target.svg) no-repeat 50% 50%;
     content: '';
     display: block;
     left: 50%;

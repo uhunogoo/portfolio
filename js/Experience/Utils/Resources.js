@@ -23,7 +23,7 @@ export default class Resources extends EventEmitter {
         this.loaders = {}
         // Draco loader
         const dracoLoader = new DRACOLoader()
-        dracoLoader.setDecoderPath('./js/draco/')
+        dracoLoader.setDecoderPath('/public/draco/')
 
         // GLTF loader
         this.loaders.gltfLoader = new GLTFLoader()
@@ -31,6 +31,8 @@ export default class Resources extends EventEmitter {
         this.loaders.textureLoader = new THREE.TextureLoader()
     }
     startLoading() {
+        // console.log( new URL( '/publick/textures/runes/point.png' ) )
+        
         // Load each source
         for( const source of this.sources ) {
             if (source.type === 'texture') {
@@ -38,7 +40,7 @@ export default class Resources extends EventEmitter {
                     this.sourceLoaded(source, file)
                 })
             } else if (source.type === 'gltfLoader') {
-                this.loaders.gltfLoader.load(source.path, (file) => {
+                this.loaders.gltfLoader.load( source.path, (file) => {
                     this.sourceLoaded(source, file)
                 })
             }
