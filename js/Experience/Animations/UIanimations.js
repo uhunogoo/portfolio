@@ -63,7 +63,7 @@ export default class UIAnimation {
                 scrub: 1.1,
                 start: "top top",
                 // snap: [0, 0.3333, 0.6666, 1],
-                snap: 1 / (sections.length - 1),
+                snap: 1 / ((sections.length - 1) * 6),
                 end: 'bottom bottom',
                 invalidateOnRefresh: true
             }

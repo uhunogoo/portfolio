@@ -574,8 +574,17 @@ h1 {
     display: block;
     height: 50px;
     margin: 0 auto;
-    width: 50px;
     pointer-events: none;
+    position: relative;
+    width: 50px;
+    img {
+      height: 70%;
+      width: 70%;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
   &__item {
     align-items: center;
