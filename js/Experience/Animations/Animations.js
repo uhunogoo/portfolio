@@ -20,6 +20,8 @@ export default class Animation {
         // Setup
         this.mainTimeline = gsap.timeline({ 
             paused: true,
+            // yoyo: true,
+            // repeat: -1,
             onComplete: () => {
                 this.mainTimeline.kill()
                 this.load = true

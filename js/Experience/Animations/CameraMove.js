@@ -14,6 +14,7 @@ export default class CameraMove {
         this.mouse = this.experience.mouse
         
         // Defaults
+        this.deviceOrientationSupported = false
         this.cloudsGroup = target.children.find( child => child.name === 'cloudsGroup' )
         this.tempMouseCoords = {
             x: 0,
@@ -32,9 +33,6 @@ export default class CameraMove {
             defaults: {
                 duration: 2,
                 ease: 'power2.inOut'
-            },
-            onComplete: () => {
-                this.animationComplete = true
             }
         })
 
@@ -43,6 +41,8 @@ export default class CameraMove {
         this.rotatioMatrix.copy( this.camera.matrixWorld )
         this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
 
+
+        // Functions
         this.animations()
         this.deviceOrientation()
     }
@@ -51,11 +51,11 @@ export default class CameraMove {
             keyframes: {
                 '50%': {
                     y: 0.4,
-                    ease: 'power1'
+                    ease: 'power1.out'
                 },
                 '100%': {
                     y: 1,
-                    ease: 'power1.in'
+                    ease: 'power2.in'
                 }
             }
         })
@@ -67,9 +67,25 @@ export default class CameraMove {
                 },
                 '100%': {
                     y: Math.PI * this.parameters.angle,
-                    ease: 'back(1.05).out'
+                    ease: 'power2.out'
                 }
             }
+        }, '<')
+        this.towerInAnimation.to(this.camera.position, {
+            keyframes: {
+                '35%': {
+                    x: this.parameters.radius * 0.5,
+                    y: this.parameters.cameraY + (this.camera.position.y - this.parameters.cameraY) / 2,
+                    z: this.parameters.radius * 0.5,
+                    ease: 'power1.in'
+                },
+                '100%': {
+                    x: this.parameters.radius,
+                    y: this.parameters.cameraY,
+                    z: this.parameters.radius,
+                    ease: 'power2.out'
+                }
+            },
         }, '<')
         this.towerInAnimation.to(this.scene.rotation, {
             keyframes: {
@@ -82,22 +98,6 @@ export default class CameraMove {
                     ease: 'back(3.4)'
                 }
             }
-        }, '<')
-        this.towerInAnimation.to(this.camera.position, {
-            keyframes: {
-                '30%': {
-                    x: this.parameters.radius * 0.5,
-                    y: this.parameters.cameraY + (this.camera.position.y - this.parameters.cameraY) / 2,
-                    z: this.parameters.radius * 0.5,
-                    ease: 'power2'
-                },
-                '100%': {
-                    x: this.parameters.radius,
-                    y: this.parameters.cameraY,
-                    z: this.parameters.radius,
-                    ease: 'back(2.5).in'
-                }
-            },
         }, '<')
     }
     cameraRotation(x, y) {
@@ -116,8 +116,10 @@ export default class CameraMove {
         }, 0)
     }
     mouseMove() {
-        // Play when animation was complete 
-        if (!this.animationComplete) return
+        console.log( this.deviceOrientationSupported )
+        
+        // Return if use device orientation 
+        if ( this.deviceOrientationSupported ) return
 
         // Get mouse coordinates 
         const { x, y } = this.mouse       
@@ -126,10 +128,12 @@ export default class CameraMove {
     }
 
     deviceOrientation() {
-        if (window.DeviceOrientationEvent) {
+        if (window.DeviceOrientationEvent) {  
             window.addEventListener('deviceorientation', (event) => {
                 const leftToRight = - event.gamma
                 const frontToBack = - event.beta + 45
+
+                this.deviceOrientationSupported = ( event.gamma || event.beta ) ? true : false
                 
                 this.cameraRotation( leftToRight * 0.085, frontToBack * 0.05)
             })

@@ -15,7 +15,7 @@ export default class Camera {
         
         // Wait for environment
         this.parameters = {}
-        this.parameters.cameraY = null
+        this.parameters.cameraY = 0
         this.parameters.cameraPosition = new THREE.Vector3(2, 2, 2)
         this.parameters.lookAt = new THREE.Vector3(0, 2.5, 0)
 
