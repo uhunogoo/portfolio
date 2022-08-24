@@ -30,9 +30,7 @@ export default class Resources extends EventEmitter {
         this.loaders.gltfLoader.setDRACOLoader(dracoLoader)
         this.loaders.textureLoader = new THREE.TextureLoader()
     }
-    startLoading() {
-        // console.log( new URL( '/publick/textures/runes/point.png' ) )
-        
+    startLoading() {      
         // Load each source
         for( const source of this.sources ) {
             if (source.type === 'texture') {

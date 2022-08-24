@@ -21,7 +21,6 @@ export default class Grass {
         // Parameters
         this.grassParameters = {
             count: 100000,
-            calculatedCount: 0,
             size: 11.78
         }
         this.customUniform = {
@@ -33,14 +32,7 @@ export default class Grass {
         this.particlesUniform = {
             uTime: { value: 0 },
             uPixelRatio: { value: this.experience.sizes.pixelRatio }
-        }
-        this.percentage = () => {
-            let percentage = ( ( this.sizes.width * 100 ) / 850 ) / 100
-            percentage = gsap.utils.clamp( 0.45, 1, percentage )
-
-            return percentage
-        }
-        
+        }      
 
         // Debug
         if (this.debug.active) {
@@ -52,6 +44,12 @@ export default class Grass {
         this.createAmbientSparks()
         this.createFloor()
         this.createGrassGeometry()
+    }
+    percentage() {
+        let percentage = ( ( this.sizes.width * 100 ) / 850 ) / 100       
+        percentage = gsap.utils.clamp( 0.45, 1, percentage )
+
+        return percentage
     }
     materials () {
         this.grassMaterial = new THREE.ShaderMaterial({
@@ -120,7 +118,7 @@ export default class Grass {
         const pushGeometryData = (x, z, scale) => {
             // const id = (scale > 0.65) ? 0 : 1
             offset.push( x, 0, z )
-            scales.push( scale )
+            scales.push( scale * 1.1 )
             rotations.push( 
                 (Math.random() - 0.5) * PI * 0.1,
                 (Math.random() - 0.5) * PI
@@ -171,8 +169,7 @@ export default class Grass {
 
         // Create grass instance      
         this.grassBufferGeometry = new THREE.InstancedBufferGeometry()
-        this.grassBufferGeometry.instanceCount = scales.length * this.percentage()
-        this.grassParameters.calculatedCount = this.grassBufferGeometry.instanceCount
+        this.grassBufferGeometry.instanceCount =  Math.round( count * this.percentage() )
 
         // Apply attributes
         this.grassBufferGeometry.setAttribute('position', new THREE.Float32BufferAttribute(grassParams.points, 3))
@@ -294,7 +291,7 @@ export default class Grass {
                     color = clamp(color, vec3(0.0), vec3(1.0));
                     
 
-                    gl_FragColor.rgb = vec3(mix(color * 0.3, color, rect));
+                    gl_FragColor.rgb = vec3(mix(color * 0.6, color, rect));
                 `
             )
         }
@@ -310,7 +307,7 @@ export default class Grass {
         this.grassGroup.add( this.floor )
     }
     resize() {
-        this.grassBufferGeometry.instanceCount = Math.round( this.grassParameters.calculatedCount * this.percentage() )    
+        this.grassBufferGeometry.instanceCount = Math.round( this.grassParameters.count * this.percentage() )     
     }
     update() {
         const time = this.experience.time.elapsed / 1000

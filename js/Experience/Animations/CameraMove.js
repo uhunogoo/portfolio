@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import * as THREE from 'three'
+import { Clock, Matrix4 } from 'three'
 
 import Experience from '../Experience'
 
@@ -25,7 +25,7 @@ export default class CameraMove {
 
         // Add parameters
         this.previousTime = 0
-        this.clock = new THREE.Clock()
+        this.clock = new Clock()
 
         // Animations
         this.towerInAnimation = gsap.timeline({
@@ -37,7 +37,7 @@ export default class CameraMove {
         })
 
 
-        this.rotatioMatrix = new THREE.Matrix4()
+        this.rotatioMatrix = new Matrix4()
         this.rotatioMatrix.copy( this.camera.matrixWorld )
         this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
 
@@ -115,9 +115,7 @@ export default class CameraMove {
             x: x * 0.05,
         }, 0)
     }
-    mouseMove() {
-        console.log( this.deviceOrientationSupported )
-        
+    mouseMove() {        
         // Return if use device orientation 
         if ( this.deviceOrientationSupported ) return
 
@@ -126,16 +124,15 @@ export default class CameraMove {
 
         this.cameraRotation(x, y)
     }
-
     deviceOrientation() {
         if (window.DeviceOrientationEvent) {  
             window.addEventListener('deviceorientation', (event) => {
-                const leftToRight = - event.gamma
-                const frontToBack = - event.beta + 45
+                const leftToRight = gsap.utils.clamp(-45, 45, event.gamma )
+                const frontToBack = gsap.utils.clamp(10, 55, event.beta )
 
                 this.deviceOrientationSupported = ( event.gamma || event.beta ) ? true : false
                 
-                this.cameraRotation( leftToRight * 0.085, frontToBack * 0.05)
+                this.cameraRotation( - leftToRight * 0.085, - frontToBack * 0.05)
             })
         }
     }

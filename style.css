@@ -216,6 +216,7 @@ h1 {
   height: 100%;
   left: 0;
   padding: 6vw;
+  padding-bottom: 6.1vw;
   padding-right: 0;
   min-width: 0;
   position: absolute;
@@ -224,12 +225,10 @@ h1 {
   will-change: transform;
   @media screen and (min-width: 1100px) {
     padding: 2vw;
-    padding-right: 0;
+    padding-bottom: 2.5vw;
     width: 70vw;
   }
   @media screen and (min-width: 1400px) {
-    padding: 2vw;
-    padding-right: 0;
     width: 55vw;
   }
   &__image {
@@ -261,7 +260,7 @@ h1 {
     bottom: 0;
     font-size: clamp(24px, 2vmax, 50px);
     grid-area: text;
-    padding: 0.5em 0;
+    padding-bottom: 0.5em;
   }
   &__name {
     color: var(--dark);

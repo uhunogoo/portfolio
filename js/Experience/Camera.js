@@ -1,6 +1,5 @@
 import gsap from 'gsap'
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { Group, Vector3, PerspectiveCamera } from 'three'
 
 import Experience from './Experience'
 
@@ -15,46 +14,41 @@ export default class Camera {
         
         // Wait for environment
         this.parameters = {}
+        this.parameters.radius = 0
         this.parameters.cameraY = 0
-        this.parameters.cameraPosition = new THREE.Vector3(2, 2, 2)
-        this.parameters.lookAt = new THREE.Vector3(0, 2.5, 0)
+        this.parameters.cameraPosition = new Vector3(2, 2, 2)
+        this.parameters.lookAt = new Vector3(0, 2.5, 0)
 
         // call method
         this.setInstance()
-        // this.setControl()
+    }
+    calculateY( aspect ) { 
+        return Math.max(1.25, ( aspect < 1) ? 2 / aspect : 1.25) 
     }
     setInstance() {
-        this.instanceGroup = new THREE.Group()
+        this.instanceGroup = new Group()
         this.scene.add(this.instanceGroup)
+        const aspect = this.sizes.width / this.sizes.height
 
         // Base camera
-        this.instance = new THREE.PerspectiveCamera(45, this.sizes.width / this.sizes.height, 0.1, 100)
+        this.instance = new PerspectiveCamera(45, aspect, 0.1, 50)
         this.instance.position.copy( this.parameters.cameraPosition )
         this.instance.lookAt( this.parameters.lookAt )
 
-        this.parameters.radius = (this.instance.aspect < 1) ? Math.max( 5, 4 / this.instance.aspect ) : 5
-        this.parameters.radius = gsap.utils.clamp( 5, 6.5, this.parameters.radius )
-        this.parameters.cameraY = Math.max(1.25, ( this.instance.aspect < 1) ? 2 / this.instance.aspect : 1.25)
-
-        // Layers setup
-        // this.instance.layers.enable(1)
+        const radius = (aspect < 1) ? Math.max( 5, 4 / aspect ) : 5 
+        this.parameters.cameraY = this.calculateY( aspect )
+        this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
         
         this.instanceGroup.add(this.instance)
     }
-    setControl() {
-        this.controls = new OrbitControls(this.instance, this.canvas)
-        this.controls.enableDamping = true
-    }
     resize() {
-        this.instance.aspect = this.sizes.width / this.sizes.height
-        
-        let positionY = Math.max(1.25, ( this.instance.aspect < 1) ? 3 / this.instance.aspect : 1.25)
-        positionY = gsap.utils.clamp( 1.25, 3, positionY )
+        const aspect = this.sizes.width / this.sizes.height
+        this.instance.aspect = aspect
 
-        this.parameters.radius = ( this.instance.aspect < 1) ? 5 / this.instance.aspect : 5
-        this.parameters.radius = gsap.utils.clamp( 5, 6.5, this.parameters.radius )
+        const radius = (aspect < 1) ? Math.max( 5, 4 / aspect ) : 5 
+        this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
 
-        this.instance.position.y = positionY
+        this.instance.position.y = this.calculateY( aspect )
         this.instance.position.z = this.parameters.radius
         this.instance.position.x = this.parameters.radius
 
@@ -62,7 +56,6 @@ export default class Camera {
     }
     
     update() {
-        // this.controls.update()
         this.instance.lookAt( this.parameters.lookAt )
     }
 }
