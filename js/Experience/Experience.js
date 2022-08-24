@@ -14,6 +14,7 @@ import sources from './sources'
 import Debug from './Utils/Debug'
 import Points from './Utils/Points'
 import Mouse from './Utils/Mouse'
+import DeviceOrientationEvent from './Utils/DeviceOrientation'
 
 
 let instance = null
@@ -33,6 +34,7 @@ export default class Experience {
         this.debug = new Debug()
         this.sizes = new Sizes()
         this.mouse = new Mouse()
+        this.deviceOrientationEvent = new DeviceOrientationEvent()
         this.points = new Points()
         this.time = new Time()
         this.scene = new THREE.Scene()
@@ -48,14 +50,22 @@ export default class Experience {
         })
 
         // Mosue move event
-        const throttleFunction = _.throttle(() => {           
+        const throttleMouseFunction = _.throttle(() => {           
             this.mouseMove() 
         }, 40)
         this.mouse.on('mouseMove', () => {
-            throttleFunction()
+            throttleMouseFunction()
         })
         this.mouse.on('mouseClick', () => {
             this.mouseClick()
+        })
+
+        // Device orientation
+        const throttleDeviceOrientationFunction = _.throttle(() => {           
+            this.deviceOrientation() 
+        }, 40)
+        this.deviceOrientationEvent.on('deviceOrientation', () => {
+            throttleDeviceOrientationFunction()
         })
 
         // Time tick event
@@ -72,6 +82,9 @@ export default class Experience {
     mouseClick() {
         this.preload.mouseClick()
         this.world.mouseClick()
+    }
+    deviceOrientation() {
+        this.world.deviceOrientation()
     }
     mouseMove() {
         this.world.mouseMove()

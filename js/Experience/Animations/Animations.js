@@ -41,6 +41,11 @@ export default class Animation {
             this.pointsAnimation.mouseClick()
         }
     }
+    deviceOrientation() {
+        if ( this.cameraMove ) {
+            this.cameraMove.deviceOrientation()
+        }
+    }
     mouseMove() {
         if ( this.cameraMove ) {
             this.cameraMove.mouseMove()

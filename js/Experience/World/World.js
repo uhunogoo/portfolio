@@ -55,6 +55,11 @@ export default class World {
             this.animation.mouseClick()
         }
     }
+    deviceOrientation() {
+        if(this.animation) {
+            this.animation.deviceOrientation()
+        }
+    }
     mouseMove() {
         if(this.animation) {
             this.animation.mouseMove()

@@ -12,6 +12,7 @@ export default class CameraMove {
         this.camera = this.experience.camera.instance
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
+        this.deviceOrientationEvent = this.experience.deviceOrientationEvent
         
         // Defaults
         this.deviceOrientationSupported = false
@@ -125,15 +126,15 @@ export default class CameraMove {
         this.cameraRotation(x, y)
     }
     deviceOrientation() {
-        if (window.DeviceOrientationEvent) {  
-            window.addEventListener('deviceorientation', (event) => {
-                const leftToRight = gsap.utils.clamp(-45, 45, event.gamma )
-                const frontToBack = gsap.utils.clamp(10, 55, event.beta )
+        if (this.deviceOrientationEvent.deviceOrientationTarget) {
+            const target = this.deviceOrientationEvent.deviceOrientationTarget
 
-                this.deviceOrientationSupported = ( event.gamma || event.beta ) ? true : false
-                
-                this.cameraRotation( - leftToRight * 0.085, - frontToBack * 0.05)
-            })
+            const leftToRight = gsap.utils.clamp(-45, 45,target.gamma )
+            const frontToBack = gsap.utils.clamp(10, 55,target.beta )
+
+            this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
+            
+            this.cameraRotation( - leftToRight * 0.085, - frontToBack * 0.05)
         }
     }
     update() {
