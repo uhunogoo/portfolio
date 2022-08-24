@@ -31,7 +31,6 @@ export default class followingCursor {
         }
         this.followButtonIn = gsap.timeline({ 
             paused: true, 
-            // yoyo: true, repeat: -1
         })
         
         this.createSvg( this.svgParameters )
@@ -47,7 +46,7 @@ export default class followingCursor {
                 fill: 'none', 
                 stroke: '#ffffff',
             },
-            strokeWidth: 4
+            strokeWidth: 8
         })
         gsap.set( 'svg .circle', {
             attr: { 
@@ -58,14 +57,13 @@ export default class followingCursor {
         // Animation
         this.followButtonIn.fromTo('.following__look .ring', {scale: 1}, {
             scale: .3,
-            stagger: 0.1,
-            duration: 0.4,
+            duration: 0.3,
             ease: 'power1',
             transformOrigin: '50% 50%'
         }, 0)
         this.followButtonIn.fromTo('.following__look .circle', {scale: 0, transformOrigin: '50% 50%'}, {
             scale: 0.3,
-            duration: 0.8,
+            duration: 0.6,
             ease: 'power1.out',
             transformOrigin: '50% 50%'
         }, 0)

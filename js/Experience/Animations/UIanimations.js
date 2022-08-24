@@ -29,12 +29,11 @@ export default class UIAnimation {
 
         // Scrolltrigger
         this.worksContainer = document.querySelector('.works')
-        this.maxScroll = ScrollTrigger.maxScroll(this.worksContainer) - 1
 
         this.scroll()
     }
     scroll() {
-        const sections = gsap.utils.toArray('.works .work')
+        const sections = gsap.utils.toArray('.work')
         const sliderItems = sections
         const numSlides = sliderItems.length
         const lastBlockLeft = sections[ sections.length - 1]
@@ -52,7 +51,8 @@ export default class UIAnimation {
             const percentageValue = widthProportion * 100
             return `${ percentageValue }%`
         }
-        gsap.set('.works__wrap', {height: scrollY})
+        gsap.set('.works__wrap', { height: scrollY })
+        gsap.set('.works .test', { height: this.worksContainer.clientHeight })
 
         let scrollTween = gsap.to(sections, {
             x: scrollX,

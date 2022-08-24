@@ -43,7 +43,7 @@ html, body {
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
+    width: 90%;
     .title-decor {
       display: block;
       height: 0;
@@ -87,19 +87,13 @@ html, body {
   .title {
     text-align: center;
   }
-  .who {
-    font-family: var(--titleFont);
-    font-size: 40px;
-    margin-bottom: 0;
-    text-align: center;
-  }
   &__progress {
     bottom: 10%;
     left: 50%;
     position: absolute;
     transform: translate( -50%, 0);
     max-width: 610px;
-    width: 100%;
+    width: 60%;
     svg {
       display: block;
       height: auto;
@@ -159,19 +153,24 @@ html, body {
 h1 {
   font-family: var(--titleFont);
   font-weight: 500;
-  font-size: 0;
+  font-size: 8.02vmin;
   line-height: 1;
   margin: 0;
   position: relative;
   text-transform: uppercase;
   .text__contaioner {
-    height: 8.02vmin;
+    height: 16.04vmin;
     overflow: clip;
     position: relative;
   }
   span {
-    font-size: 8.02vmin;
-    display: inline-block;
+    font-size: 1em;
+    display: block;
+    will-change: transform;
+    + span {
+      font-size: 0.6em;
+      margin-top: 0.6em;
+    }
   }
 }
 
@@ -604,6 +603,7 @@ h1 {
       position: absolute;
       transform: translateX(-50%);
       width: 100px;
+      will-change: transform;
     }
     &_about {
       transform: translate(180%, 0);

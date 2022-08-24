@@ -166,7 +166,7 @@ export default class Preload extends EventEmitter {
             duration: 0.8,
             ease: 'power1'
         }, '<+=10%')
-        this.playInAnimation.from('.text', {
+        this.playInAnimation.from('.text span', {
             y: 40,
             scale: 1.2,
             opacity: 0,
@@ -187,7 +187,7 @@ export default class Preload extends EventEmitter {
             duration: 0.6,
             ease: 'power3'
         })
-        this.playOutAnimation.to('.text', {
+        this.playOutAnimation.to('.text span', {
             scale: 0.2,
             y: gsap.utils.wrap( [20, -20] ),
             opacity: 0,

@@ -118,7 +118,7 @@ export default class Grass {
         const pushGeometryData = (x, z, scale) => {
             // const id = (scale > 0.65) ? 0 : 1
             offset.push( x, 0, z )
-            scales.push( scale * 1.1 )
+            scales.push( scale * 1.2 )
             rotations.push( 
                 (Math.random() - 0.5) * PI * 0.1,
                 (Math.random() - 0.5) * PI
