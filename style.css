@@ -95,7 +95,7 @@ html, body {
     position: absolute;
     transform: translate( -50%, 0);
     max-width: 610px;
-    width: 60%;
+    width: 75%;
     svg {
       display: block;
       height: auto;

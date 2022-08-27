@@ -12,16 +12,15 @@ export default class Animation {
         this.experience = new Experience()
         this.preload = this.experience.preload
         this.followingCursor = new followingCursor()
-        this.cameraMove = new CameraMove( target )
         this.uiAnimation = new UIAnimation( this.followingCursor )
         this.pointsAnimation = new PointsAnimation( target, this.uiAnimation ) 
+        this.cameraMove = new CameraMove( target )
         this.load = false
+        this.informationBlockOpen = false
 
         // Setup
         this.mainTimeline = gsap.timeline({ 
             paused: true,
-            // yoyo: true,
-            // repeat: -1,
             onComplete: () => {
                 this.mainTimeline.kill()
                 this.load = true
@@ -35,6 +34,10 @@ export default class Animation {
         this.preload.on('preloadWasClicked', () => {
             this.mainTimeline.play()
         })
+
+        // Information blocks events
+        this.pointsAnimation.on('menuWasOpen', () => this.informationBlockOpen = true)
+        this.pointsAnimation.on('menuWasClose', () => this.informationBlockOpen = false)
     }
     mouseClick() {
         if ( this.pointsAnimation ) {
@@ -42,19 +45,26 @@ export default class Animation {
         }
     }
     deviceOrientation() {
+        // Check iformation block state
+        if ( this.informationBlockOpen ) return
+
         if ( this.cameraMove ) {
             this.cameraMove.deviceOrientation()
         }
     }
     mouseMove() {
+        if ( this.followingCursor ) {
+            this.followingCursor.mouseMove()
+        }
+
+        // Check iformation block state
+        if ( this.informationBlockOpen ) return 
+        
         if ( this.cameraMove ) {
             this.cameraMove.mouseMove()
         }
         if ( this.uiAnimation ) {
             this.uiAnimation.mouseMove()
-        }
-        if ( this.followingCursor ) {
-            this.followingCursor.mouseMove()
         }
         if ( this.pointsAnimation ) {
             if (!this.load) return
