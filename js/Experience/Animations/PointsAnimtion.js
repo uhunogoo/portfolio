@@ -149,8 +149,9 @@ export default class PointsAnimation extends EventEmitter {
         gsap.set( '#myPhoto img', { scale: 1.4 })
         gsap.set( '.content__title span', { yPercent: 100 })
         gsap.set( '.animate-text', { opacity: 0, y: 100 })
-        gsap.set( '.content__text .icon', { opacity: 0, scale: 0.1 })
+        gsap.set( '.content__text span.icon', { opacity: 0, scale: 0.1 })
         gsap.set( '.content__links', { opacity: 0, scale: 0.1 })
+        gsap.set( '.content .decor', { opacity: 0, scale: 1.6, rotate: '90deg', x: '100%', y: '-60%' })
     }
     showNav() {
         const clear = () => {
@@ -372,7 +373,7 @@ export default class PointsAnimation extends EventEmitter {
                 ease: 'power1'
             }
         }, '<')
-        tl.to('.content__text .icon', {
+        tl.to('.content__text span.icon', {
             opacity: 1,
             scale: 1,
             stagger: {
@@ -385,6 +386,13 @@ export default class PointsAnimation extends EventEmitter {
             scale: 1,
             ease: 'power3.in'
         }, '<-=50%')
+        tl.to('.content .decor', { 
+            opacity: 0.05, 
+            scale: 1, 
+            rotate: '0deg',
+            x: '50%',
+            duration: 1
+        }, 0.3)
         
         return tl
     }
