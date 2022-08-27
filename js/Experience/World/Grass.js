@@ -190,7 +190,7 @@ export default class Grass {
     }
     createAmbientSparks() {
         // Particles defaults
-        const count = 50
+        const count = 100
         const PI = Math.PI
         const offset = []
         const speed = []

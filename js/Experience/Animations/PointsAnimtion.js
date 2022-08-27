@@ -387,7 +387,7 @@ export default class PointsAnimation extends EventEmitter {
             ease: 'power3.in'
         }, '<-=50%')
         tl.to('.content .decor', { 
-            opacity: 0.05, 
+            opacity: 0.025, 
             scale: 1, 
             rotate: '0deg',
             x: '50%',
