@@ -109,4 +109,7 @@ void main() {
 
 
     gl_FragColor = vec4( finalColor, grassTexture.a);
+    #if defined( TONE_MAPPING )
+        gl_FragColor.rgb = toneMapping( gl_FragColor.rgb );
+    #endif
 }

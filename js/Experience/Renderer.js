@@ -32,19 +32,53 @@ export default class Renderer {
     }
 
     setInstance() {
+        const params = {
+            exposure: 1.0,
+            toneMapping: 'Custom'
+        }
+        const toneMappingOptions = {
+            None: THREE.NoToneMapping,
+            Linear: THREE.LinearToneMapping,
+            Reinhard: THREE.ReinhardToneMapping,
+            Cineon: THREE.CineonToneMapping,
+            ACESFilmic: THREE.ACESFilmicToneMapping,
+            Custom: THREE.CustomToneMapping
+        }
+
         this.instance = new THREE.WebGLRenderer({
             canvas: this.canvas,
             powerPreference: "high-performance"
         })
 
         this.instance.outputEncoding = THREE.sRGBEncoding
+
+        THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars_fragment.replace(
+            'vec3 CustomToneMapping( vec3 color ) { return color; }',
+            `#define Uncharted2Helper( x ) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.02 / 0.30, vec3( 0.0 ) )
+            float toneMappingWhitePoint = 1.0;
+            vec3 CustomToneMapping( vec3 color ) {
+                color *= toneMappingExposure;
+                return saturate( Uncharted2Helper( color ) / Uncharted2Helper( vec3( toneMappingWhitePoint ) ) );
+            }`
+        );
+
+        this.instance.toneMapping = THREE.CineonToneMapping
+        this.instance.toneMapping = toneMappingOptions[ params.toneMapping ]
+        // this.instance.toneMapping = THREE.LinearToneMapping
         
         // Debug renderer
         if (this.debug.active) {
             this.debugFolder
+                .add( params, 'toneMapping', Object.keys( toneMappingOptions ) )
+                .onChange( () => {
+                    this.instance.toneMapping = toneMappingOptions[ params.toneMapping ]
+                } )
+
+
+            this.debugFolder
                 .add( this.instance, 'toneMappingExposure')
                 .min(0)
-                .max(10)
+                .max(2)
                 .step(0.001)
         }
 

@@ -22,7 +22,7 @@ export default class CameraMove {
             y: 0
         }
         this.parameters = this.experience.camera.parameters
-        this.parameters.angle = 1.75
+        this.parameters.angle = 1.75        
 
         // Add parameters
         this.previousTime = 0

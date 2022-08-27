@@ -58,6 +58,7 @@ export default class Grass {
             transparent: true,
             vertexShader,
             fragmentShader,
+            // toneMapped: true
         })
 
         if (this.debug.active) {
@@ -239,7 +240,7 @@ export default class Grass {
         this.resources.items.sandTexture.repeat.set(20, 20)
 
         const floorMaterial = new THREE.MeshBasicMaterial({
-            map: this.resources.items.sandTexture
+            map: this.resources.items.sandTexture,
         })
         floorMaterial.onBeforeCompile = (shader) => {
 
@@ -292,6 +293,9 @@ export default class Grass {
                     
 
                     gl_FragColor.rgb = vec3(mix(color * 0.6, color, rect));
+                    #if defined( TONE_MAPPING )
+                        gl_FragColor.rgb = toneMapping( gl_FragColor.rgb );
+                    #endif
                 `
             )
         }

@@ -40,8 +40,6 @@ export default class PointsAnimation extends EventEmitter {
 
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
-        this.parameters.radius = 4.5
-        this.parameters.cameraY = 0.75
 
         // gsap.set('.close_btn g', { rotate: gsap.utils.wrap([-45, 45]), transformOrigin: '50% 50%' })
 

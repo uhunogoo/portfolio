@@ -35,7 +35,7 @@ export default class Camera {
         this.instance.position.copy( this.parameters.cameraPosition )
         this.instance.lookAt( this.parameters.lookAt )
 
-        const radius = (aspect < 1) ? Math.max( 5, 4 / aspect ) : 5 
+        const radius = 4 / aspect
         this.parameters.cameraY = this.calculateY( aspect )
         this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
         
@@ -45,7 +45,7 @@ export default class Camera {
         const aspect = this.sizes.width / this.sizes.height
         this.instance.aspect = aspect
 
-        const radius = (aspect < 1) ? Math.max( 5, 4 / aspect ) : 5 
+        const radius = 4 / aspect        
         this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
 
         this.instance.position.y = this.calculateY( aspect )

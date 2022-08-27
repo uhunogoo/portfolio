@@ -10,15 +10,30 @@ export default class DeviceOrientationEvent extends EventEmitter {
         // Resize
         this.deviceOrientation()
     }
-    deviceOrientation() {
-        if (window.DeviceOrientationEvent) {  
-            window.addEventListener('deviceorientation', (event) => {
-                // Set click tagret
-                this.deviceOrientationTarget = event
+    deviceOrientation() {       
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+            // Handle iOS 13+ devices.
+            DeviceMotionEvent.requestPermission()
+                .then((state) => {
+                    if (state === 'granted') {
+                        this.orientationEvent()
+                    } else {
+                        console.error('Request to access the orientation was rejected')
+                    }
+                })
+                .catch(console.error)
+          } else {
+            // Handle regular non iOS 13+ devices.
+            this.orientationEvent()
+          }
+    }
+    orientationEvent() {
+        window.addEventListener('deviceorientation', (event) => {
+            // Set click tagret
+            this.deviceOrientationTarget = event
 
-                // Add mouse event
-                this.trigger('deviceOrientation')
-            })
-        }
+            // Add mouse event
+            this.trigger('deviceOrientation')
+        })
     }
 }
