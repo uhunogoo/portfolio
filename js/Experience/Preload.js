@@ -201,7 +201,7 @@ export default class Preload extends EventEmitter {
             ease: 'power3'
         }, 0.2)
         this.playOutAnimation.to(this.bloomPass, {
-            strength: 0.15,
+            strength: 0.12,
             duration: 1.5,
             ease: 'power3'
         }, 0.2)

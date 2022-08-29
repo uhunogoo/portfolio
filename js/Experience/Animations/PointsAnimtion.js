@@ -20,6 +20,7 @@ export default class PointsAnimation extends EventEmitter {
         this.scene = this.experience.scene
         this.points = this.experience.points.list
         this.camera = this.experience.camera.instance
+        this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
         this.preload = this.experience.preload.mesh
         this.uiAnimations = UI
@@ -195,6 +196,12 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1,
             y: target.position.y,
             z: lookAt,
+            ease: 'power3.inOut'
+        }, '<')
+        tl.to(this.cameraGroup.rotation, {
+            x: 0,
+            y: 0,
+            duration: 1,
             ease: 'power3.inOut'
         }, '<')
         tl.to(this.camera.position, {

@@ -27,6 +27,9 @@ html, body {
   height: 100%;
   width: 100vw;
 }
+.animate-text {
+  will-change: transform;
+}
 .preload {
   font-size: 100px;
   height: 100%;

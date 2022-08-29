@@ -31,15 +31,21 @@ export default class Tower {
         this.generateShape()
     }
     loadMaterials() {
+        // Floor texture
         this.resources.items.towerTexture1.flipY = false
         this.resources.items.towerTexture1.encoding = THREE.sRGBEncoding
-        this.resources.items.towerTexture1.magFilter = THREE.NearestFilter
+        this.resources.items.towerTexture1.minFilter = THREE.NearestFilter
+        this.resources.items.towerTexture1.magFilter = THREE.LinearFilter
+        // Walls texture
         this.resources.items.towerTexture2.flipY = false
         this.resources.items.towerTexture2.encoding = THREE.sRGBEncoding
-        this.resources.items.towerTexture2.magFilter = THREE.NearestFilter
+        this.resources.items.towerTexture1.minFilter = THREE.LinearFilter
+        this.resources.items.towerTexture1.magFilter = THREE.LinearFilter
+        // Other objects texture
         this.resources.items.towerTexture3.flipY = false
         this.resources.items.towerTexture3.encoding = THREE.sRGBEncoding
-        this.resources.items.towerTexture3.magFilter = THREE.NearestFilter
+        this.resources.items.towerTexture1.minFilter = THREE.LinearFilter
+        this.resources.items.towerTexture1.magFilter = THREE.LinearFilter
 
         this.towerMaterial1 = new THREE.MeshBasicMaterial({
             map: this.resources.items.towerTexture1

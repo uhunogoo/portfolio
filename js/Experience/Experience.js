@@ -63,7 +63,7 @@ export default class Experience {
         // Device orientation
         const throttleDeviceOrientationFunction = _.throttle(() => {           
             this.deviceOrientation() 
-        }, 40)
+        }, 80)
         this.deviceOrientationEvent.on('deviceOrientation', () => {
             throttleDeviceOrientationFunction()
         })

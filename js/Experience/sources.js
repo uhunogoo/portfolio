@@ -3,7 +3,7 @@ export default [
     {
         name: 'towerModel',
         type: 'gltfLoader',
-        path: '/geometry/postament-draco.glb?url'
+        path: '/geometry/postament-draco-new.glb?url'
     },
     //  TOWER
     {

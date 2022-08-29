@@ -16,7 +16,7 @@ export default class CameraMove {
         
         // Defaults
         this.deviceOrientationSupported = false
-        this.cloudsGroup = target.children.find( child => child.name === 'cloudsGroup' )
+        this.cloudsGroup = this.target.children.find( child => child.name === 'cloudsGroup' )
         this.tempMouseCoords = {
             x: 0,
             y: 0
@@ -42,10 +42,9 @@ export default class CameraMove {
         this.rotatioMatrix.copy( this.camera.matrixWorld )
         this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
 
-
         // Functions
         this.animations()
-        this.deviceOrientation()
+        // this.deviceOrientation()
     }
     animations() {
         this.towerInAnimation.to(this.parameters.lookAt, {
@@ -128,13 +127,14 @@ export default class CameraMove {
     deviceOrientation() {
         if (this.deviceOrientationEvent.deviceOrientationTarget) {
             const target = this.deviceOrientationEvent.deviceOrientationTarget
-
-            const leftToRight = gsap.utils.clamp(-45, 45,target.gamma )
+            const gammaAngle = 20
+            
+            const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle,target.gamma )
             const frontToBack = gsap.utils.clamp(10, 55,target.beta )
 
             this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
             
-            this.cameraRotation( - leftToRight * 0.085, - frontToBack * 0.05)
+            this.cameraRotation( (leftToRight / gammaAngle) * 2.5, - ( frontToBack / 55 ) * 1.5)
         }
     }
     update() {
