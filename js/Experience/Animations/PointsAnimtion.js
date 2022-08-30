@@ -222,20 +222,24 @@ export default class PointsAnimation extends EventEmitter {
         }
         const openInformationBlock = (targetPoint) => {
             this.trigger('menuWasOpen')
+
+            // Set current tab as active
+            targetPoint.element.classList.add( 'active' )
+
             
             this.showInformation(targetPoint)
         }
         
         // Click part
         this.mouseFollowActive.reverse()
-        const clicked =  this.mouse.clickTarget
+        const clicked = this.mouse.clickTarget
         
         document.querySelector('.close_btn').classList.remove('active')
         // Click targets
         const clickOnCanvas = clicked.classList.contains('webgl')
         const clickOnCloseButton = clicked.classList.contains('close_btn')
         const clickOnNavigationButton = clicked.classList.contains('menu__item')
-
+        
         if ( clickOnCanvas ) {
             if (this.intersect && !this.pointInfoOpen) {
                 this.pointInfoOpen = true
@@ -250,10 +254,14 @@ export default class PointsAnimation extends EventEmitter {
                 
                 // Close button
                 clicked.classList.add('active')
-
+                
                 playHitSound()
                 this.open.reverse()
                 this.pointInfoOpen = false
+
+                gsap.utils
+                    .toArray('.point__content')
+                    .map( block => block.classList.remove('active') )
             }
         }
         if(clickOnNavigationButton) {

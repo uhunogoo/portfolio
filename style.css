@@ -27,9 +27,6 @@ html, body {
   height: 100%;
   width: 100vw;
 }
-.animate-text {
-  will-change: transform;
-}
 .preload {
   font-size: 100px;
   height: 100%;
@@ -89,6 +86,7 @@ html, body {
       }
     }
   }
+  
   .title {
     text-align: center;
   }
@@ -154,6 +152,13 @@ html, body {
       transform: translate(6%, -50%) rotate(180deg);
     }
   }
+  &:not(.close) {
+    .title-decor,
+    .title-decor div {
+      will-change: transform;
+    }
+    
+  }
 }
 h1 {
   color: var(--dark);
@@ -197,6 +202,24 @@ h1 {
   visibility: hidden;
   width: 100%;
   z-index: 5;
+  &.active {
+    img,
+    .decor,
+    .content__links,
+    .work {
+      will-change: transform;
+    }
+    .animate-text {
+      will-change: transform, opacity;
+    }
+  }
+  img,
+  .decor,
+  .content__links,
+  .work,
+  .animate-text {
+    will-change: auto;
+  }
 }
 .works {
   width: 100%;
@@ -207,7 +230,6 @@ h1 {
     width: 100%;
   }
   .test {
-    height: 100vh;
     -webkit-position: sticky;
     position: sticky;
     top: 0;
@@ -228,7 +250,6 @@ h1 {
   position: absolute;
   top: 0;
   width: 80vw;
-  will-change: transform;
   @media screen and (min-width: 1100px) {
     padding: 2vw;
     padding-right: 0;
@@ -251,7 +272,6 @@ h1 {
       position: absolute;
       left: 50%;
       top: 0;
-      will-change: transform;
     }
     &:hover {
       filter: brightness(0.4);
@@ -324,7 +344,6 @@ h1 {
       top: 100%;
       transform: translate(50%, -60%);
       width: 65vmax;
-      will-change: transform;
     }
   }
   &__block {
