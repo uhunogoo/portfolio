@@ -49,6 +49,9 @@ export default class World {
         if(this.grass) {
             this.grass.resize()
         }
+        if(this.animation) {
+            this.animation.resize()
+        }
     }
     mouseClick() {
         if(this.animation) {

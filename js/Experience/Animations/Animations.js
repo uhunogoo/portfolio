@@ -76,4 +76,9 @@ export default class Animation {
             this.cameraMove.update()
         }
     }
+    resize() {
+        if ( this.uiAnimation ) {
+            this.uiAnimation.resize()
+        }
+    }
 }

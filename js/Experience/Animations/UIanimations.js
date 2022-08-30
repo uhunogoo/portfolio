@@ -52,7 +52,7 @@ export default class UIAnimation {
             return `${ percentageValue }%`
         }
         gsap.set('.works__wrap', { height: scrollY })
-        gsap.set('.works .test', { height: this.worksContainer.clientHeight })
+        gsap.set('.works .test', { height: document.body.clientHeight })
 
         let scrollTween = gsap.to(sections, {
             x: scrollX,
@@ -149,5 +149,8 @@ export default class UIAnimation {
                 this.closeButtonHover = false
             }
         }
+    }
+    resize() {
+        gsap.set('.works .test', { height: document.body.clientHeight })
     }
 }
