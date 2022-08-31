@@ -58,7 +58,7 @@ float cnoise(vec2 P){
 }
 
 void main(){
-  float intesity = 0.1;
+  float intesity = 0.5;
   
 	float noise = cnoise( offset.xz / vec2(1.5, 7.0) + vec2(0.0, uTime * 0.6) );
   
@@ -84,10 +84,9 @@ void main(){
 	st.xz *= get2dRotateMatrix( rotation.y + staticNoise2 * 3.14 );
 
   // Wind grass moving 
-	st.xy *= get2dRotateMatrix( ( sin(uv.y * 2.0 + noise + uTime * 4.0) * scale * 3.14 * 0.05) * intesity);
-	// st.xy *= get2dRotateMatrix( ( wind * sin(uv.y * 2.0 + noise + uTime * 4.0) * scale * 3.14 * 0.05 * step(0.6, uv.y)) * intesity);
-  st.zy *= get2dRotateMatrix( wind * noise * intesity);
-	// st.zy *= get2dRotateMatrix( -noise * step(0.6, uv.y) * intesity);
+ float newWind = ((1.0 + wind) * 0.5);
+  st.zy *= get2dRotateMatrix( - (0.3 + rotation.x) * newWind * intesity );
+  st.xy *= get2dRotateMatrix( ( sin(uv.y * 2.0 + staticNoise + uTime * 4.0) * rotation.y * 3.14 * 0.05) * 0.2 * newWind * intesity);
 
   st += offset;
 
