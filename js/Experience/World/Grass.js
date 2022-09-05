@@ -24,6 +24,8 @@ export default class Grass {
             size: 11.78
         }
         this.customUniform = {
+            uHeight: { value: 0.43 },
+            uIntesity: { value: 0.25 },
             uTime: { value: 0 },
             uTexture: { value: this.resources.items.grassTexture },
             uColor1: { value: new THREE.Color('#8f3838') },
@@ -58,7 +60,6 @@ export default class Grass {
             transparent: true,
             vertexShader,
             fragmentShader,
-            // toneMapped: true
         })
 
         if (this.debug.active) {
@@ -74,6 +75,16 @@ export default class Grass {
                 .onChange( () => {
                     this.grassMaterial.uniforms.uColor2.value = this.customUniform.uColor2.value
                 })
+            this.debugFolder
+                .add( this.customUniform.uHeight, 'value')
+                .min(0)
+                .max(1)
+                .name('grassHeight')
+            this.debugFolder
+                .add( this.customUniform.uIntesity, 'value')
+                .min(0)
+                .max(1)
+                .name('grassIntesity')
         }
     }
     createGrassGeometry() {
@@ -151,7 +162,7 @@ export default class Grass {
                     const fireArea = (-1.45 > y && y > -2.1 && x > 3.5 && x < 4.15)
                     const stelaArea = (y > 1.3 && y < 1.98 && x > 3.5 && x < 4.15)
                     
-                    if (y < -0.7 && !fireArea) { 
+                    if (y < -0.685 && !fireArea) { 
                         pushGeometryData(x, y, scale)
 
                         // increase 

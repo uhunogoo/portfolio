@@ -24,7 +24,7 @@ void main() {
     vec3 color2 = uColor2;
 
     float grassAngle = sin( st.y * PI );
-    grassAngle = sin( st.y * 1.57 + vNoise + uTime * 2.0 ) * 0.5;
+    grassAngle = sin( st.y * PI + vNoise + uTime * 1.2 ) * 0.25;
 
     vec4 grassTexture = texture2D(
         uTexture, 
