@@ -129,7 +129,7 @@ export default class Skybox {
             // Cloud parameters
             cloud.position.set(
                 (Math.random() - 0.5) * cloudsParameters.size * 2,
-                0.5 + Math.random() * cloudsParameters.size * 0.6,
+                2.5 + Math.random() * cloudsParameters.size * 0.3,
                 Math.random() * 6.0 * -1.0
             )
             let scale = cloud.position.y / (cloudsParameters.size * 0.6)

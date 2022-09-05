@@ -23,6 +23,11 @@ html, body {
 * {
   box-sizing: border-box;
 }
+img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
 #app {
   height: 100%;
   width: 100vw;
@@ -268,10 +273,10 @@ h1 {
     width: 100%;
     img {
       height: 100%;
-      display: block;
       position: absolute;
       left: 50%;
       top: 0;
+      width: auto;
     }
     &:hover {
       filter: brightness(0.4);
@@ -389,9 +394,6 @@ h1 {
       position: relative;
       width: 100%;
       img {
-        height: auto;
-        display: block;
-        width: 100%;
         @media screen and (min-width: 767.5px) {
           height: 100%;
           object-fit: cover;
@@ -629,6 +631,39 @@ h1 {
     }
     &_works {
       transform: translate(0, -170%);
+    }
+  }
+}
+
+.compass {
+  height: auto;
+  left: 50%;
+  margin-top: 2rem;
+  position: fixed;
+  transform: translate(-50%, 0);
+  visibility: hidden;
+  max-width: 620px;
+  width: 90vw;
+  will-change: transform;
+  @media screen and (min-width: 1300px) {
+    margin-top: 1.7rem;
+  }
+  &__dots {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    width: 70%;
+    will-change: transform;
+    &::after {
+      background: url(/public/backgrounds/compass-letter.png) no-repeat center;
+      content: '';
+      display: block;
+      height: 1rem;
+      left: 50%;
+      position: absolute;
+      top: 0;
+      transform: translate(-50%, -165%);
+      width: 1rem;
     }
   }
 }

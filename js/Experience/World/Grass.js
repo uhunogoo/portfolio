@@ -23,11 +23,14 @@ export default class Grass {
             count: 100000,
             size: 11.78
         }
+        this.resources.items.shadowMap.flipY = false
         this.customUniform = {
-            uHeight: { value: 0.43 },
-            uIntesity: { value: 0.25 },
+            uHeight: { value: 0.5 },
+            uIntesity: { value: 0.38 },
             uTime: { value: 0 },
             uTexture: { value: this.resources.items.grassTexture },
+            uShadows: { value: this.resources.items.shadowMap },
+            uShadowVec: { value: new THREE.Vector2(0.042, 0.042) },
             uColor1: { value: new THREE.Color('#8f3838') },
             uColor2: { value: new THREE.Color('#ff8800') },
         }
@@ -80,6 +83,16 @@ export default class Grass {
                 .min(0)
                 .max(1)
                 .name('grassHeight')
+            this.debugFolder
+                .add( this.customUniform.uShadowVec.value, 'x')
+                .min(-1)
+                .max(1)
+                .name('shadowX')
+            this.debugFolder
+                .add( this.customUniform.uShadowVec.value, 'y')
+                .min(-1)
+                .max(1)
+                .name('shadowY')
             this.debugFolder
                 .add( this.customUniform.uIntesity, 'value')
                 .min(0)
@@ -255,21 +268,21 @@ export default class Grass {
         })
         floorMaterial.onBeforeCompile = (shader) => {
 
-            shader.uniforms.uColor1 = { value: new THREE.Color('#b76e2a') }
-            shader.uniforms.uColor2 = { value: new THREE.Color('#864a18') }
+            shader.uniforms.uFloorColor1 = { value: new THREE.Color('#b76e2a') }
+            shader.uniforms.uFloorColor2 = { value: new THREE.Color('#864a18') }
 
             if (this.debug.active) {
                 this.debugFolder
-                    .addColor( this.customUniform.uColor1, 'value')
+                    .addColor( shader.uniforms.uFloorColor1, 'value')
                     .name('color1')
                     .onChange( () => {
-                        shader.uniforms.uColor1.value = this.customUniform.uColor1.value
+                        shader.uniforms.uFloorColor1.value = this.customUniform.uFloorColor1.value
                     })
                 this.debugFolder
-                    .addColor( this.customUniform.uColor2, 'value')
+                    .addColor( shader.uniforms.uFloorColor2, 'value')
                     .name('color2')
                     .onChange( () => {
-                        shader.uniforms.uColor2.value = this.customUniform.uColor2.value
+                        shader.uniforms.uFloorColor2.value = this.customUniform.uFloorColor2.value
                     })
             }
             
@@ -277,8 +290,8 @@ export default class Grass {
             shader.fragmentShader = shader.fragmentShader.replace(
                 '#include <common>',
                 `#include <common>
-                uniform vec3 uColor1;
-                uniform vec3 uColor2;
+                uniform vec3 uFloorColor1;
+                uniform vec3 uFloorColor2;
                 `
             )
             
@@ -299,8 +312,8 @@ export default class Grass {
                     
                     vec3 color;
                     color = vec3( sin( grey * 20.0 ) );
-                    color = mix( uColor2, uColor1, grey);
-                    color = clamp(color, vec3(0.0), vec3(1.0));
+                    color = mix( uFloorColor2, uFloorColor1, grey);
+                    color = vec3( 1.0, 0.413, 0.232 );
                     
 
                     gl_FragColor.rgb = vec3(mix(color * 0.6, color, rect));

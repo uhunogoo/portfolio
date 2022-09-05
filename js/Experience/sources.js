@@ -22,6 +22,11 @@ export default [
         path: '/textures/tower/otherTextures.jpg?url'
     },
     {
+        name: 'shadowMap',
+        type: 'texture',
+        path: '/textures/tower/shadowMap.jpg?url'
+    },
+    {
         name: 'sandTexture',
         type: 'texture',
         path: '/textures/runes/sand.jpg?url'

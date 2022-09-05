@@ -44,7 +44,6 @@ export default class CameraMove {
 
         // Functions
         this.animations()
-        // this.deviceOrientation()
     }
     animations() {
         this.towerInAnimation.to(this.parameters.lookAt, {

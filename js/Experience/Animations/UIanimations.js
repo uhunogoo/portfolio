@@ -9,13 +9,19 @@ export default class UIAnimation {
         this.experience = new Experience()
         this.mouse = this.experience.mouse
         this.sizes = this.experience.sizes
+        this.deviceOrientationEvent = this.experience.deviceOrientationEvent
         
         // Defaults
+        this.deviceOrientationSupported = false
         this.closeButtonHover = false
         this.mouseFollowAnimation = mouseFollow.followButtonIn
         this.preload = document.querySelector('.preload')        
         gsap.set('.title-decor div', { transformPerspective: '2000' })
-        
+        gsap.set('.compass__dots', {
+            xPercent: -50,
+            yPercent: -50
+        })
+
         // Close button hover animation
         const closeButton = gsap.fromTo('.close_btn g', { rotate: gsap.utils.wrap([0, 0]), transformOrigin: '50% 50%' },{ 
             rotate: gsap.utils.wrap([-45, 45]),
@@ -92,6 +98,7 @@ export default class UIAnimation {
         })
         gsap.set('.menu__item', { opacity: 0, scale: 0.2 })
         gsap.set('.menu__item span', { opacity: 0, y: 30, scale: 0.6 })
+        gsap.set('.compass', { y: -50, autoAlpha: 0 })
 
         const menuAimation = gsap.timeline()
         menuAimation.to('.menu', {
@@ -117,6 +124,12 @@ export default class UIAnimation {
             ease: 'power1',
             stagger: 0.2
         }, '<+=60%')
+        menuAimation.to('.compass', {
+            autoAlpha: 1,
+            y: 0,
+            ease: 'back',
+            duration: 1
+        }, 0.25)
 
         return menuAimation
     }
@@ -124,7 +137,8 @@ export default class UIAnimation {
         const isPreloadHiden = this.preload.classList.contains('close')
         let isCloseButton = false
         
-        if (this.mouse.moveTarget) {
+        if (this.mouse.moveTarget['localName']) {
+            
             isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
         }
         
@@ -137,6 +151,12 @@ export default class UIAnimation {
                 transformOrigin:'50% 50%'
             })
         }
+        // Run if device orientation is not using 
+        if ( !this.deviceOrientationSupported && isPreloadHiden ) {
+            gsap.to('.compass__dots', {
+                xPercent: -50 - 6 * this.mouse.x
+            })
+        }      
         
         if ( isCloseButton ) {            
             if (!this.closeButtonHover) {
@@ -148,6 +168,22 @@ export default class UIAnimation {
                 this.mouseFollowAnimation.reverse()
                 this.closeButtonHover = false
             }
+        }
+    }
+    deviceOrientation() {
+        const isPreloadHiden = this.preload.classList.contains('close')
+        if (this.deviceOrientationEvent.deviceOrientationTarget && isPreloadHiden) {
+            const target = this.deviceOrientationEvent.deviceOrientationTarget
+            const gammaAngle = 20
+            
+            const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle,target.gamma )
+
+            this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
+            
+            gsap.to('.compass__dots', {
+                xPercent: -50 - 6 * (leftToRight / gammaAngle)
+            })
+            
         }
     }
     resize() {

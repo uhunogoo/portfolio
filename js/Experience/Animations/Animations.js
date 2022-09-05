@@ -48,6 +48,9 @@ export default class Animation {
         // Check iformation block state
         if ( this.informationBlockOpen ) return
 
+        if ( this.uiAnimation ) {
+            this.uiAnimation.deviceOrientation()
+        }
         if ( this.cameraMove ) {
             this.cameraMove.deviceOrientation()
         }

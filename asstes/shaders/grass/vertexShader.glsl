@@ -104,7 +104,8 @@ void main(){
 	vUv = uv;
 	vNoise = clamp(wind, 0.0, 1.0) * 0.1 + staticNoise;
   vWind = noise;
-  vPosition = (offset.xz - 0.5) / 6.0 + 0.5;
+  vPosition = (offset.xz - 0.5) / (11.78 * 0.5) + 0.5;
+
   vScale = scale;
   vMultiply = clamp( staticNoise2, scale * 0.4 + (staticNoise * staticNoise2), 1.0);
 }
