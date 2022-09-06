@@ -3,7 +3,7 @@ import * as THREE from 'three'
 
 import Experience from './Experience'
 import EventEmitter from './Utils/EventEmitter'
-import bell from '../../asstes/sounds/CinematicStrike.wav?url'
+import bell from '../../asstes/sounds/CinematicStrike.mp3?url'
 
 // Postprocessing
 
