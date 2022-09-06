@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import * as _ from 'lodash-es'
+import { throttle } from 'lodash-es'
 
 import Sizes from './Utils/Sizes'
 import Time from './Utils/Time'
@@ -50,7 +50,7 @@ export default class Experience {
         })
 
         // Mosue move event
-        const throttleMouseFunction = _.throttle(() => {           
+        const throttleMouseFunction = throttle(() => {           
             this.mouseMove() 
         }, 40)
         this.mouse.on('mouseMove', () => {
@@ -61,7 +61,7 @@ export default class Experience {
         })
 
         // Device orientation
-        const throttleDeviceOrientationFunction = _.throttle(() => {           
+        const throttleDeviceOrientationFunction = throttle(() => {           
             this.deviceOrientation() 
         }, 80)
         this.deviceOrientationEvent.on('deviceOrientation', () => {

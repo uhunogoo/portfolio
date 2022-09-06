@@ -1,5 +1,4 @@
 
-import * as _ from 'lodash-es'
 import * as THREE from 'three'
 import gsap from 'gsap'
 

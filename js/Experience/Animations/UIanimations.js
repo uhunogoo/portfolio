@@ -55,12 +55,14 @@ export default class UIAnimation {
         const scrollY = () => {
             const widthProportion = (numSlides * lastBlockLeft.clientWidth + 40) / this.sizes.width
             const percentageValue = widthProportion * 100
-            return `${ percentageValue }%`
+            return percentageValue
         }
-        gsap.set('.works__wrap', { height: scrollY })
-        gsap.set('.works .test', { height: this.worksContainer.clientHeight })
+        
+        gsap.set('.works__wrap', { height: `${ scrollY() * 0.75 }%` })
+        gsap.set('.works__sticky', { height: this.worksContainer.clientHeight })
+        gsap.set('.works__scroller', { width: `${ scrollY() }%` })
 
-        let scrollTween = gsap.to(sections, {
+        let scrollTween = gsap.to('.works__scroller', {
             x: scrollX,
             ease: "none",
             scrollTrigger: {
@@ -74,8 +76,8 @@ export default class UIAnimation {
         })
         
         sections.forEach( section => {
-            gsap.fromTo( section.querySelector('img'), { x: '-35%', },{ 
-                x: '-65%',
+            gsap.fromTo( section.querySelector('picture'), { x: '-40%', },{ 
+                x: '-60%',
                 ease: "none",
                 scrollTrigger: {
                     trigger: section,
@@ -187,6 +189,6 @@ export default class UIAnimation {
         }
     }
     resize() {
-        gsap.set('.works .test', { height: this.worksContainer.clientHeight })
+        gsap.set('.works__sticky', { height: this.worksContainer.clientHeight })
     }
 }

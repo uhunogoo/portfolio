@@ -5,6 +5,8 @@
 	<meta charset="UTF-8" />
 	<link rel="icon" type="image/svg+xml" href="favicon.svg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="Yurii Scherbachenko Three.js portfolio page">
+	<link rel="stylesheet" href="style.css">
 	<style type="text/css" media="screen, print">
 		@font-face {
 		  font-family: "Romanica";
@@ -96,57 +98,69 @@
 		<div id="point-0" class="point__content">
 			<div class="works">
 				<div class="works__wrap">
-					<div class="test">
-						<div class="work">
-							<div class="work__image">
-								<a class="work__link" href="https://portal-neon.vercel.app" target="_blank" rel="nofollow noopener">
-									<img src="/backgrounds/myworks/project-1.jpg" alt="image">
+					<div class="works__sticky">
+						<div class="works__scroller">
+							<div class="work">
+								<a class="work__link work__image" href="https://portal-neon.vercel.app" target="_blank" rel="nofollow noopener">
+									<picture>
+										<source srcset="/backgrounds/myworks/project-1.webp">
+										<img width="1920" height="955" src="/backgrounds/myworks/project-1.jpg" alt="portal">
+									</picture>
 								</a>
+								<div class="work__info">
+									<h2 class="work__name"><span>Portal</span></h2>
+									<p class="work__description">
+										blender, three.js, shaders
+									</p>
+								</div>
 							</div>
-							<div class="work__info">
-								<h2 class="work__name"><span>Portal</span></h2>
-								<p class="work__description">
-									blender, three.js, shaders
-								</p>
+							<div class="work">
+								<div class="work__image">
+									<a class="work__link" href="https://35-importing-and-optimizing-the-scene.vercel.app" target="_blank" rel="nofollow noopener">
+										<picture>
+											<source srcset="/backgrounds/myworks/project-2.webp">
+											<img width="1920" height="955" src="/backgrounds/myworks/project-2.jpg" alt="room">
+										</picture>
+									</a>
+								</div>
+								<div class="work__info">
+									<h2 class="work__name"><span>Room</span></h2>
+									<p class="work__description">
+										blender, three.js, shaders
+									</p>
+								</div>
 							</div>
-						</div>
-						<div class="work">
-							<div class="work__image">
-								<a class="work__link" href="https://35-importing-and-optimizing-the-scene.vercel.app" target="_blank" rel="nofollow noopener">
-									<img src="/backgrounds/myworks/project-2.jpg" alt="image">
-								</a>
+							<div class="work">
+								<div class="work__image">
+									<a class="work__link" href="https://bloob.vercel.app" target="_blank" rel="nofollow noopener">
+										<picture>
+											<source srcset="/backgrounds/myworks/project-3.webp">
+											<img width="1920" height="955" src="/backgrounds/myworks/project-3.jpg" alt="Bloob">
+										</picture>
+									</a>
+								</div>
+								<div class="work__info">
+									<h2 class="work__name"><span>Bloob</span></h2>
+									<p class="work__description">
+										shaders, three.js, gsap
+									</p>
+								</div>
 							</div>
-							<div class="work__info">
-								<h2 class="work__name"><span>Room</span></h2>
-								<p class="work__description">
-									blender, three.js, shaders
-								</p>
-							</div>
-						</div>
-						<div class="work">
-							<div class="work__image">
-								<a class="work__link" href="https://bloob.vercel.app" target="_blank" rel="nofollow noopener">
-									<img src="/backgrounds/myworks/project-3.jpg" alt="image">
-								</a>
-							</div>
-							<div class="work__info">
-								<h2 class="work__name"><span>Bloob</span></h2>
-								<p class="work__description">
-									shaders, three.js, gsap
-								</p>
-							</div>
-						</div>
-						<div class="work">
-							<div class="work__image">
-								<a class="work__link" href="https://parfum-amber.vercel.app" target="_blank" rel="nofollow noopener">
-									<img src="/backgrounds/myworks/project-4.jpg" alt="image">
-								</a>
-							</div>
-							<div class="work__info">
-								<h2 class="work__name"><span>Parfum</span></h2>
-								<p class="work__description">
-									blender, three.js, gsap
-								</p>
+							<div class="work">
+								<div class="work__image">
+									<a class="work__link" href="https://parfum-amber.vercel.app" target="_blank" rel="nofollow noopener">
+										<picture>
+											<source srcset="/backgrounds/myworks/project-4.webp">
+											<img width="1920" height="955" src="/backgrounds/myworks/project-4.jpg" alt="Parfum">
+										</picture>
+									</a>
+								</div>
+								<div class="work__info">
+									<h2 class="work__name"><span>Parfum</span></h2>
+									<p class="work__description">
+										blender, three.js, gsap
+									</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -168,13 +182,13 @@
 						</div>
 						<figcaption class="content__links">
 							<a href="#">
-								<img src="/backgrounds/icon-1.svg" width="20" height="20" alt="">
+								<img src="/backgrounds/icon-1.svg" width="20" height="20" alt="linkedin">
 							</a>
 							<a href="#">
-								<img src="/backgrounds/icon-2.svg" width="20" height="20" alt="">
+								<img src="/backgrounds/icon-2.svg" width="20" height="20" alt="twitter">
 							</a>
 							<a href="#">
-								<img src="/backgrounds/icon-3.svg" width="20" height="20" alt="">
+								<img src="/backgrounds/icon-3.svg" width="20" height="20" alt="github">
 							</a>
 						</figcaption>
 					</figure>
@@ -221,9 +235,9 @@
 		</div>
 		<div class="ui-layer">
 			<div class="compass">
-				<img src="/backgrounds/compass.svg" alt="">
+				<img width="620" height="37" src="/backgrounds/compass.svg" alt="compass">
 				<div class="compass__dots">
-					<img src="/backgrounds/compass-dots.png" alt="">
+					<img width="434" height="6" src="/backgrounds/compass-dots.png" alt="dots">
 				</div>
 			</div>
 			<nav class="menu">
