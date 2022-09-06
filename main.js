@@ -6,4 +6,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 window.addEventListener("load", () => {
     const experiance = new Experience( canvas )
+
+    console.log( window.innerWidth, window.outerWidth )
+    
 });

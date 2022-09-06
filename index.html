@@ -3,9 +3,11 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+	<meta http-equiv="refresh">
+	<meta name="theme-color" content="#F3B754">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="description" content="Yurii Scherbachenko Three.js portfolio page">
+	<link rel="icon" type="image/svg+xml" href="favicon.svg" />
 	<link rel="stylesheet" href="./style.css">
 	<style type="text/css" media="screen, print">
 		@font-face {
@@ -177,9 +179,10 @@
 						</p>
 					</div>
 					<figure class="content__image">
-						<div id="myPhoto">
+						<picture id="myPhoto">
+							<source srcset="/backgrounds/image.webp">
 							<img width="570" height="856" src="/backgrounds/image.jpg" alt="Yurii" title="Me" />
-						</div>
+						</picture>
 						<figcaption class="content__links">
 							<a href="#">
 								<img src="/backgrounds/icon-1.svg" width="20" height="20" alt="linkedin">
