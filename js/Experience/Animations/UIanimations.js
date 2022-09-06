@@ -127,8 +127,8 @@ export default class UIAnimation {
         menuAimation.to('.compass', {
             autoAlpha: 1,
             y: 0,
-            ease: 'back',
-            duration: 1
+            ease: 'power1',
+            duration: 0.75
         }, 0.25)
 
         return menuAimation
