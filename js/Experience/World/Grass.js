@@ -313,7 +313,7 @@ export default class Grass {
                     vec3 color;
                     color = vec3( sin( grey * 20.0 ) );
                     color = mix( uFloorColor2, uFloorColor1, grey);
-                    color = vec3( 1.0, 0.413, 0.232 );
+                    color = vec3( 1.0, 0.413, 0.232 ) - grey;
                     
 
                     gl_FragColor.rgb = vec3(mix(color * 0.6, color, rect));
