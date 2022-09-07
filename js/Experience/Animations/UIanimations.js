@@ -14,7 +14,6 @@ export default class UIAnimation {
         // Defaults
         this.deviceOrientationSupported = false
         this.closeButtonHover = false
-        this.mouseFollowAnimation = mouseFollow.followButtonIn
         this.preload = document.querySelector('.preload')        
         gsap.set('.title-decor div', { transformPerspective: '2000' })
         gsap.set('.compass__dots', {
@@ -31,7 +30,6 @@ export default class UIAnimation {
         }, 0)
 
         // Add close button animation to mouse follow timeline
-        this.mouseFollowAnimation.add( closeButton, 0 )
 
         // Scrolltrigger
         this.worksContainer = document.querySelector('.works')
@@ -137,12 +135,6 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
-        let isCloseButton = false
-        
-        if (this.mouse.moveTarget['localName']) {
-            
-            isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
-        }
         
         if (!isPreloadHiden) {
             gsap.to('.title-decor div', {
@@ -158,18 +150,6 @@ export default class UIAnimation {
             gsap.to('.compass__dots', {
                 xPercent: -50 - 6 * this.mouse.x
             })
-        }      
-        
-        if ( isCloseButton ) {            
-            if (!this.closeButtonHover) {
-                this.mouseFollowAnimation.restart()
-                this.closeButtonHover = true
-            }
-        } else {
-            if (this.closeButtonHover) {
-                this.mouseFollowAnimation.reverse()
-                this.closeButtonHover = false
-            }
         }
     }
     deviceOrientation() {

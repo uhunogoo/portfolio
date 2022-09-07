@@ -11,9 +11,10 @@ export default class Animation {
         // Defaults
         this.experience = new Experience()
         this.preload = this.experience.preload
-        this.followingCursor = new followingCursor()
-        this.uiAnimation = new UIAnimation( this.followingCursor )
+        this.uiAnimation = new UIAnimation()
         this.pointsAnimation = new PointsAnimation( target, this.uiAnimation ) 
+        this.intersect = null
+        this.followingCursor = new followingCursor( this.intersect )
         this.cameraMove = new CameraMove( target )
         this.load = false
         this.informationBlockOpen = false
@@ -57,7 +58,10 @@ export default class Animation {
     }
     mouseMove() {
         if ( this.followingCursor ) {
-            this.followingCursor.mouseMove()
+            this.followingCursor.mouseMove( this.pointsAnimation.intersect )
+        }
+        if ( this.uiAnimation ) {
+            this.uiAnimation.mouseMove()
         }
 
         // Check iformation block state
@@ -65,9 +69,6 @@ export default class Animation {
         
         if ( this.cameraMove ) {
             this.cameraMove.mouseMove()
-        }
-        if ( this.uiAnimation ) {
-            this.uiAnimation.mouseMove()
         }
         if ( this.pointsAnimation ) {
             if (!this.load) return

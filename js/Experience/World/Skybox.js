@@ -45,33 +45,26 @@ export default class Skybox {
             turbidity: 13.116,
             rayleigh: 0.066,
             mieCoefficient: 0.007,
-            mieDirectionalG: 0.975,
-            luminance: 1.1,
-            elevation: 90,
-            azimuth: 180,
-            exposure: this.renderer.instance.toneMappingExposure
 
             // NEW v2
             // **************************
-            // turbidity: 4.02,
-            // rayleigh: 0.163,
-            // mieCoefficient: 0.026,
-            // mieDirectionalG: 0.975,
-            // luminance: 1.1,
-            // elevation: 90,
-            // azimuth: 180,
-            // exposure: this.renderer.instance.toneMappingExposure
+            // turbidity: 20,
+            // rayleigh: 0.165,
+            // mieCoefficient: 0.004,
+            // mieDirectionalG: 0.973,
+            // elevation: 39,
+            // azimuth: 149,
 
             // OLD
             // **************************
-            // turbidity: 1.8,
-            // rayleigh: 0.263,
-            // mieCoefficient: 0.042,
-            // mieDirectionalG: 0.975,
-            // luminance: 1.1,
-            // elevation: 90,
-            // azimuth: 180,
-            // exposure: this.renderer.instance.toneMappingExposure
+            // turbidity: 2.299,
+            // rayleigh: 0.411,
+            // mieCoefficient: 0.1,
+            
+            mieDirectionalG: 0.975,
+            elevation: 90,
+            azimuth: 180,
+            exposure: this.renderer.instance.toneMappingExposure
         }
 
         function guiChanged() {

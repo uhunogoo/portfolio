@@ -9,11 +9,12 @@ import bell from '../../../asstes/sounds/intro.mp3?url'
 import splash from '../../../asstes/sounds/splash.mp3?url'
 
 export default class PointsAnimation extends EventEmitter {
-    constructor (world, UI) {
+    constructor ( world, UI ) {
         super()
 
         // Setup
         this.world = world
+        this.uiAnimations = UI
         this.experience = new Experience()
         this.debug = this.experience.debug
         this.scene = this.experience.scene
@@ -22,7 +23,6 @@ export default class PointsAnimation extends EventEmitter {
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
         this.preload = this.experience.preload.mesh
-        this.uiAnimations = UI
         this.bloomPass = this.experience.renderer.unrealBloomPass
         this.bloomPass = this.experience.renderer.unrealBloomPass
         
@@ -36,7 +36,6 @@ export default class PointsAnimation extends EventEmitter {
         this.clickedPoint = null
         this.hitSound = new Audio( bell )
         this.outSound = new Audio( splash )
-        this.mouseFollowActive = this.uiAnimations.mouseFollowAnimation
 
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
@@ -230,7 +229,6 @@ export default class PointsAnimation extends EventEmitter {
         }
         
         // Click part
-        this.mouseFollowActive.reverse()
         const clicked = this.mouse.clickTarget
         
         document.querySelector('.close_btn').classList.remove('active')
@@ -447,16 +445,5 @@ export default class PointsAnimation extends EventEmitter {
     }
     mouseMove() {
         this.raycasterAnimation()
-
-        if ( this.intersect && !this.pointInfoOpen ) {
-            if (this.mouseFollowActive.progress() === 0) {
-                this.mouseFollowActive.play(0).timeScale(2)
-            }
-        } else if (!this.pointInfoOpen) {
-            if (this.mouseFollowActive.progress() === 1) {
-                this.mouseFollowActive.reverse()
-            }
-        }
-
     }
 }
