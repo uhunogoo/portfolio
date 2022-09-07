@@ -23,7 +23,6 @@ export default class Preload extends EventEmitter {
         this.resources = this.experience.resources
         this.bloomPass = this.experience.renderer.unrealBloomPass
         
-
         // Defaults
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
@@ -89,18 +88,17 @@ export default class Preload extends EventEmitter {
                 this.playInAnimationComplete = true
             }
         })
+        
+        // Start animation
+        this.pageIntro = gsap.timeline({
+            paused: true,
+        })
         this.preload = gsap.timeline({
             paused: true,
+            onStart: () => this.pageIntro.play(),
             onComplete: () => this.playInAnimation.play()
         })
 
-
-        // Call all base animations
-        this.loading()
-        this.inAnimation()
-        this.outAnimation()
-
-        // Start animation
         this.resources.on('loadingProgress', () => {
             gsap.fromTo(this.progress, { value: this.progress.value }, {
                 value: this.resources.loaded / this.resources.toLoad,
@@ -110,6 +108,11 @@ export default class Preload extends EventEmitter {
                 }
             })
         })
+
+        // Call all base animations
+        this.loading()
+        this.inAnimation()
+        this.outAnimation()
     }
     preloadBG() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height
@@ -139,34 +142,29 @@ export default class Preload extends EventEmitter {
                 .step(0.001)
         }
     }
-    loading() {  
+    loading() { 
+        // Animation on content loading 
         this.preload.from('#progress__bar', {
             duration: 2,
             scaleX: 0,
             transformOrigin: 'left center'
-        })  
-    }
-    inAnimation() {
-        this.playInAnimation.to('.title-decor', {
+        })
+
+        // Animation on page load 
+        this.pageIntro.to('.title-decor', {
             rotate: '0',
             scale: 0.85,
             opacity: 0.025,
             duration: 2
-        })
-        this.playInAnimation.to('.preload__progress', {
-            opacity: 0,
-            y: -10,
-            scale: 0.8,
-            ease: 'power3.out',
-        }, '<')
-        this.playInAnimation.from('.text-part', {
+        }, 0)
+        this.pageIntro.from('.text-part', {
             scale: 1.3,
             y: 200,
             opacity: 0,
             duration: 0.8,
             ease: 'power1'
         }, '<+=10%')
-        this.playInAnimation.from('.text span', {
+        this.pageIntro.from('.text span', {
             y: 40,
             scale: 1.2,
             opacity: 0,
@@ -174,6 +172,14 @@ export default class Preload extends EventEmitter {
                 amount: 0.2
             }
         }, '<+=30%')
+    }
+    inAnimation() {
+        this.playInAnimation.to('.preload__progress', {
+            opacity: 0,
+            y: -10,
+            scale: 0.8,
+            ease: 'power3.out',
+        }, 0)
         this.playInAnimation.to('.preload__enter', {
             autoAlpha: 1,
             scale: 1,

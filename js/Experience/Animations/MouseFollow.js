@@ -92,9 +92,7 @@ export default class followingCursor {
         }
         
         if ( isFocused || intersect ) {
-            if (this.followButtonIn.progress() === 0) {
-                this.followButtonIn.play().timeScale(2)
-            }       
+            this.followButtonIn.play().timeScale(2)
         } else {
             this.followButtonIn.reverse()
         }

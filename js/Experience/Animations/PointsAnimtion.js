@@ -40,8 +40,6 @@ export default class PointsAnimation extends EventEmitter {
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
 
-        // gsap.set('.close_btn g', { rotate: gsap.utils.wrap([-45, 45]), transformOrigin: '50% 50%' })
-
         // Animation
         gsap.registerEffect({
             name: "pointsShow",
@@ -109,7 +107,6 @@ export default class PointsAnimation extends EventEmitter {
             }
         })
 
-        // Debug lookAt
         // Debug
         if (this.debug.active) {
             this.debugFolder = this.debug.ui.addFolder('Points')
@@ -223,9 +220,9 @@ export default class PointsAnimation extends EventEmitter {
 
             // Set current tab as active
             targetPoint.element.classList.add( 'active' )
-
-            
             this.showInformation(targetPoint)
+
+            this.clean()
         }
         
         // Click part
