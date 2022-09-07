@@ -3,7 +3,10 @@
   --dark: #121F2F;
   --red: #F72C3B;
   --gold: #F3B754;
-  --titleFont: 'Romanica'
+  --titleFont: 'Romanica';
+  --largeTitle: 8.02vmin;
+  --smallTitle: 4.81vmin;
+  --textSize: 14px;
 }
 @font-face{
   font-family: 'Romanica';
@@ -23,7 +26,7 @@ html, body {
   font-family: var(--titleFont);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 16px;
+  font-size: var(--textSize);
   height: 100%;
   margin: 0;
   overflow: hidden;
@@ -46,7 +49,6 @@ img {
   width: 100vw;
 }
 .preload {
-  font-size: 100px;
   height: 100%;
   left: 0;
   opacity: 0;
@@ -140,7 +142,7 @@ img {
     border: 1px solid var(--gold);
     color: var(--dark);
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     bottom: 10%;
     left: 50%;
     padding: 0.25em 1em;
@@ -181,14 +183,14 @@ img {
 h1 {
   color: var(--dark);
   font-family: var(--titleFont);
-  font-weight: 500;
-  font-size: 8.02vmin;
+  font-size: var(--largeTitle);
+  font-weight: 400;
   line-height: 1;
   margin: 0;
   position: relative;
   text-transform: uppercase;
-  .text__contaioner {
-    height: 16.04vmin;
+  .text__container {
+    height: calc(var(--largeTitle) * 2);
     overflow: hidden;
     position: relative;
   }
@@ -197,11 +199,13 @@ h1 {
     display: block;
     will-change: transform;
     + span {
-      font-size: 0.6em;
-      font-weight: normal;
+      font-size: var(--smallTitle);
       margin-top: 0.6em;
     }
   }
+}
+p {
+  font-size: var(--textSize);
 }
 
 .webgl {
@@ -314,16 +318,14 @@ h1 {
     height: 100%;
   }
   &__info {
-    bottom: 0;
-    font-size: clamp(24px, 2vmax, 50px);
     grid-area: text;
     padding-bottom: 0.5em;
   }
   &__name {
     color: var(--dark);
     font-family: var(--titleFont);
-    font-size: 1.2em;
-    font-weight: 500;
+    font-size: var(--smallTitle);
+    font-weight: 400;
     margin: 0;
     overflow: hidden;
     text-transform: uppercase;
@@ -334,13 +336,12 @@ h1 {
   }
   &__description {
     color: var(--dark);
-    font-size: 0;
+    font-size: var(--textSize);
+    letter-spacing: 0.015em;
     list-style: none;
     margin: 0.5rem 0 0;
     padding: 0;
     text-transform: capitalize;
-    font-size: .5em;
-    letter-spacing: 0.015em;
   }
 }
 
@@ -381,6 +382,7 @@ h1 {
     padding: 0 30px;
     position: relative;
     width: 100%;
+    --gap: 9.35vw;
     & > div {
       min-width: 0;
     }
@@ -395,14 +397,14 @@ h1 {
       max-width: 1500px;
 
       div:first-of-type {
-        padding-top: 4vw;
+        padding-top: var(--gap);
       }
       div:last-of-type {
-        padding-bottom: 4vw;
+        padding-bottom: var(--gap);
       }
     }
     @media screen and (min-width: 991.5px) {
-      grid-template-columns: 38% 45%;
+      grid-template-columns: 40% 45%;
       grid-template-areas: 'image text' 'image text1' 'image .';
     }
   }
@@ -476,7 +478,7 @@ h1 {
       grid-area: text1;
     }
     h2, h3 {
-      font-weight: normal;
+      font-weight: 400;
       line-height: 1;
       margin: 0;
       text-transform: uppercase;
@@ -486,7 +488,7 @@ h1 {
       }
     }
     h2 {
-      font-size: clamp(30px, 4vw, 60px);
+      font-size: var(--smallTitle);
       + p {
         margin-top: 40px;
         margin-bottom: 50px;
@@ -647,6 +649,7 @@ h1 {
     text-align: center;
     span {
       display: block;
+      font-size: var(--textSize);
       left: 50%;
       position: absolute;
       transform: translateX(-50%);
