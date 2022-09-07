@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { Group } from 'three'
 import Experience from '../Experience'
 import Fire from './Fire'
 import Grass from './Grass'
@@ -13,7 +13,7 @@ export default class World {
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         
-        const sceneGroup = new THREE.Group()
+        const sceneGroup = new Group()
         sceneGroup.name = 'worldGroup'
         // Wait for environment
         this.resources.on('ready', () => {
@@ -37,8 +37,6 @@ export default class World {
             sceneGroup.renderOrder = 0
             
             this.scene.add( sceneGroup )
-
-            // this.environment = new Environment()
             this.animation = new Animation( sceneGroup )
         })
     }

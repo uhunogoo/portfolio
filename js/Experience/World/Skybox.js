@@ -1,14 +1,14 @@
-import * as THREE from 'three';
+import { Group, Mesh, MeshBasicMaterial, PlaneBufferGeometry, Vector3 } from 'three';
 import { Sky } from 'three/examples/jsm/objects/Sky'
+import Experience from '../Experience'
 import gsap from 'gsap'
 
-import Experience from '../Experience'
 
 export default class Skybox {
     constructor() {
         this.experience = new Experience()
-        this.skyGroup = new THREE.Group()
-        this.cloudsGroup = new THREE.Group()
+        this.skyGroup = new Group()
+        this.cloudsGroup = new Group()
         this.cloudsGroup.name = 'cloudsGroup'
         this.renderer = this.experience.renderer
         this.camera = this.experience.camera
@@ -26,6 +26,10 @@ export default class Skybox {
             this.debugFolder.close()
         }
 
+        this.degToRad = (a) => {
+            return a * Math.PI / 180
+        }
+
         this.createSky()
         this.createClouds()
     }
@@ -36,7 +40,7 @@ export default class Skybox {
         sky.scale.setScalar( 100)
         this.skyGroup.add( sky )
 
-        const sun = new THREE.Vector3()
+        const sun = new Vector3()
 
         /// GUI
         const effectController = {
@@ -74,8 +78,8 @@ export default class Skybox {
             uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient
             uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG
 
-            const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation )
-            const theta = THREE.MathUtils.degToRad( effectController.azimuth )
+            const phi = that.degToRad( 90 - effectController.elevation )
+            const theta = that.degToRad( effectController.azimuth )
             sun.setFromSphericalCoords( 1, phi, theta )
 
             uniforms[ 'sunPosition' ].value.copy( sun )
@@ -105,8 +109,8 @@ export default class Skybox {
             this.resources.items.cloud,
             this.resources.items.cloud2
         ]
-        const geometry = new THREE.PlaneBufferGeometry( 1, 1 )
-        const material = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false })
+        const geometry = new PlaneBufferGeometry( 1, 1 )
+        const material = new MeshBasicMaterial({ transparent: true, depthWrite: false })
 
         // Generate clouds
         for (let i = 0; i < cloudsParameters.count; i++) {
@@ -114,7 +118,7 @@ export default class Skybox {
             
             cloudTexture.map = images[ i % 2 ]
 
-            const cloud = new THREE.Mesh( 
+            const cloud = new Mesh( 
                 geometry.clone(), 
                 cloudTexture
             )

@@ -1,5 +1,4 @@
-import * as THREE from 'three'
-
+import { Color, DoubleSide, Group, LinearFilter, MeshBasicMaterial, NearestFilter, ShaderMaterial, sRGBEncoding } from 'three'
 import Experience from '../Experience'
 
 // Portal shaders
@@ -10,15 +9,15 @@ export default class Tower {
     constructor () {
         // Setup
         this.experience = new Experience()
-        this.towerGroup = new THREE.Group()
+        this.towerGroup = new Group()
         this.resources = this.experience.resources
         this.debug = this.experience.debug
 
         // Defaults
         this.customUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#d4b268') },
-            uColor2: { value: new THREE.Color('#ebebeb') },
+            uColor1: { value: new Color('#d4b268') },
+            uColor2: { value: new Color('#ebebeb') },
         }
 
         // Debug
@@ -33,32 +32,32 @@ export default class Tower {
     loadMaterials() {
         // Floor texture
         this.resources.items.towerTexture1.flipY = false
-        this.resources.items.towerTexture1.encoding = THREE.sRGBEncoding
-        this.resources.items.towerTexture1.minFilter = THREE.NearestFilter
-        this.resources.items.towerTexture1.magFilter = THREE.LinearFilter
+        this.resources.items.towerTexture1.encoding = sRGBEncoding
+        this.resources.items.towerTexture1.minFilter = NearestFilter
+        this.resources.items.towerTexture1.magFilter = LinearFilter
         // Walls texture
         this.resources.items.towerTexture2.flipY = false
-        this.resources.items.towerTexture2.encoding = THREE.sRGBEncoding
-        this.resources.items.towerTexture1.minFilter = THREE.LinearFilter
-        this.resources.items.towerTexture1.magFilter = THREE.LinearFilter
+        this.resources.items.towerTexture2.encoding = sRGBEncoding
+        this.resources.items.towerTexture1.minFilter = LinearFilter
+        this.resources.items.towerTexture1.magFilter = LinearFilter
         // Other objects texture
         this.resources.items.towerTexture3.flipY = false
-        this.resources.items.towerTexture3.encoding = THREE.sRGBEncoding
-        this.resources.items.towerTexture1.minFilter = THREE.LinearFilter
-        this.resources.items.towerTexture1.magFilter = THREE.LinearFilter
+        this.resources.items.towerTexture3.encoding = sRGBEncoding
+        this.resources.items.towerTexture1.minFilter = LinearFilter
+        this.resources.items.towerTexture1.magFilter = LinearFilter
 
-        this.towerMaterial1 = new THREE.MeshBasicMaterial({
+        this.towerMaterial1 = new MeshBasicMaterial({
             map: this.resources.items.towerTexture1
         })
-        this.towerMaterial2 = new THREE.MeshBasicMaterial({
+        this.towerMaterial2 = new MeshBasicMaterial({
             map: this.resources.items.towerTexture2
         })
-        this.towerMaterial3 = new THREE.MeshBasicMaterial({
+        this.towerMaterial3 = new MeshBasicMaterial({
             map: this.resources.items.towerTexture3
         })
-        this.towerMaterial4 = new THREE.ShaderMaterial({
+        this.towerMaterial4 = new ShaderMaterial({
             uniforms: this.customUniform,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             vertexShader,
             fragmentShader,
         })
@@ -80,7 +79,7 @@ export default class Tower {
     }
     generateShape() {
         const towerScene = this.resources.items.towerModel.scene
-        const tower = new THREE.Group()
+        const tower = new Group()
         tower.name = 'towerGroup'
 
         const towerPart1 = towerScene.children.find((child) => child.name === 'floor')

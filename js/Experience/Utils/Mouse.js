@@ -1,5 +1,7 @@
 import EventEmitter from './EventEmitter'
 import Sizes from './Sizes'
+import { throttle } from 'lodash-es'
+
 export default class Mouse extends EventEmitter {
     constructor() {
         super()
@@ -16,17 +18,18 @@ export default class Mouse extends EventEmitter {
         this.mouseClick()
     }
     mouseClick() {
-        document.addEventListener('click', (e) => {
+        const throttled = throttle( (e) => {
             // Set click tagret
             this.clickTarget = e.target
 
             // Add mouse event
             this.trigger('mouseClick')
-        })
+        }, 300000, { 'trailing': false })
+
+        document.addEventListener('click', throttled)
     }
     mouseMove() {
-        // Mouse move
-        window.addEventListener('mousemove', (e) => {
+        const throttleMouseFunction = throttle((e) => {   
             // Set click tagret
             this.moveTarget = e.target
 
@@ -36,6 +39,9 @@ export default class Mouse extends EventEmitter {
 
             // Add mouse event
             this.trigger('mouseMove')
-        })
+        }, 40)
+
+        // Mouse move
+        window.addEventListener('mousemove', throttleMouseFunction)
     }
 }

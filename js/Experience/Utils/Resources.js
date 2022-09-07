@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { TextureLoader } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
@@ -28,7 +28,7 @@ export default class Resources extends EventEmitter {
         // GLTF loader
         this.loaders.gltfLoader = new GLTFLoader()
         this.loaders.gltfLoader.setDRACOLoader(dracoLoader)
-        this.loaders.textureLoader = new THREE.TextureLoader()
+        this.loaders.textureLoader = new TextureLoader()
     }
     startLoading() {      
         // Load each source

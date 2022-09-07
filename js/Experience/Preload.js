@@ -1,5 +1,4 @@
 import gsap from 'gsap'
-import * as THREE from 'three'
 
 import Experience from './Experience'
 import EventEmitter from './Utils/EventEmitter'
@@ -10,6 +9,7 @@ import bell from '../../asstes/sounds/CinematicStrike.mp3?url'
 // Preload shaders
 import vertexShader from '../../asstes/shaders/preloader/preloadVertex.glsl?raw'
 import fragmentShader from '../../asstes/shaders/preloader/preloadFragment.glsl?raw'
+import { Mesh, PlaneGeometry, ShaderMaterial } from 'three'
 
 export default class Preload extends EventEmitter {
     constructor() {
@@ -116,8 +116,8 @@ export default class Preload extends EventEmitter {
     }
     preloadBG() {
         const aspect = this.experience.sizes.width / this.experience.sizes.height
-        const plane = new THREE.PlaneGeometry(2, 2, 200, 200)
-        const material = new THREE.ShaderMaterial({
+        const plane = new PlaneGeometry(2, 2, 200, 200)
+        const material = new ShaderMaterial({
             uniforms: {
                 uProgress: { value: 1 },
                 uAspect: { value: aspect }
@@ -128,7 +128,7 @@ export default class Preload extends EventEmitter {
             fragmentShader,
         })
         
-        this.mesh = new THREE.Mesh( plane, material )
+        this.mesh = new Mesh( plane, material )
         this.mesh.position.copy( this.experience.camera.instance.position )
         this.mesh.renderOrder = 1
         this.scene.add( this.mesh )

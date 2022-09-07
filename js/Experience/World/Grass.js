@@ -1,7 +1,7 @@
-import * as THREE from 'three'
-import gsap from 'gsap'
-import Experience from '../Experience'
+import { BufferAttribute, BufferGeometry, CircleGeometry, Color, DoubleSide, Float32BufferAttribute, Group, InstancedBufferAttribute, InstancedBufferGeometry, Mesh, MeshBasicMaterial, Object3D, Points, RepeatWrapping, ShaderMaterial, sRGBEncoding, Vector2, Vector3 } from 'three'
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler'
+import Experience from '../Experience'
+import gsap from 'gsap'
 
 // Grass shaders
 import vertexShader from '../../../asstes/shaders/grass/vertexShader.glsl?raw'
@@ -13,7 +13,7 @@ import particlesFragment from '../../../asstes/shaders/sword/particlesFragment.g
 export default class Grass {
     constructor () {
         this.experience = new Experience()
-        this.grassGroup = new THREE.Group()
+        this.grassGroup = new Group()
         this.sizes = this.experience.sizes
         this.resources = this.experience.resources
         this.debug = this.experience.debug
@@ -30,9 +30,9 @@ export default class Grass {
             uTime: { value: 0 },
             uTexture: { value: this.resources.items.grassTexture },
             uShadows: { value: this.resources.items.shadowMap },
-            uShadowVec: { value: new THREE.Vector2(0.042, 0.042) },
-            uColor1: { value: new THREE.Color('#8f3838') },
-            uColor2: { value: new THREE.Color('#ff8800') },
+            uShadowVec: { value: new Vector2(0.042, 0.042) },
+            uColor1: { value: new Color('#8f3838') },
+            uColor2: { value: new Color('#ff8800') },
         }
         this.particlesUniform = {
             uTime: { value: 0 },
@@ -57,9 +57,9 @@ export default class Grass {
         return percentage
     }
     materials () {
-        this.grassMaterial = new THREE.ShaderMaterial({
+        this.grassMaterial = new ShaderMaterial({
             uniforms: this.customUniform,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             transparent: true,
             vertexShader,
             fragmentShader,
@@ -106,9 +106,9 @@ export default class Grass {
         const sampler = new MeshSurfaceSampler( this.floor ).setWeightAttribute( null ).build()
         
         // resample basic
-        const dummy = new THREE.Object3D()
-        const _position = new THREE.Vector3()
-        const _normal = new THREE.Vector3()
+        const dummy = new Object3D()
+        const _position = new Vector3()
+        const _normal = new Vector3()
 
         // DEFAULTS
         const grassParams = {
@@ -163,7 +163,7 @@ export default class Grass {
             // Calculated
             const scale = 0.5 + Math.random() * 0.5
             const { x, y } = dummy.position
-            const r = dummy.position.distanceTo( new THREE.Vector3() )
+            const r = dummy.position.distanceTo( new Vector3() )
             
             if ( r > 2.05 ) {
                 if ( x < 0) {
@@ -193,19 +193,19 @@ export default class Grass {
         }
 
         // Create grass instance      
-        this.grassBufferGeometry = new THREE.InstancedBufferGeometry()
+        this.grassBufferGeometry = new InstancedBufferGeometry()
         this.grassBufferGeometry.instanceCount =  Math.round( count * this.percentage() )
 
         // Apply attributes
-        this.grassBufferGeometry.setAttribute('position', new THREE.Float32BufferAttribute(grassParams.points, 3))
-        this.grassBufferGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(grassParams.uv, 2) )
+        this.grassBufferGeometry.setAttribute('position', new Float32BufferAttribute(grassParams.points, 3))
+        this.grassBufferGeometry.setAttribute('uv', new Float32BufferAttribute(grassParams.uv, 2) )
         this.grassBufferGeometry.setIndex( grassParams.indeces )
 
-        this.grassBufferGeometry.setAttribute('rotation', new THREE.InstancedBufferAttribute( new Float32Array( rotations ), 2))
-        this.grassBufferGeometry.setAttribute('offset', new THREE.InstancedBufferAttribute( new Float32Array( offset ), 3))
-        this.grassBufferGeometry.setAttribute('scale', new THREE.InstancedBufferAttribute( new Float32Array( scales ), 1))
+        this.grassBufferGeometry.setAttribute('rotation', new InstancedBufferAttribute( new Float32Array( rotations ), 2))
+        this.grassBufferGeometry.setAttribute('offset', new InstancedBufferAttribute( new Float32Array( offset ), 3))
+        this.grassBufferGeometry.setAttribute('scale', new InstancedBufferAttribute( new Float32Array( scales ), 1))
 
-        const instancedGrassMesh = new THREE.Mesh( this.grassBufferGeometry, this.grassMaterial )
+        const instancedGrassMesh = new Mesh( this.grassBufferGeometry, this.grassMaterial )
         
         // Bounding sphere for frustumculled 
         instancedGrassMesh.geometry.computeBoundingSphere()
@@ -222,7 +222,7 @@ export default class Grass {
         let i = 0
 
         // Generate particles around the sword
-        const ambientParticlesMaterial = new THREE.ShaderMaterial({
+        const ambientParticlesMaterial = new ShaderMaterial({
             uniforms: this.particlesUniform,
             transparent: true,
             depthWrite: false,
@@ -245,31 +245,31 @@ export default class Grass {
         }
         
         
-        this.particlesBufferGeometry = new THREE.BufferGeometry()
+        this.particlesBufferGeometry = new BufferGeometry()
         this.particlesBufferGeometry.instanceCount = count
-        this.particlesBufferGeometry.setAttribute('position', new THREE.BufferAttribute( new Float32Array( offset ), 3))
-        this.particlesBufferGeometry.setAttribute('vSpeed', new THREE.BufferAttribute( new Float32Array( speed ), 1))
+        this.particlesBufferGeometry.setAttribute('position', new BufferAttribute( new Float32Array( offset ), 3))
+        this.particlesBufferGeometry.setAttribute('vSpeed', new BufferAttribute( new Float32Array( speed ), 1))
 
-        const instancedParticlesMesh = new THREE.Points( this.particlesBufferGeometry, ambientParticlesMaterial )
+        const instancedParticlesMesh = new Points( this.particlesBufferGeometry, ambientParticlesMaterial )
         instancedParticlesMesh.position.y = 0.6
         
         this.grassGroup.add( instancedParticlesMesh )
     }
     createFloor() {
-        const floorGeometry = new THREE.CircleGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 ).toNonIndexed()
+        const floorGeometry = new CircleGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 ).toNonIndexed()
 
-        this.resources.items.sandTexture.encoding = THREE.sRGBEncoding
-        this.resources.items.sandTexture.wrapS = THREE.RepeatWrapping
-        this.resources.items.sandTexture.wrapT = THREE.RepeatWrapping
+        this.resources.items.sandTexture.encoding = sRGBEncoding
+        this.resources.items.sandTexture.wrapS = RepeatWrapping
+        this.resources.items.sandTexture.wrapT = RepeatWrapping
         this.resources.items.sandTexture.repeat.set(20, 20)
 
-        const floorMaterial = new THREE.MeshBasicMaterial({
+        const floorMaterial = new MeshBasicMaterial({
             map: this.resources.items.sandTexture,
         })
         floorMaterial.onBeforeCompile = (shader) => {
 
-            shader.uniforms.uFloorColor1 = { value: new THREE.Color('#b76e2a') }
-            shader.uniforms.uFloorColor2 = { value: new THREE.Color('#864a18') }
+            shader.uniforms.uFloorColor1 = { value: new Color('#b76e2a') }
+            shader.uniforms.uFloorColor2 = { value: new Color('#864a18') }
 
             if (this.debug.active) {
                 this.debugFolder
@@ -324,7 +324,7 @@ export default class Grass {
             )
         }
         
-        this.floor = new THREE.Mesh(
+        this.floor = new Mesh(
             floorGeometry,
             floorMaterial
         )

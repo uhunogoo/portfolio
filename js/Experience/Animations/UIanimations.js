@@ -5,7 +5,7 @@ gsap.registerPlugin( ScrollTrigger )
 import Experience from '../Experience'
 
 export default class UIAnimation {
-    constructor( mouseFollow ) {
+    constructor() {
         this.experience = new Experience()
         this.mouse = this.experience.mouse
         this.sizes = this.experience.sizes

@@ -1,19 +1,18 @@
-import * as THREE from 'three'
-import { throttle } from 'lodash-es'
+import { Scene } from 'three'
 
-import Sizes from './Utils/Sizes'
-import Time from './Utils/Time'
 import Camera from './Camera'
 import Renderer from './Renderer'
 import World from './World/World'
-import Resources from './Utils/Resources'
 import Preload from './Preload'
 import sources from './sources'
 
-// Debug
+// Utils
+import Sizes from './Utils/Sizes'
+import Time from './Utils/Time'
 import Debug from './Utils/Debug'
 import Points from './Utils/Points'
 import Mouse from './Utils/Mouse'
+import Resources from './Utils/Resources'
 import DeviceOrientationEvent from './Utils/DeviceOrientation'
 
 
@@ -37,7 +36,7 @@ export default class Experience {
         this.deviceOrientationEvent = new DeviceOrientationEvent()
         this.points = new Points()
         this.time = new Time()
-        this.scene = new THREE.Scene()
+        this.scene = new Scene()
         this.resources = new Resources(sources)
         this.camera = new Camera()
         this.renderer = new Renderer()
@@ -50,22 +49,18 @@ export default class Experience {
         })
 
         // Mosue move event
-        const throttleMouseFunction = throttle(() => {           
-            this.mouseMove() 
-        }, 40)
         this.mouse.on('mouseMove', () => {
-            throttleMouseFunction()
+            this.mouseMove() 
         })
+        
+        // Mosue click event
         this.mouse.on('mouseClick', () => {
             this.mouseClick()
         })
 
-        // Device orientation
-        const throttleDeviceOrientationFunction = throttle(() => {           
-            this.deviceOrientation() 
-        }, 80)
+        // Device orientation event
         this.deviceOrientationEvent.on('deviceOrientation', () => {
-            throttleDeviceOrientationFunction()
+            this.deviceOrientation() 
         })
 
         // Time tick event

@@ -1,5 +1,5 @@
+// import { Matrix4 } from 'three'
 import gsap from 'gsap'
-import { Clock, Matrix4 } from 'three'
 
 import Experience from '../Experience'
 
@@ -24,10 +24,6 @@ export default class CameraMove {
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75        
 
-        // Add parameters
-        this.previousTime = 0
-        this.clock = new Clock()
-
         // Animations
         this.towerInAnimation = gsap.timeline({
             paused: true,
@@ -38,9 +34,9 @@ export default class CameraMove {
         })
 
 
-        this.rotatioMatrix = new Matrix4()
-        this.rotatioMatrix.copy( this.camera.matrixWorld )
-        this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
+        // this.rotatioMatrix = new Matrix4()
+        // this.rotatioMatrix.copy( this.camera.matrixWorld )
+        // this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
 
         // Functions
         this.animations()

@@ -1,4 +1,3 @@
-import * as THREE from 'three' 
 import Experience from './Experience'
 
 // Post Processing
@@ -8,6 +7,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+import { ACESFilmicToneMapping, CineonToneMapping, CustomToneMapping, LinearFilter, LinearToneMapping, NoToneMapping, ReinhardToneMapping, RGBAFormat, ShaderChunk, sRGBEncoding, Vector2, WebGLRenderer, WebGLRenderTarget } from 'three'
 
 
 export default class Renderer {
@@ -37,22 +37,22 @@ export default class Renderer {
             toneMapping: 'Custom'
         }
         const toneMappingOptions = {
-            None: THREE.NoToneMapping,
-            Linear: THREE.LinearToneMapping,
-            Reinhard: THREE.ReinhardToneMapping,
-            Cineon: THREE.CineonToneMapping,
-            ACESFilmic: THREE.ACESFilmicToneMapping,
-            Custom: THREE.CustomToneMapping
+            None: NoToneMapping,
+            Linear: LinearToneMapping,
+            Reinhard: ReinhardToneMapping,
+            Cineon: CineonToneMapping,
+            ACESFilmic: ACESFilmicToneMapping,
+            Custom: CustomToneMapping
         }
 
-        this.instance = new THREE.WebGLRenderer({
+        this.instance = new WebGLRenderer({
             canvas: this.canvas,
             powerPreference: "high-performance"
         })
 
-        this.instance.outputEncoding = THREE.sRGBEncoding
+        this.instance.outputEncoding = sRGBEncoding
 
-        THREE.ShaderChunk.tonemapping_pars_fragment = THREE.ShaderChunk.tonemapping_pars_fragment.replace(
+        ShaderChunk.tonemapping_pars_fragment = ShaderChunk.tonemapping_pars_fragment.replace(
             'vec3 CustomToneMapping( vec3 color ) { return color; }',
             `#define Uncharted2Helper( x ) max( ( ( x * ( 0.15 * x + 0.10 * 0.50 ) + 0.20 * 0.02 ) / ( x * ( 0.15 * x + 0.50 ) + 0.20 * 0.30 ) ) - 0.02 / 0.30, vec3( 0.0 ) )
             float toneMappingWhitePoint = 1.0;
@@ -86,13 +86,13 @@ export default class Renderer {
         this.instance.setPixelRatio( Math.min(this.sizes.pixelRatio, 2) )
     }
     setPostprocess() {
-        const renderTarget = new THREE.WebGLRenderTarget(
+        const renderTarget = new WebGLRenderTarget(
             800,
             600,
             {
-                minFilter: THREE.LinearFilter,
-                magFilter: THREE.LinearFilter,
-                format: THREE.RGBAFormat,
+                minFilter: LinearFilter,
+                magFilter: LinearFilter,
+                format: RGBAFormat,
                 samples: this.instance.getPixelRatio() === 1 ? 2 : 0
             }
         )
@@ -198,7 +198,7 @@ export default class Renderer {
         
         this.displacementPass = new ShaderPass(DisplacementShader)
         // this.displacementPass.enabled = false
-        this.displacementPass.material.uniforms.uBokhe.value = new THREE.Vector2(0.4, 0.823)
+        this.displacementPass.material.uniforms.uBokhe.value = new Vector2(0.4, 0.823)
         this.effectComposer.addPass(this.displacementPass)
         
         // Debug renderer

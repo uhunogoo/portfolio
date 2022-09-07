@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import { Color, CylinderBufferGeometry, DoubleSide, Group, Mesh, ShaderMaterial } from 'three'
 import Experience from '../Experience'
 
 // Sword shaders
@@ -8,7 +8,7 @@ import swordFireFragment from '../../../asstes/shaders/sword/fireFragment.glsl?r
 export default class Fire {
     constructor() {
         this.experience = new Experience()
-        this.fireGroup = new THREE.Group()
+        this.fireGroup = new Group()
         this.scene = this.experience.scene
         this.sizes = this.experience.sizes
         this.debug = this.experience.debug
@@ -26,26 +26,26 @@ export default class Fire {
         this.options.z = -1.77
         this.fireUniform = {
             uTime: { value: 0 },
-            uColor1: { value: new THREE.Color('#ff0000') },
-            uColor2: { value: new THREE.Color('#fff700') },
-            uColor3: { value: new THREE.Color('#e6893d') },
+            uColor1: { value: new Color('#ff0000') },
+            uColor2: { value: new Color('#fff700') },
+            uColor3: { value: new Color('#e6893d') },
         }
 
         this.createFire()
     }
     createFire() {
         // Shape around te sword
-        const geometry = new THREE.CylinderBufferGeometry(0.4, 0.165, 0.25, 10, 10)
+        const geometry = new CylinderBufferGeometry(0.4, 0.165, 0.25, 10, 10)
         
         // Generate fire around the sword
         // const fireGeometry
-        const swordFireMaterial = new THREE.ShaderMaterial({
+        const swordFireMaterial = new ShaderMaterial({
             uniforms: this.fireUniform,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
         })
-        const fireMesh = new THREE.Mesh( geometry, swordFireMaterial )
+        const fireMesh = new Mesh( geometry, swordFireMaterial )
         fireMesh.position.x = this.options.x
         fireMesh.position.y = this.options.y
         fireMesh.position.z = this.options.z

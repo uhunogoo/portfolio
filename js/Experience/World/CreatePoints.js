@@ -1,6 +1,6 @@
-import * as THREE from 'three'
-import gsap from 'gsap'
+import { Group, Sprite, SpriteMaterial } from 'three'
 import Experience from '../Experience'
+import gsap from 'gsap'
 
 export default class Createpoints {
     constructor () {
@@ -11,7 +11,7 @@ export default class Createpoints {
         this.resources = this.experience.resources
         
         // Add parameters
-        this.pointsGroup = new THREE.Group()
+        this.pointsGroup = new Group()
         this.pointsGroup.name = 'pointsGroup'
         
         // Methods
@@ -20,12 +20,12 @@ export default class Createpoints {
 
     createPoints() {
         // Default points geometry and material
-        const points = new THREE.Group()
-        const material = new THREE.SpriteMaterial( { map: this.resources.items.pointTexture } )
+        const points = new Group()
+        const material = new SpriteMaterial( { map: this.resources.items.pointTexture } )
         
         // Create points
         this.points.forEach( point => {
-            const sprite = new THREE.Sprite( material.clone() )
+            const sprite = new Sprite( material.clone() )
             
             sprite.position.copy( point.position )
             sprite.scale.setScalar(0)
@@ -51,7 +51,5 @@ export default class Createpoints {
         const y = (windowWidth > 767.5) ? -50 : 0
         
         gsap.set( '.content__links', { x: x( windowWidth ), yPercent: y })
-    }
-    update() {
     }
 }

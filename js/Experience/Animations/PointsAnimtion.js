@@ -1,9 +1,9 @@
 
-import * as THREE from 'three'
-import gsap from 'gsap'
-
+import { Raycaster } from 'three'
 import Experience from '../Experience'
 import EventEmitter from '../Utils/EventEmitter'
+import gsap from 'gsap'
+
 
 import bell from '../../../asstes/sounds/intro.mp3?url'
 import splash from '../../../asstes/sounds/splash.mp3?url'
@@ -31,7 +31,7 @@ export default class PointsAnimation extends EventEmitter {
         this.pointInfoOpen = false
         this.pointsGroup = this.world.children.find( child => child.name === 'pointsGroup' )
         this.cloudsGroup = this.world.children.find( child => child.name === 'cloudsGroup' )
-        this.raycaster = new THREE.Raycaster()
+        this.raycaster = new Raycaster()
         this.intersect = null
         this.clickedPoint = null
         this.hitSound = new Audio( bell )
@@ -414,7 +414,7 @@ export default class PointsAnimation extends EventEmitter {
         }
     }
     raycasterAnimation() {
-        const mouse = new THREE.Vector2( this.mouse.x, this.mouse.y )
+        const mouse = { x: this.mouse.x, y: this.mouse.y }
         this.raycaster.setFromCamera(mouse, this.camera)
         const intersects = this.raycaster.intersectObjects( this.pointsGroup.children )
 
