@@ -124,21 +124,21 @@ export default class Preload extends EventEmitter {
             opacity: 0.025,
             duration: 2
         }, 0)
-        this.pageIntro.from('.text-part', {
-            scale: 1.3,
-            y: 200,
-            opacity: 0,
-            duration: 0.8,
-            ease: 'power1'
-        }, '<+=10%')
-        this.pageIntro.from('.text span', {
-            y: 40,
-            scale: 1.2,
-            opacity: 0,
-            stagger: {
-                amount: 0.2
-            }
-        }, '<+=30%')
+        // this.pageIntro.from('.text-part', {
+        //     scale: 1.3,
+        //     y: 200,
+        //     opacity: 0,
+        //     duration: 0.8,
+        //     ease: 'power1'
+        // }, '<+=10%')
+        // this.pageIntro.from('.text span', {
+        //     y: 40,
+        //     scale: 1.2,
+        //     opacity: 0,
+        //     stagger: {
+        //         amount: 0.2
+        //     }
+        // }, '<+=30%')
     }
     loadingComplete() {
         // Debug
