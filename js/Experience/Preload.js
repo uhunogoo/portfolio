@@ -34,7 +34,6 @@ export default class Preload extends EventEmitter {
         // actions
         this.loadingAnimation()
         this.preloadBG()
-
         this.animationControll()  
     }
     
