@@ -68,13 +68,11 @@ export default [
     {
         name: 'cloud',
         type: 'texture',
-        asset: 'startParams',
         path: `/backgrounds/cloud${ formatPNG }`
     },
     {
         name: 'cloud2',
         type: 'texture',
-        asset: 'startParams',
         path: `/backgrounds/cloud-2${ formatPNG }`
     },
 ]
