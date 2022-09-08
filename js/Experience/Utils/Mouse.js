@@ -18,15 +18,13 @@ export default class Mouse extends EventEmitter {
         this.mouseClick()
     }
     mouseClick() {
-        const throttled = throttle( (e) => {
+        document.addEventListener('click', (e)=> {
             // Set click tagret
             this.clickTarget = e.target
 
             // Add mouse event
             this.trigger('mouseClick')
-        }, 300000, { 'trailing': false })
-
-        document.addEventListener('click', throttled)
+        })
     }
     mouseMove() {
         const throttleMouseFunction = throttle((e) => {   
