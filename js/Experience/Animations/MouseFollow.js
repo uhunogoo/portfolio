@@ -54,6 +54,7 @@ export default class followingCursor {
                 fill: '#ffffff',
             },
         })
+        gsap.set( '.following', {autoAlpha: 1})
 
         // Animation
         this.followButtonIn.fromTo('.following__look .ring', {scale: 1}, {

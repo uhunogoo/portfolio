@@ -11,34 +11,30 @@ export default class World {
     constructor() {
         this.experience = new Experience()
         this.scene = this.experience.scene
-        this.resources = this.experience.resources
         
         const sceneGroup = new Group()
         sceneGroup.name = 'worldGroup'
-        // Wait for environment
-        this.resources.on('ready', () => {
-
-            // Create world
-            this.sky = new Skybox()
-            this.grass = new Grass()
-            this.tower = new Tower()
-            this.fire = new Fire()
-            this.points = new Createpoints()
-            
-            // Add all scene group to main 
-            sceneGroup.add( 
-                this.sky.skyGroup,
-                this.sky.cloudsGroup,
-                this.grass.grassGroup,
-                this.points.pointsGroup,
-                this.tower.towerGroup, 
-                this.fire.fireGroup
-            )
-            sceneGroup.renderOrder = 0
-            
-            this.scene.add( sceneGroup )
-            this.animation = new Animation( sceneGroup )
-        })
+        
+        // Create world
+        this.sky = new Skybox()
+        this.grass = new Grass()
+        this.tower = new Tower()
+        this.fire = new Fire()
+        this.points = new Createpoints()
+        
+        // Add all scene group to main 
+        sceneGroup.add( 
+            this.sky.skyGroup,
+            this.sky.cloudsGroup,
+            this.grass.grassGroup,
+            this.points.pointsGroup,
+            this.tower.towerGroup, 
+            this.fire.fireGroup
+        )
+        sceneGroup.renderOrder = 0
+        
+        this.scene.add( sceneGroup )
+        this.animation = new Animation( sceneGroup )
     }
     resize() {
         if(this.points) {

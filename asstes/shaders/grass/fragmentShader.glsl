@@ -56,9 +56,10 @@ void main() {
     shadowNewUV += uShadowVec;
     shadowNewUV = (shadowNewUV - 0.5) * get2dRotateMatrix(PI * 0.5) + 0.5;
     vec4 shadowTexture = texture2D( uShadows, shadowNewUV );
+    float shadow = clamp(shadowTexture.r, 0.7, 1.0);
     
     //  Final color calcullation
-    vec3 color = finalColor * shadowTexture.r;
+    vec3 color = finalColor * shadow;
     finalColor = mix( color, color - noise * 0.13 * st.y, noise );
     finalColor = vec3( mix( finalColor * 1.1, finalColor * 2.0, sunnyPlace ) );
     finalColor = clamp(finalColor, 0.0, 1.0);

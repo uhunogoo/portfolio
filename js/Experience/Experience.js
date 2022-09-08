@@ -30,42 +30,52 @@ export default class Experience {
         this.canvas = canvas
 
         // Setup
-        this.debug = new Debug()
         this.sizes = new Sizes()
         this.mouse = new Mouse()
-        this.deviceOrientationEvent = new DeviceOrientationEvent()
-        this.points = new Points()
-        this.time = new Time()
-        this.scene = new Scene()
         this.resources = new Resources(sources)
+
+        this.debug = new Debug()
+        this.scene = new Scene()
         this.camera = new Camera()
         this.renderer = new Renderer()
         this.preload = new Preload()
-        this.world = new World()
 
-        // Sizes resize event
-        this.sizes.on('resize', () => {
-            this.resize()
+        // Wait for environment
+        this.resources.on('loadingProgress', () => {
+            this.preload.loadingProcess()
         })
+        this.resources.on('ready', () => {
+            this.deviceOrientationEvent = new DeviceOrientationEvent()
+            this.points = new Points()
+            this.time = new Time()
+            this.world = new World()
+
+             // Mosue click event
+            this.mouse.on('mouseClick', () => {
+                this.mouseClick()
+            })
+
+            // Device orientation event
+            this.deviceOrientationEvent.on('deviceOrientation', () => {
+                this.deviceOrientation() 
+            })
+
+            // Time tick event
+            this.time.on('tick', () => {
+                this.update()
+            })
+
+            // Sizes resize event
+            this.sizes.on('resize', () => {
+                this.resize()
+            })
+            this.preload.loadingComplete()
+        })
+
 
         // Mosue move event
         this.mouse.on('mouseMove', () => {
             this.mouseMove() 
-        })
-        
-        // Mosue click event
-        this.mouse.on('mouseClick', () => {
-            this.mouseClick()
-        })
-
-        // Device orientation event
-        this.deviceOrientationEvent.on('deviceOrientation', () => {
-            this.deviceOrientation() 
-        })
-
-        // Time tick event
-        this.time.on('tick', () => {
-            this.update()
         })
     }
     resize() {
@@ -82,7 +92,9 @@ export default class Experience {
         this.world.deviceOrientation()
     }
     mouseMove() {
-        this.world.mouseMove()
+        if (this.world) {
+            this.world.mouseMove()
+        }
     }
     update() {
         this.debug.update()

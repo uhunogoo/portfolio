@@ -1,4 +1,4 @@
-import { Color, DoubleSide, Group, LinearFilter, MeshBasicMaterial, NearestFilter, ShaderMaterial, sRGBEncoding } from 'three'
+import { Color, DoubleSide, Group, MeshBasicMaterial, ShaderMaterial } from 'three'
 import Experience from '../Experience'
 
 // Portal shaders
@@ -30,22 +30,6 @@ export default class Tower {
         this.generateShape()
     }
     loadMaterials() {
-        // Floor texture
-        this.resources.items.towerTexture1.flipY = false
-        this.resources.items.towerTexture1.encoding = sRGBEncoding
-        this.resources.items.towerTexture1.minFilter = NearestFilter
-        this.resources.items.towerTexture1.magFilter = LinearFilter
-        // Walls texture
-        this.resources.items.towerTexture2.flipY = false
-        this.resources.items.towerTexture2.encoding = sRGBEncoding
-        this.resources.items.towerTexture1.minFilter = LinearFilter
-        this.resources.items.towerTexture1.magFilter = LinearFilter
-        // Other objects texture
-        this.resources.items.towerTexture3.flipY = false
-        this.resources.items.towerTexture3.encoding = sRGBEncoding
-        this.resources.items.towerTexture1.minFilter = LinearFilter
-        this.resources.items.towerTexture1.magFilter = LinearFilter
-
         this.towerMaterial1 = new MeshBasicMaterial({
             map: this.resources.items.towerTexture1
         })

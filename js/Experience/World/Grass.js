@@ -258,7 +258,6 @@ export default class Grass {
     createFloor() {
         const floorGeometry = new CircleGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 ).toNonIndexed()
 
-        this.resources.items.sandTexture.encoding = sRGBEncoding
         this.resources.items.sandTexture.wrapS = RepeatWrapping
         this.resources.items.sandTexture.wrapT = RepeatWrapping
         this.resources.items.sandTexture.repeat.set(20, 20)

@@ -25,26 +25,31 @@ export default [
     {
         name: 'towerTexture1',
         type: 'texture',
+        asset: 'startParams',
         path: `/textures/tower/floorTexture${ formatJPG }`
     },
     {
         name: 'towerTexture2',
         type: 'texture',
+        asset: 'startParams',
         path: `/textures/tower/wallTexture${ formatJPG }`
     },
     {
         name: 'towerTexture3',
         type: 'texture',
+        asset: 'startParams',
         path: `/textures/tower/otherTextures${ formatJPG }`
     },
     {
         name: 'shadowMap',
         type: 'texture',
+        asset: 'startParams',
         path: `/textures/tower/shadowMap${ formatJPG }`
     },
     {
         name: 'sandTexture',
         type: 'texture',
+        asset: 'startParams',
         path: `/textures/runes/sand${ formatJPG }`
     },
     //  Point
@@ -63,11 +68,13 @@ export default [
     {
         name: 'cloud',
         type: 'texture',
+        asset: 'startParams',
         path: `/backgrounds/cloud${ formatPNG }`
     },
     {
         name: 'cloud2',
         type: 'texture',
+        asset: 'startParams',
         path: `/backgrounds/cloud-2${ formatPNG }`
     },
 ]

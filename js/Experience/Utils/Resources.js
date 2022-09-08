@@ -1,4 +1,4 @@
-import { TextureLoader } from 'three'
+import { LinearFilter, sRGBEncoding, TextureLoader } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
@@ -30,11 +30,20 @@ export default class Resources extends EventEmitter {
         this.loaders.gltfLoader.setDRACOLoader(dracoLoader)
         this.loaders.textureLoader = new TextureLoader()
     }
-    startLoading() {      
+    startLoading() {
         // Load each source
         for( const source of this.sources ) {
+            const asset = ( source.asset ) ? source.asset : null
             if (source.type === 'texture') {
                 this.loaders.textureLoader.load( source.path, (file) => {
+                    if ( source.asset === 'startParams' ) {
+                        // Basic textures parameters
+                        file.flipY = false
+                        file.encoding = sRGBEncoding
+                        file.minFilter = LinearFilter
+                        file.magFilter = LinearFilter
+                    }
+                    
                     this.sourceLoaded(source, file)
                 })
             } else if (source.type === 'gltfLoader') {
@@ -47,7 +56,9 @@ export default class Resources extends EventEmitter {
     sourceLoaded(source, file) {
         this.items[source.name] = file
         this.loaded++
+
         this.trigger('loadingProgress')
+
         if (this.loaded === this.toLoad) {
             this.trigger('ready')
         }
