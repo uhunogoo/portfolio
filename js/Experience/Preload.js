@@ -39,7 +39,6 @@ export default class Preload extends EventEmitter {
     }
     
     animationControll() {
-        gsap.set('.preload', {autoAlpha: 1})
         this.playInAnimation = gsap.timeline({ 
             paused: true,
             onComplete: () => {
