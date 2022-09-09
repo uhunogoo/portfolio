@@ -22,7 +22,7 @@ export default class UIAnimation {
         })
 
         // Close button hover animation
-        const closeButton = gsap.fromTo('.close_btn g', { rotate: gsap.utils.wrap([0, 0]), transformOrigin: '50% 50%' },{ 
+        this.closeButton = gsap.fromTo('.close_btn g', { rotate: gsap.utils.wrap([0, 0]), transformOrigin: '50% 50%' },{ 
             rotate: gsap.utils.wrap([-45, 45]),
             transformOrigin: '50% 50%',
             duration: 0.4,
@@ -135,6 +135,7 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
+        let isFocused = false
         
         if (!isPreloadHiden) {
             gsap.to('.title-decor div', {
@@ -151,6 +152,38 @@ export default class UIAnimation {
                 xPercent: -50 - 6 * this.mouse.x
             })
         }
+
+        // Close button animation
+        if (this.mouse.moveTarget['localName']) {
+            // Detect block with button role
+            const targetRole = () => {
+                // Get target role
+                let role = null
+                if ( this.mouse.moveTarget.attributes.role ) {
+                    role = this.mouse.moveTarget.attributes.role.value
+                    // console.dir( this.mouse.moveTarget.attributes.role )
+                } else if (this.mouse.moveTarget.parentElement.attributes.role) {
+                    // Get parent element role if tagret isn't button
+                    role = this.mouse.moveTarget.parentElement.attributes.role.value
+                }
+                return role
+            }
+            // Test if target role is button   
+            isFocused = targetRole() === 'button'
+            
+            // Close button animation part
+            if ( isFocused ) {
+                const isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
+                if (isCloseButton) {
+                    this.closeButton.play()
+                }
+            } else {
+                if ( this.closeButton.progress() !== 0) {
+                    this.closeButton.reverse()
+                }
+            }
+        }
+        
     }
     deviceOrientation() {
         const isPreloadHiden = this.preload.classList.contains('close')

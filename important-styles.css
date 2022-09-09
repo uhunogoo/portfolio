@@ -3,7 +3,7 @@
     --dark: #121F2F;
     --red: #F72C3B;
     --gold: #F3B754;
-    --titleFont: 'Romanica';
+    --titleFont: 'Romanica', sans-serif;
     --largeTitle: 8.02vmin;
     --smallTitle: 4.81vmin;
     --textSize: 14px;
@@ -11,14 +11,7 @@
 
 @font-face {
     font-family: 'Romanica';
-    src: url(./asstes/fonts/Romanica/Romanica.ttf);
-    font-display: swap;
-    font-weight: 400
-}
-
-@font-face {
-    font-family: 'PoetsenOne-Regular';
-    src: url(./asstes/fonts/PoetsenOne/PoetsenOne-Regular.ttf);
+    src: url(./asstes/fonts/Romanica/Romanica.woff) format('woff');
     font-display: swap;
     font-weight: 400
 }
@@ -69,7 +62,6 @@ h1 {
 
     .text__container {
         height: calc(var(--largeTitle) * 2);
-        overflow: hidden;
         position: relative;
     }
 
@@ -160,7 +152,17 @@ p {
     .title {
         text-align: center;
     }
-
+    &__indicator {
+        font-size: 0;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        span {
+            font-size: var(--largeTitle);
+            display: inline-block;
+        }
+    }
     &__progress {
         bottom: 10%;
         left: 50%;

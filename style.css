@@ -72,7 +72,7 @@
   }
   &__info {
     grid-area: text;
-    padding-bottom: 0.5em;
+    padding-bottom: 1em;
   }
   &__name {
     color: var(--dark);
