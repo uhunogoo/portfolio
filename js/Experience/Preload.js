@@ -40,41 +40,39 @@ export default class Preload extends EventEmitter {
     animationControll() {
         this.playInAnimation = gsap.timeline({ 
             paused: true,
-            onComplete: () => {
+            onUpdate: () => {
+                const progress =  this.playInAnimation.progress()
+                if (progress < 0.8 || this.playInAnimationComplete) return
+                
+                // Intro animation was ended
                 this.playInAnimationComplete = true
+
+                // Set support class for enter button
+                document
+                    .querySelector('.preload__enter')
+                    .classList.add('preload__enter_animated') 
+
+                // Enter button letters rainbow 
+                gsap.to('.preload__enter span', {
+                    keyframes: {
+                        '50%': { color: '#F3B754', ease: 'power1.out' },
+                        '100%': { color: '#121F2F', ease: 'power1.in' },
+                    },
+                    duration: 0.4,
+                    stagger: 0.05
+                })
             }
         })
         // Call all base animations
         this.inAnimation()
     }
     inAnimation() {
-        // gsap.set('.top__content', {autoAlpha: 1})
         this.playInAnimation.to('.preload__progress', {
             opacity: 0,
             y: -10,
             scale: 0.8,
             ease: 'power3.out',
         }, 0)
-        // this.playInAnimation.from('.text-part', {
-        //     scale: 1.3,
-        //     y: 80,
-        //     opacity: 0,
-        //     duration: 0.6,
-        //     ease: 'power1'
-        // }, '<+=0.35')
-        // this.playInAnimation.fromTo('.text span', {
-        //     y: gsap.utils.wrap( [-20, 20] ),
-        //     scale: 1.2,
-        //     opacity: 0,
-        // }, {
-        //     y: 0,
-        //     opacity: 1,
-        //     scale: 1,
-        //     duration: 0.6,
-        //     stagger: {
-        //         amount: 0.2
-        //     }
-        // }, '<+=30%')
         this.playInAnimation.to('.preload__enter', {
             autoAlpha: 1,
             scale: 1,

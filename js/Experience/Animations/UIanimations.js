@@ -27,7 +27,17 @@ export default class UIAnimation {
             transformOrigin: '50% 50%',
             duration: 0.4,
             ease: 'power1'
-        }, 0)
+        })
+
+        this.enterButton = gsap.to('.preload__enter span', {
+            paused: true,
+            keyframes: {
+                '50%': { color: '#F3B754', ease: 'power1.out' },
+                '100%': { color: '#121F2F', ease: 'power1.in' },
+            },
+            duration: 0.4,
+            stagger: 0.05
+        })
 
         // Add close button animation to mouse follow timeline
 
@@ -153,7 +163,7 @@ export default class UIAnimation {
             })
         }
 
-        // Close button animation
+        // Buttons animation
         if (this.mouse.moveTarget['localName']) {
             // Detect block with button role
             const targetRole = () => {
@@ -171,15 +181,26 @@ export default class UIAnimation {
             // Test if target role is button   
             isFocused = targetRole() === 'button'
             
-            // Close button animation part
+            // Button animation part
             if ( isFocused ) {
                 const isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
+                const isEnterButton = this.mouse.moveTarget.classList.contains('preload__enter_animated')
+
                 if (isCloseButton) {
                     this.closeButton.play()
+                }
+                
+                if (isEnterButton) {                   
+                    if ( this.enterButton.progress() === 0) {
+                        this.enterButton.play(0)
+                    }
                 }
             } else {
                 if ( this.closeButton.progress() !== 0) {
                     this.closeButton.reverse()
+                }
+                if ( this.enterButton.progress() !== 0) {
+                    this.enterButton.restart().pause()
                 }
             }
         }
