@@ -30,18 +30,6 @@ export default class Preload extends EventEmitter {
         this.preloadHovered = false
         this.debug = this.experience.debug
         this.hitSound = new Audio( bell )
-        
-        this.indicator = gsap.to('.preload__indicator span', {
-            repeat: -1,
-            paused: true,
-            keyframes: {
-                '50%': { opacity: 0.95, color: '#F3B754', ease: 'power2.out'},
-                '100%': { opacity: 1, color: '#121F2F', ease: 'back.out' },
-            },
-            duration: 0.6,
-            stagger: 0.05,
-            ease: 'power1.out',
-        }, 0)
 
         // actions
         this.loadingAnimation()
@@ -60,39 +48,33 @@ export default class Preload extends EventEmitter {
         this.inAnimation()
     }
     inAnimation() {
-        gsap.set('.top__content', {autoAlpha: 1})
+        // gsap.set('.top__content', {autoAlpha: 1})
         this.playInAnimation.to('.preload__progress', {
             opacity: 0,
             y: -10,
             scale: 0.8,
             ease: 'power3.out',
         }, 0)
-        this.playInAnimation.to('.preload__indicator', {
-            opacity: 0,
-            y: -90,
-            scale: 0.3,
-            ease: 'power3.out',
-        }, 0)
-        this.playInAnimation.from('.text-part', {
-            scale: 1.3,
-            y: 80,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'power1'
-        }, '<+=0.35')
-        this.playInAnimation.fromTo('.text span', {
-            y: gsap.utils.wrap( [-20, 20] ),
-            scale: 1.2,
-            opacity: 0,
-        }, {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.6,
-            stagger: {
-                amount: 0.2
-            }
-        }, '<+=30%')
+        // this.playInAnimation.from('.text-part', {
+        //     scale: 1.3,
+        //     y: 80,
+        //     opacity: 0,
+        //     duration: 0.6,
+        //     ease: 'power1'
+        // }, '<+=0.35')
+        // this.playInAnimation.fromTo('.text span', {
+        //     y: gsap.utils.wrap( [-20, 20] ),
+        //     scale: 1.2,
+        //     opacity: 0,
+        // }, {
+        //     y: 0,
+        //     opacity: 1,
+        //     scale: 1,
+        //     duration: 0.6,
+        //     stagger: {
+        //         amount: 0.2
+        //     }
+        // }, '<+=30%')
         this.playInAnimation.to('.preload__enter', {
             autoAlpha: 1,
             scale: 1,
@@ -128,7 +110,6 @@ export default class Preload extends EventEmitter {
         }
     }
     loadingProcess() {
-        this.indicator.play()
         gsap.fromTo(this.progress, { value: this.progress.value }, {
             value: this.resources.loaded / this.resources.toLoad,
             duration: 1,
@@ -170,7 +151,6 @@ export default class Preload extends EventEmitter {
         }
         
         const beforeOut = () => {
-            this.indicator.pause()
             this.preload.kill()
             this.playInAnimation.kill()
             this.hitSound.currentTime = 0

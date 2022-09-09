@@ -5,6 +5,7 @@
     --gold: #F3B754;
     --titleFont: 'Romanica', sans-serif;
     --largeTitle: 8.02vmin;
+    --loading: 8.5vmin;
     --smallTitle: 4.81vmin;
     --textSize: 14px;
 }
@@ -151,17 +152,6 @@ p {
 
     .title {
         text-align: center;
-    }
-    &__indicator {
-        font-size: 0;
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        span {
-            font-size: var(--largeTitle);
-            display: inline-block;
-        }
     }
     &__progress {
         bottom: 10%;
