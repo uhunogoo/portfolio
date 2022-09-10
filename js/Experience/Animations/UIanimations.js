@@ -48,41 +48,81 @@ export default class UIAnimation {
     }
     scroll() {
         const sections = gsap.utils.toArray('.work')
-        const sliderItems = sections
-        const numSlides = sliderItems.length
+        const sectionsTitles = gsap.utils.toArray('.work__info')
+        const imagesWrapper = document.querySelector('.works__picture')
+        const numSlides = sections.length
         const lastBlockLeft = sections[ sections.length - 1]
 
         // slides positions
         for (let i = 0; i < numSlides; i++) {
-            gsap.set(sliderItems[i], { xPercent: i * 100, y: 0 })
+            gsap.set(sections[i], { xPercent: i * 100, y: 0 })
         }
 
         const scrollX = () => {
-            return this.sizes.width - ( numSlides * lastBlockLeft.clientWidth + 40)
+            return imagesWrapper.clientWidth - ( numSlides * lastBlockLeft.clientWidth)
         }
         const scrollY = () => {
-            const widthProportion = (numSlides * lastBlockLeft.clientWidth + 40) / this.sizes.width
+            const widthProportion = (numSlides * lastBlockLeft.clientWidth) / imagesWrapper.clientWidth
             const percentageValue = widthProportion * 100
             return percentageValue
+        }
+
+        const animateWorkTitle = (self) => {
+            // Calculate current ID
+            const id = Math.round( self.progress * (sections.length - 1) )
+
+            // Add class to active title
+            sectionsTitles.forEach( (el, i) => {
+                const isActive = el.classList.contains( 'active' )
+                
+                if ( i === id ) {
+                    if( !isActive ) {
+                        el.classList.add( 'active' )
+                    }
+                } else {
+                    if( isActive ) {
+                        el.classList.remove( 'active' )
+                    }
+                }
+            })
         }
         
         gsap.set('.works__wrap', { height: `${ scrollY() * 0.75 }%` })
         gsap.set('.works__sticky', { height: this.worksContainer.clientHeight })
         gsap.set('.works__scroller', { width: `${ scrollY() }%` })
 
-        let scrollTween = gsap.to('.works__scroller', {
+        const arrowAnimation = gsap.to('.works__direction', { paused: true, x: '-20%', opacity: 0 })
+
+        const scrollTween = gsap.to('.works__scroller', {
             x: scrollX,
+            onUpdate: () => {
+                arrowAnimation.progress( scrollTween.progress() * 10 )
+            },
             ease: "none",
             scrollTrigger: {
                 scroller: '.works',
                 trigger: ".works__wrap",
                 scrub: 1.1,
                 start: "top top",
+                snap: {
+                    snapTo: 1 / (sections.length - 1),
+                    directional: false,
+                    duration: 0.2,
+                    inertia: true,
+                    ease: 'power2',
+                    onComplete: animateWorkTitle
+                },
+                onToggle: animateWorkTitle,
                 end: 'bottom bottom',
                 invalidateOnRefresh: true,
             }
         })
         
+        // Set start work title as active
+        const activeTitle = sectionsTitles[ Math.round(scrollTween.progress() * (sections.length - 1)) ] 
+        activeTitle.classList.add( 'active' )
+
+        // Each section animation
         sections.forEach( section => {
             gsap.fromTo( section.querySelector('picture'), { x: '-40%', },{ 
                 x: '-60%',
