@@ -91,13 +91,10 @@ export default class UIAnimation {
         gsap.set('.works__sticky', { height: this.worksContainer.clientHeight })
         gsap.set('.works__scroller', { width: `${ scrollY() }%` })
 
-        const arrowAnimation = gsap.to('.works__direction', { paused: true, x: '-20%', opacity: 0 })
+        const arrowAnimation = gsap.to( '.works__direction', { paused: true, x: '-20%', opacity: 0 })
 
         const scrollTween = gsap.to('.works__scroller', {
             x: scrollX,
-            onUpdate: () => {
-                arrowAnimation.progress( scrollTween.progress() * 10 )
-            },
             ease: "none",
             scrollTrigger: {
                 scroller: '.works',
@@ -112,12 +109,16 @@ export default class UIAnimation {
                     ease: 'power2',
                     onComplete: animateWorkTitle
                 },
+                onUpdate: (self) => {
+                    const progress = self.progress * 10
+                    arrowAnimation.progress( progress )
+                },
                 onToggle: animateWorkTitle,
                 end: 'bottom bottom',
                 invalidateOnRefresh: true,
             }
         })
-        
+
         // Set start work title as active
         const activeTitle = sectionsTitles[ Math.round(scrollTween.progress() * (sections.length - 1)) ] 
         activeTitle.classList.add( 'active' )

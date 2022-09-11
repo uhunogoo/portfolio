@@ -4,24 +4,38 @@
   overflow-x: hidden;
   overflow-y: scroll;
   &__direction {
-    height: 70%;
+    height: 20%;
     left: 2%;
     position: absolute;
-    top: 55%;
-    transform: translateY(-50%);
+    bottom: 5vw;
     width: 10%;
+  }
+  &__arrow {
+    height: 100%;
+    position: relative;
+    width: 100%;
+    &::after {
+      content: 'scroll';
+      display: block;
+      font-size: 14px;
+      text-transform: uppercase;
+      top: 0;
+      transform: translate(7%, -100%) rotate(90deg);
+      transform-origin: bottom left;
+      position: absolute;
+    }
     svg {
       height: 100%;
       width: auto;
     }
     .arrow{
       fill: none;
-      stroke: var(--gold);
+      stroke: var(--dark);
       stroke-width: 4;
     }
   }
   &__titles {
-    height: 24vmin;
+    height: var( --loading);
     mix-blend-mode: exclusion;
     position: absolute;
     pointer-events: none;
@@ -56,7 +70,10 @@
     height: 100%;
     margin: auto;
     padding: 5% 0;
-    width: 70%;
+    width: 90vw;
+    @media screen and (min-width: 1100px) {
+      width: 70vw;
+    }
   }
   &__scroller {
     height: 100%;
@@ -69,8 +86,10 @@
   left: 0;
   min-width: 0;
   position: absolute;
+  padding-left: 5vmin;
+  padding-right: 5vmin;
   top: 0;
-  width: 80vw;
+  width: 90vw;
   @media screen and (min-width: 1100px) {
     padding-left: 5vmin;
     padding-right: 5vmin;
@@ -118,13 +137,14 @@
   &__name {
     color: var(--white);
     font-family: var(--titleFont);
-    font-size: 24vmin;
+    font-size: 0;
     font-weight: 400;
     margin: 0;
     overflow: hidden;
     text-transform: uppercase;
     span {
-      display: block;
+      font-size: var( --loading);
+      display: inline-block;
       line-height: 0.9;
     }
   }
@@ -176,7 +196,7 @@
     padding: 0 30px;
     position: relative;
     width: 100%;
-    --gap: 9.35vw;
+    --gap: 4vw;
     & > div {
       min-width: 0;
     }
@@ -370,10 +390,14 @@
       .decor,
       .content__links,
       .content__image img,
+      .works__name span,
       .works__scroller {
           will-change: transform;
       }
-
+      .work,
+      #myPhoto {
+        will-change: transform, clip-path;
+      }
       .animate-text {
           will-change: transform, opacity;
       }
@@ -383,6 +407,8 @@
   .decor,
   .content__links,
   .content__image img,
+  .work,
+  #myPhoto,
   .works__scroller,
   .animate-text {
       will-change: auto;

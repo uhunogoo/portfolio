@@ -97,15 +97,6 @@ export default class Preload extends EventEmitter {
         this.mesh.position.copy( this.experience.camera.instance.position )
         this.mesh.renderOrder = 1
         this.scene.add( this.mesh )
-
-        // Debug renderer
-        if (this.debug.active) {
-            this.debugFolder
-                .add( this.mesh.material.uniforms.uProgress, 'value')
-                .min(0)
-                .max(1)
-                .step(0.001)
-        }
     }
     loadingProcess() {
         gsap.fromTo(this.progress, { value: this.progress.value }, {
@@ -146,6 +137,14 @@ export default class Preload extends EventEmitter {
         // Debug
         if (this.debug.active) {
             this.debugFolder = this.debug.ui.addFolder('Preload')
+        }
+        // Debug renderer
+        if (this.debug.active) {
+            this.debugFolder
+                .add( this.mesh.material.uniforms.uProgress, 'value')
+                .min(0)
+                .max(1)
+                .step(0.001)
         }
         
         const beforeOut = () => {

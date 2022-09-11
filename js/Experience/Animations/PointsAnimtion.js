@@ -134,7 +134,7 @@ export default class PointsAnimation extends EventEmitter {
     startStyles() {
         gsap.set('.work', 
         {
-            clipPath: 'inset(15%)',
+            clipPath: 'inset(25%)',
             y: '180%',
             opacity: 0
         })
@@ -144,7 +144,7 @@ export default class PointsAnimation extends EventEmitter {
         gsap.set( '.content__title span', { yPercent: 100 })
         gsap.set( '.animate-text', { opacity: 0, y: 100 })
         gsap.set( '.content__text span.icon', { opacity: 0, scale: 0.1 })
-        gsap.set( '.content__links', { opacity: 0, scale: 0.1 })
+        gsap.set( '.content__links img', { opacity: 0, scale: 0.1 })
         gsap.set( '.content .decor', { opacity: 0, scale: 1.6, rotate: '90deg', x: '100%', y: '-60%' })
     }
     showNav() {
@@ -349,6 +349,19 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.25,
             ease: 'power2'
         }, '<')
+        tl.fromTo('.works__titles', {scale: 0.6, y: 60, opacity: 0}, {
+            scale: 1,
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            ease: 'power2'
+        }, 1)
+        tl.fromTo('.works__arrow', {x: -20, opacity: 0}, {
+            x: 0,
+            opacity: 1,
+            duration: 0.65,
+            ease: 'power1'
+        }, 0.7)
 
         return tl
     }
@@ -388,9 +401,10 @@ export default class PointsAnimation extends EventEmitter {
                 ease: 'power3.in'
             }
         }, '<+=50%')
-        tl.to('.content__links', {
+        tl.to('.content__links img', {
             opacity: 1,
             scale: 1,
+            stagger: 0.1,
             ease: 'power3.in'
         }, '<-=50%')
         tl.to('.content .decor', { 
