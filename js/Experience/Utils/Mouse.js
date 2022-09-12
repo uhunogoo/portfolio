@@ -29,7 +29,7 @@ export default class Mouse extends EventEmitter {
     mouseMove() {
         const throttleMouseFunction = throttle((e) => {   
             // Set click tagret
-            this.moveTarget = e.target
+            this.moveTarget = e.target          
 
             // Set coordinates
             this.x = ( e.clientX / this.sizes.width ) * 2 - 1

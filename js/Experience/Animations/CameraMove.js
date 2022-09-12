@@ -17,10 +17,7 @@ export default class CameraMove {
         // Defaults
         this.deviceOrientationSupported = false
         this.cloudsGroup = this.target.children.find( child => child.name === 'cloudsGroup' )
-        this.tempMouseCoords = {
-            x: 0,
-            y: 0
-        }
+        this.tempCloudsRotation = this.cloudsGroup.rotation.clone()
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75        
 
@@ -32,11 +29,6 @@ export default class CameraMove {
                 ease: 'power2.inOut'
             }
         })
-
-
-        // this.rotatioMatrix = new Matrix4()
-        // this.rotatioMatrix.copy( this.camera.matrixWorld )
-        // this.rotatioMatrix.makeRotationY( Math.PI * 0.25)
 
         // Functions
         this.animations()
@@ -106,8 +98,8 @@ export default class CameraMove {
             ease: 'power1.out',
             duration: 0.6
         }, 0)
-        tl.fromTo(this.cloudsGroup.rotation, {x: this.cloudsGroup.rotation.x}, {
-            x: x * 0.05,
+        tl.fromTo(this.cloudsGroup.rotation, {y: this.cloudsGroup.rotation.y}, {
+            y: this.tempCloudsRotation.y + x * 0.05,
         }, 0)
     }
     mouseMove() {        
@@ -117,7 +109,7 @@ export default class CameraMove {
         // Get mouse coordinates 
         const { x, y } = this.mouse       
 
-        this.cameraRotation(x, y)
+        this.cameraRotation(x * 1.4, y)
     }
     deviceOrientation() {
         if (this.deviceOrientationEvent.deviceOrientationTarget) {
@@ -129,7 +121,7 @@ export default class CameraMove {
 
             this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
             
-            this.cameraRotation( (leftToRight / gammaAngle) * 2.5, - ( frontToBack / 55 ) * 1.5)
+            this.cameraRotation( (leftToRight / gammaAngle) * 2, - ( frontToBack / 55 ) * 1.5)
         }
     }
     update() {

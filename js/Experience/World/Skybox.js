@@ -102,7 +102,7 @@ export default class Skybox {
     createClouds() {
         const cloudsParameters = {
             count: 30,
-            size: 19
+            size: 25
         }
         
         const images = [
@@ -126,7 +126,7 @@ export default class Skybox {
             // Cloud parameters
             cloud.position.set(
                 (Math.random() - 0.5) * cloudsParameters.size * 2,
-                2.5 + Math.random() * cloudsParameters.size * 0.3,
+                2.5 + Math.random() * cloudsParameters.size * 0.4,
                 Math.random() * 6.0 * -1.0
             )
             let scale = cloud.position.y / (cloudsParameters.size * 0.6)

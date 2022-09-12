@@ -104,6 +104,7 @@ export default class Grass {
         // Defaults
         const { count } = this.grassParameters
         const sampler = new MeshSurfaceSampler( this.floor ).setWeightAttribute( null ).build()
+		sampler.geometry.scale( 0.46, 0.47, 0.47 )
         
         // resample basic
         const dummy = new Object3D()
@@ -141,7 +142,6 @@ export default class Grass {
 
         // Calculation
         const pushGeometryData = (x, z, scale) => {
-            // const id = (scale > 0.65) ? 0 : 1
             offset.push( x, 0, z )
             scales.push( scale * 1.2 )
             rotations.push( 
@@ -149,48 +149,24 @@ export default class Grass {
                 (Math.random() - 0.5) * PI
             )
         }
-        
+		
+		// Generate grass
+		for (let i = 0; i < count; i++ ) {
+			sampler.sample( _position, _normal )
+			_normal.add( _position )
 
-        let i = 0
-        while (i < count) {
-            sampler.sample( _position, _normal )
-            _normal.add( _position )
-
-            dummy.position.copy( _position )
-            dummy.lookAt( _normal )
-            dummy.updateMatrix()
-
-            // Calculated
-            const scale = 0.5 + Math.random() * 0.5
-            const { x, y } = dummy.position
-            const r = dummy.position.distanceTo( new Vector3() )
-            
-            if ( r > 2.05 ) {
-                if ( x < 0) {
-                    pushGeometryData(x, y, scale)
-                        
-                    // increase 
-                    i++
-                } else {
-                    const fireArea = (-1.45 > y && y > -2.1 && x > 3.5 && x < 4.15)
-                    const stelaArea = (y > 1.3 && y < 1.98 && x > 3.5 && x < 4.15)
-                    
-                    if (y < -0.685 && !fireArea) { 
-                        pushGeometryData(x, y, scale)
-
-                        // increase 
-                        i++
-                    } else if (y > 0.7 && !stelaArea) {
-                        pushGeometryData(x, y, scale)
-
-                        // increase 
-                        i++
-                    }
-                        
-                }
-            }
-
-        }
+			// Dummy object
+			dummy.position.copy( _position )
+			dummy.lookAt( _normal )
+			dummy.updateMatrix()
+			
+			// Calculated
+			const scale = 0.5 + Math.random() * 0.5
+			const { x, z } = dummy.position
+			
+			// Set parameters
+			pushGeometryData(x, z, scale)
+		}
 
         // Create grass instance      
         this.grassBufferGeometry = new InstancedBufferGeometry()
@@ -256,8 +232,12 @@ export default class Grass {
         this.grassGroup.add( instancedParticlesMesh )
     }
     createFloor() {
-        const floorGeometry = new CircleGeometry( this.grassParameters.size * 0.5, 80, 0, Math.PI * 2 ).toNonIndexed()
-
+		const towerScene = this.resources.items.towerModel.scene
+        const floorGeometry = towerScene.children.find((child) => child.name === 'ground')
+		floorGeometry.scale.setScalar(0.47)
+		floorGeometry.geometry.computeVertexNormals()
+		console.log( floorGeometry )
+		
         this.resources.items.sandTexture.wrapS = RepeatWrapping
         this.resources.items.sandTexture.wrapT = RepeatWrapping
         this.resources.items.sandTexture.repeat.set(20, 20)
@@ -291,6 +271,9 @@ export default class Grass {
                 `#include <common>
                 uniform vec3 uFloorColor1;
                 uniform vec3 uFloorColor2;
+				mat2 get2dRotateMatrix(float _angle){
+					return mat2(cos(_angle),-sin(_angle),sin(_angle),cos(_angle));
+				}
                 `
             )
             
@@ -301,9 +284,10 @@ export default class Grass {
                     #include <dithering_fragment>
 
                     // Calculate road shadow
-                    float rect = length(vUv.y - 9.95);
-                    rect = smoothstep(1.1, 1.4, rect);
-                    rect = (1.0 - step(0.5, vUv.x - 10.0)) + rect;
+					vec2 newUV = (vUv - 10.0) * get2dRotateMatrix(3.14 * 0.217) + 10.0;
+                    float rect = length(newUV.y - 9.95);
+                    rect = smoothstep(1.0, 1.25, rect);
+                    rect = step(0.5, newUV.x - 10.0) + rect;
                     rect = clamp(rect, 0.0, 1.0);
 
                     float grey = (gl_FragColor.r + gl_FragColor.g + gl_FragColor.b) / 3.0;
@@ -315,7 +299,7 @@ export default class Grass {
                     color = vec3( 1.0, 0.413, 0.232 ) - grey;
                     
 
-                    gl_FragColor.rgb = vec3(mix(color * 0.6, color, rect));
+                    gl_FragColor.rgb = vec3( mix(color * 0.5, color * 0.8, rect) );
                     #if defined( TONE_MAPPING )
                         gl_FragColor.rgb = toneMapping( gl_FragColor.rgb );
                     #endif
@@ -323,13 +307,8 @@ export default class Grass {
             )
         }
         
-        this.floor = new Mesh(
-            floorGeometry,
-            floorMaterial
-        )
-
-        // Transform
-        this.floor.rotation.x = -Math.PI / 2
+        this.floor = floorGeometry
+        this.floor.material = floorMaterial
 
         this.grassGroup.add( this.floor )
     }

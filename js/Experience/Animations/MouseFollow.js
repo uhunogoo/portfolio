@@ -104,8 +104,9 @@ export default class followingCursor {
         
         gsap.to('.following', {
             x: ( (x + 1) / 2 ) * this.size.width - this.targetBlockSizes.width * 0.5,
-            y: ( (- y + 1.0) / 2 ) * this.size.height - this.targetBlockSizes.height * 0.5,
-            ease: 'power4'
+            y: ( (- y + 1) / 2 ) * this.size.height - this.targetBlockSizes.height * 0.5,
+            duration: 0.3,
+            ease: 'power1'
         })
         
     }
