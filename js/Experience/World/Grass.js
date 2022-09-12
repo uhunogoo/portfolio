@@ -103,6 +103,7 @@ export default class Grass {
     createGrassGeometry() {
         // Defaults
         const { count } = this.grassParameters
+		
         const sampler = new MeshSurfaceSampler( this.floor ).setWeightAttribute( null ).build()
 		sampler.geometry.scale( 0.46, 0.47, 0.47 )
         
@@ -235,8 +236,6 @@ export default class Grass {
 		const towerScene = this.resources.items.towerModel.scene
         const floorGeometry = towerScene.children.find((child) => child.name === 'ground')
 		floorGeometry.scale.setScalar(0.47)
-		floorGeometry.geometry.computeVertexNormals()
-		console.log( floorGeometry )
 		
         this.resources.items.sandTexture.wrapS = RepeatWrapping
         this.resources.items.sandTexture.wrapT = RepeatWrapping
@@ -307,10 +306,11 @@ export default class Grass {
             )
         }
         
+        floorGeometry.material = floorMaterial
         this.floor = floorGeometry
-        this.floor.material = floorMaterial
+		
 
-        this.grassGroup.add( this.floor )
+        this.grassGroup.add( floorGeometry )
     }
     resize() {
         this.grassBufferGeometry.instanceCount = Math.round( this.grassParameters.count * this.percentage() )     
