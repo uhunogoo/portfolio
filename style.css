@@ -454,31 +454,38 @@
 	&.active {
 
 		picture,
-		.decor,
-		.content__links,
 		.content__image img,
 		.works__name span,
+		.content__title span,
 		.works__scroller {
 			will-change: transform;
 		}
-
-		.work,
-		#myPhoto {
+		
+		.work {
 			will-change: transform, clip-path;
 		}
-
+		#myPhoto {
+			will-change: opacity, clip-path;
+		}
+		
+		.decor,
+		.content__links img,
+		.animate-text .icon,
 		.animate-text {
 			will-change: transform, opacity;
 		}
 	}
-
+	
 	picture,
 	.decor,
-	.content__links,
+	.content__links img,
 	.content__image img,
 	.work,
 	#myPhoto,
+	#myPhoto img,
+	.content__title span,
 	.works__scroller,
+	.animate-text .icon,
 	.animate-text {
 		will-change: auto;
 	}

@@ -24,14 +24,13 @@ void main(){
 	
 	vec3 color1=uColor1;
 	vec3 color2=uColor2;
-	
-	float grassAngle=sin(st.y*PI);
-	grassAngle=sin(st.y*PI+vNoise+uTime*1.2)*.25;
-	
-	vec4 grassTexture=texture2D(
-		uTexture,
-		st+vec2(grassAngle*vScale*.3*st.y,0.)
-	);
+
+	float wavyMotion = sin(vWind  + st.x * 2.0);
+	float grassStrength = smoothstep(0.0, 1.0, st.y );
+	vec4 grassTexture = texture2D( 
+      uTexture, 
+      st + wavyMotion * vec2( grassStrength * 0.06, wavyMotion * grassStrength * 0.03  ) 
+    );
 	
 	if(grassTexture.a<.65)discard;
 	

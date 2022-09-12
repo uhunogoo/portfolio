@@ -1,4 +1,4 @@
-import { Group, Mesh, MeshBasicMaterial, PlaneBufferGeometry, Vector3 } from 'three';
+import { CylinderGeometry, Group, Mesh, MeshBasicMaterial, PlaneBufferGeometry, Vector3 } from 'three';
 import { Sky } from 'three/examples/jsm/objects/Sky'
 import Experience from '../Experience'
 import gsap from 'gsap'
@@ -37,7 +37,8 @@ export default class Skybox {
         // Add Sky
         const that = this
         const sky = new Sky()
-        sky.scale.setScalar( 100)
+		sky.geometry = new CylinderGeometry(0.5, 0.5, 1, 10, 10)
+        sky.scale.setScalar( 15)
         this.skyGroup.add( sky )
 
         const sun = new Vector3()
@@ -52,12 +53,12 @@ export default class Skybox {
 
             // NEW v2
             // **************************
-            // turbidity: 20,
-            // rayleigh: 0.165,
-            // mieCoefficient: 0.004,
-            // mieDirectionalG: 0.973,
-            // elevation: 39,
-            // azimuth: 149,
+            // turbidity: 3.036,
+            // rayleigh: 0.607,
+            // mieCoefficient: 0.064,
+            // mieDirectionalG: 0.975,
+            // elevation: 11.45,
+            // azimuth: 87.068,
 
             // OLD
             // **************************

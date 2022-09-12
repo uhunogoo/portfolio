@@ -307,10 +307,9 @@ export default class Grass {
         }
         
         floorGeometry.material = floorMaterial
-        this.floor = floorGeometry
 		
-
         this.grassGroup.add( floorGeometry )
+        this.floor = floorGeometry
     }
     resize() {
         this.grassBufferGeometry.instanceCount = Math.round( this.grassParameters.count * this.percentage() )     

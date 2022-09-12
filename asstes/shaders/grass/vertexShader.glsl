@@ -87,13 +87,15 @@ void main(){
 	st.y*=uHeight;
 	float scaleRoad = mix(1.0, 1.0 - clamp(1.0 - shadow + scale * rotation.y * 0.4, 0.0, 1.0) * 0.75 * staticNoise2, step( 0.5, groundUV.x ));
 	st *= scaleRoad;
-	st.x *= 2.0 - scaleRoad;
+	st.x *= 2.2 - scaleRoad;
 	st.y+=.01;
 	
 	// Base rotation
-	st.xz*=get2dRotateMatrix( (PI*rotation.y+staticNoise2));
-	st.xy*=get2dRotateMatrix((rotation.y+staticNoise2)*.05);
-	st.zy*=get2dRotateMatrix(sin(rotation.y*2.)*staticNoise2*.2);
+	st.zy*=get2dRotateMatrix( PI * rotation.y * 0.1 );
+	st.xz*=get2dRotateMatrix( PI * 0.5 + (rotation.y + staticNoise2) * 0.5);
+	// st.xz*=get2dRotateMatrix( (PI*rotation.y+staticNoise2));
+	// st.xy*=get2dRotateMatrix((rotation.y+staticNoise2)*.05);
+	// st.zy*=get2dRotateMatrix(sin(rotation.y*2.)*staticNoise2*.2);
 	
 	// Wind grass moving
 	float newWind=((1.+wind)*.5);
