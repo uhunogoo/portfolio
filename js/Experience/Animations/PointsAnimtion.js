@@ -134,7 +134,7 @@ export default class PointsAnimation extends EventEmitter {
     startStyles() {
         gsap.set('.work', 
         {
-            clipPath: 'inset(25%)',
+            scale: 0.5,
             y: '180%',
             opacity: 0
         })
@@ -337,7 +337,7 @@ export default class PointsAnimation extends EventEmitter {
         const tl = gsap.timeline()
 
         tl.to('.work', {
-            clipPath: 'inset(0%)',
+            scale: 1,
             y: 0,
             opacity: 1,
             duration: 1.2,

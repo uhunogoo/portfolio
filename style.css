@@ -96,7 +96,6 @@
 }
 
 .work {
-	clip-path: inset(0%);
 	height: 100%;
 	left: 0;
 	min-width: 0;
@@ -121,7 +120,6 @@
 		flex: 1;
 		grid-area: image;
 		height: 100%;
-		overflow: hidden;
 		transition: filter 0.3s ease-in-out;
 		width: 100%;
 
@@ -460,15 +458,12 @@
 		.works__scroller {
 			will-change: transform;
 		}
-		
-		.work {
-			will-change: transform, clip-path;
-		}
 		#myPhoto {
 			will-change: opacity, clip-path;
 		}
-		
+	
 		.decor,
+		.work,
 		.content__links img,
 		.animate-text .icon,
 		.animate-text {
