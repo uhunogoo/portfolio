@@ -22,10 +22,12 @@ export default class Fire {
         // Setup
         this.options = {}
         this.options.x = 3.82
-        this.options.y = 0.6
+        this.options.y = 0.578
         this.options.z = -1.77
         this.fireUniform = {
             uTime: { value: 0 },
+            uStrength: { value: 1.5 },
+            uStrengthBottom: { value: 2.0 },
             uColor1: { value: new Color('#ff0000') },
             uColor2: { value: new Color('#fff700') },
             uColor3: { value: new Color('#e6893d') },
@@ -35,7 +37,7 @@ export default class Fire {
     }
     createFire() {
         // Shape around te sword
-        const geometry = new CylinderBufferGeometry(0.4, 0.165, 0.25, 10, 10)
+        const geometry = new CylinderBufferGeometry(0.4, 0.168, 0.25, 10, 10)
         
         // Generate fire around the sword
         // const fireGeometry
@@ -54,6 +56,10 @@ export default class Fire {
 
         // Debug shader material
         if (this.debug.active) {
+			this.debugFolder.add( fireMesh.position, 'y').name('firePositionY').min(0).max(1).step(0.001)
+			this.debugFolder.add( this.fireUniform.uStrength, 'value').name('fireStrength').min(0).max(8).step(0.001)
+			this.debugFolder.add( this.fireUniform.uStrengthBottom, 'value').name('fireStrength').min(0).max(8).step(0.001)
+
             this.debugFolder.addColor( this.fireUniform.uColor1, 'value').name('fireColor 1').onChange( () => {
                 this.fireUniform.uColor1.value = this.fireUniform.uColor1.value
             })

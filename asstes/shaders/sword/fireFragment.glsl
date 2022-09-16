@@ -4,6 +4,8 @@ varying vec3 vNormal;
 
 
 uniform float uTime;
+uniform float uStrength;
+uniform float uStrengthBottom;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 uniform vec3 uColor3;
@@ -104,23 +106,23 @@ void main() {
     vec2 rotatedUV = st * get2dRotateMatrix( st.y * 0.1 );
 
     float strength =  mod(rotatedUV.x * 10.0, 1.0);
-    strength = length(strength - 0.5) * (1.0 - st.y);
+    strength = length(strength - 0.5) * (1.0 - st.y * uStrength);
   
-
-    // float noise = cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) + cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) ) + cnoise( vec3(noiseP.xy * 10.0 - newTime, 1.9) ) );
     vec2 noiseCoord = vec2( strength + st.x * 20.0, noiseP.y) * vec2(2.0, 10.0) - vec2(newTime * 1.5, newTime);
     float noise = cnoise( vec3( noiseCoord, 0) + cnoise( vec3( noiseCoord, 0) ) + cnoise( vec3( noiseCoord, 0) ) );
     float absNoise = 1.0 - abs(noise);
 
 
     float fire = smoothstep( 0.2, 0.5, strength * 4.0 + absNoise - 1.0 );
-    fire += 1.0 - smoothstep(0.1, 1.0, st.y * 4.0 + noise - 1.0);
+    fire += 1.0 - smoothstep(0.1, 1.0 * (uStrengthBottom / 8.0), st.y * 4.0 + noise - 1.0);
 
     float activePath = ( 1.0 + sin(smoothstep(0.1, 1.0, strength * 4.0 + absNoise - 1.0) * 6.0)) / 2.0;
     activePath *= strength;
 
     // calmped
     fire = clamp(fire, 0.0, 1.0);
+    float mask = clamp( side * fire, 0.0, 1.0 );
+    if (mask < 0.1) discard;
 
     // collor
     vec3 color_1 = uColor1;
@@ -131,10 +133,6 @@ void main() {
     mixedColor = clamp( mixedColor, vec3(0.0), vec3(1.0) );
 
     // final
-    float mask = clamp( side * fire, 0.0, 1.0 );
-
-    if (mask < 0.1) discard;
-
     gl_FragColor = vec4( mixedColor, mask);
-    // gl_FragColor = vec4( vec3( noise + activePath ), side);
+    // gl_FragColor = vec4( vec3(strength), mask);
 }
