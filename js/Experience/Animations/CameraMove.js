@@ -109,7 +109,7 @@ export default class CameraMove {
         // Get mouse coordinates 
         const { x, y } = this.mouse       
 
-        this.cameraRotation(x * 1.4, y)
+        this.cameraRotation(-x * 1.4, y)
     }
     deviceOrientation() {
         if (this.deviceOrientationEvent.deviceOrientationTarget) {

@@ -5,13 +5,15 @@ gsap.registerPlugin( ScrollTrigger )
 import Experience from '../Experience'
 
 export default class UIAnimation {
-    constructor() {
+    constructor(scene) {
         this.experience = new Experience()
         this.mouse = this.experience.mouse
         this.sizes = this.experience.sizes
         this.deviceOrientationEvent = this.experience.deviceOrientationEvent
-        
+        this.towerGroup = scene.children.find( child => child.name === 'towerGroup' )
+		
         // Defaults
+		this.runic = this.towerGroup.children.find((child) => child.name === 'runic')
         this.deviceOrientationSupported = false
         this.closeButtonHover = false
         this.preload = document.querySelector('.preload')        
@@ -38,6 +40,11 @@ export default class UIAnimation {
             duration: 0.4,
             stagger: 0.05
         })
+		this.runicAnimation = gsap.timeline({ poused: true })
+		this.runicAnimation.to( this.runic.material.uniforms.uFinal, {
+			value: 1,
+			duration: 0.7
+		})
 
         // Add close button animation to mouse follow timeline
 
@@ -228,6 +235,8 @@ export default class UIAnimation {
             if ( isFocused ) {
                 const isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
                 const isEnterButton = this.mouse.moveTarget.classList.contains('preload__enter_animated')
+                const isWorksButton = this.mouse.moveTarget.classList.contains('menu__item_works')
+				
 
                 if (isCloseButton) {
                     this.closeButton.play()
@@ -238,12 +247,20 @@ export default class UIAnimation {
                         this.enterButton.play(0)
                     }
                 }
+                if (isWorksButton) {
+					if ( this.runicAnimation.progress() === 0) {
+						this.runicAnimation.play(0)
+					}
+                }
             } else {
                 if ( this.closeButton.progress() !== 0) {
                     this.closeButton.reverse()
                 }
                 if ( this.enterButton.progress() !== 0) {
                     this.enterButton.restart().pause()
+                }
+                if ( this.runicAnimation.progress() !== 0) {
+                    this.runicAnimation.reverse()
                 }
             }
         }

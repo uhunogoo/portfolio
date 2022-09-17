@@ -4,11 +4,14 @@ varying vec3 vNormal;
 
 
 uniform float uTime;
+uniform float uFireType; 
 uniform float uStrength;
 uniform float uStrengthBottom;
+uniform float uFlameSpire;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 uniform vec3 uColor3;
+
 
 //	Classic Perlin 3D Noise 
 //	by Stefan Gustavson
@@ -105,10 +108,14 @@ void main() {
     
     vec2 rotatedUV = st * get2dRotateMatrix( st.y * 0.1 );
 
-    float strength =  mod(rotatedUV.x * 10.0, 1.0);
+    float strength =  mod(rotatedUV.x * floor(uFlameSpire) - 0.5, 1.0);
     strength = length(strength - 0.5) * (1.0 - st.y * uStrength);
-  
-    vec2 noiseCoord = vec2( strength + st.x * 20.0, noiseP.y) * vec2(2.0, 10.0) - vec2(newTime * 1.5, newTime);
+	
+	float scaleX = mix( 4.0, 20.0, uFireType );
+	float scaleNoise = mix( 2.0, 1.0, uFireType );
+	float scaleTime = mix( .76, 0.5, uFireType );
+
+    vec2 noiseCoord = vec2( strength + st.x * scaleX, noiseP.y) * vec2(scaleNoise, 10.0) - vec2(newTime * scaleTime, newTime);
     float noise = cnoise( vec3( noiseCoord, 0) + cnoise( vec3( noiseCoord, 0) ) + cnoise( vec3( noiseCoord, 0) ) );
     float absNoise = 1.0 - abs(noise);
 
@@ -134,5 +141,5 @@ void main() {
 
     // final
     gl_FragColor = vec4( mixedColor, mask);
-    // gl_FragColor = vec4( vec3(strength), mask);
+    // gl_FragColor = vec4( vec3(strength), 1.0);
 }

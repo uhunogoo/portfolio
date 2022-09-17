@@ -1,4 +1,4 @@
-import { Color, CylinderBufferGeometry, DoubleSide, Group, Mesh, ShaderMaterial } from 'three'
+import { Color, PlaneBufferGeometry, SphereGeometry, DoubleSide, Group, Mesh, ShaderMaterial, BufferAttribute } from 'three'
 import Experience from '../Experience'
 
 // Sword shaders
@@ -22,12 +22,14 @@ export default class Fire {
         // Setup
         this.options = {}
         this.options.x = 3.82
-        this.options.y = 0.578
+        this.options.y = 0.53
         this.options.z = -1.77
         this.fireUniform = {
             uTime: { value: 0 },
-            uStrength: { value: 1.5 },
-            uStrengthBottom: { value: 2.0 },
+            uStrength: { value: 0.92 },
+            uStrengthBottom: { value: 8.0 },
+			uFlameSpire: { value: 1 },
+			uFireType: { value: 0 },
             uColor1: { value: new Color('#ff0000') },
             uColor2: { value: new Color('#fff700') },
             uColor3: { value: new Color('#e6893d') },
@@ -36,29 +38,59 @@ export default class Fire {
         this.createFire()
     }
     createFire() {
-        // Shape around te sword
-        const geometry = new CylinderBufferGeometry(0.4, 0.168, 0.25, 10, 10)
-        
-        // Generate fire around the sword
-        // const fireGeometry
-        const swordFireMaterial = new ShaderMaterial({
+		const fire = {}
+		fire.detail = 4
+		fire.size = { x: 0.33, y: 0.4 }
+		fire.geometry = new PlaneBufferGeometry(1, 1)
+		fire.material = new ShaderMaterial({
             uniforms: this.fireUniform,
             side: DoubleSide,
             vertexShader: swordFireVertex,
             fragmentShader: swordFireFragment
         })
-        const fireMesh = new Mesh( geometry, swordFireMaterial )
-        fireMesh.position.x = this.options.x
-        fireMesh.position.y = this.options.y
-        fireMesh.position.z = this.options.z
+		fire.group = new Group()
 
-        this.fireGroup.add(fireMesh)
+		// Generate fire
+		for (let i = 0; i < fire.detail; i++ ) {
+			const geometry = fire.geometry.clone() 
+			const material = fire.material
+			const fireMesh = new Mesh( geometry, material )
+
+			fireMesh.scale.set( fire.size.x, fire.size.y, 1 )
+			fireMesh.rotation.y = Math.PI * ( 1 / fire.detail ) * i
+			
+			fire.group.add( fireMesh )
+		}
+		
+		fire.group.position.x = this.options.x
+        fire.group.position.y = this.options.y - fire.size.y * 0.08
+        fire.group.position.z = this.options.z
+		
+
+		this.fireGlobe = new Mesh( 
+			new SphereGeometry(0.17, 8, 6),
+			fire.material.clone()
+		)
+		
+		this.fireGlobe.material.uniforms.uFlameSpire.value = 1
+		this.fireGlobe.material.uniforms.uFireType.value = 1
+
+		this.fireGlobe.position.x = this.options.x
+		this.fireGlobe.position.y = 0.45
+		this.fireGlobe.position.z = this.options.z
+
+		// this.fireGroup.add( fire.group )
+		this.fireGroup.add( fire.group, this.fireGlobe )
 
         // Debug shader material
         if (this.debug.active) {
-			this.debugFolder.add( fireMesh.position, 'y').name('firePositionY').min(0).max(1).step(0.001)
+			this.debugFolder.add( this.fireGlobe.position, 'y').name('firePositionY').min(0).max(1).step(0.001)
+			this.debugFolder.add( this.fireGlobe.material.uniforms.uFlameSpire, 'value').name('fireSpire').min(0).max(10).step(0.001)
+
 			this.debugFolder.add( this.fireUniform.uStrength, 'value').name('fireStrength').min(0).max(8).step(0.001)
+				.onChange( () => { this.fireGlobe.material.uniforms.uStrength.value = this.fireUniform.uStrength.value })
 			this.debugFolder.add( this.fireUniform.uStrengthBottom, 'value').name('fireStrength').min(0).max(8).step(0.001)
+				.onChange( () => { this.fireGlobe.material.uniforms.uStrengthBottom.value = this.fireUniform.uStrengthBottom.value })
 
             this.debugFolder.addColor( this.fireUniform.uColor1, 'value').name('fireColor 1').onChange( () => {
                 this.fireUniform.uColor1.value = this.fireUniform.uColor1.value
@@ -71,7 +103,54 @@ export default class Fire {
             })
         }
     }
+    // createFire() {
+    //     // Shape around te sword
+    //     const geometry = new CylinderBufferGeometry(0.12, 0.15, 0.25, 10, 10)
+        
+    //     // Generate fire around the sword
+    //     // const fireGeometry
+    //     const swordFireMaterial = new ShaderMaterial({
+    //         uniforms: this.fireUniform,
+    //         side: DoubleSide,
+    //         vertexShader: swordFireVertex,
+    //         fragmentShader: swordFireFragment
+    //     })
+    //     const fireMesh = new Mesh( geometry, swordFireMaterial )
+    //     fireMesh.position.x = this.options.x
+    //     fireMesh.position.y = this.options.y
+    //     fireMesh.position.z = this.options.z
+
+		
+	// 	this.fireGlobe = new Mesh( 
+	// 		new SphereGeometry(0.2, 6, 6),
+	// 		swordFireMaterial.clone()
+	// 	) 
+	// 	this.fireGlobe.position.x = this.options.x
+	// 	this.fireGlobe.position.y = this.options.y
+	// 	this.fireGlobe.position.z = this.options.z
+	// 	this.fireGroup.add(fireMesh, this.fireGlobe)
+
+    //     // Debug shader material
+    //     if (this.debug.active) {
+	// 		this.debugFolder.add( this.fireGlobe.material.uniforms.uFlameSpire, 'value').name('fireSpire').min(0).max(1).step(0.001)
+	// 		this.debugFolder.add( this.fireGlobe.position, 'y').name('firePositionY').min(0).max(1).step(0.001)
+	// 		this.debugFolder.add( this.fireUniform.uStrength, 'value').name('fireStrength').min(0).max(8).step(0.001)
+	// 		this.debugFolder.add( this.fireUniform.uStrengthBottom, 'value').name('fireStrength').min(0).max(8).step(0.001)
+
+    //         this.debugFolder.addColor( this.fireUniform.uColor1, 'value').name('fireColor 1').onChange( () => {
+    //             this.fireUniform.uColor1.value = this.fireUniform.uColor1.value
+    //         })
+    //         this.debugFolder.addColor( this.fireUniform.uColor2, 'value').name('fireColor 2').onChange( () => {
+    //             this.fireUniform.uColor2.value = this.fireUniform.uColor2.value
+    //         })
+    //         this.debugFolder.addColor( this.fireUniform.uColor3, 'value').name('fireColor 3').onChange( () => {
+    //             this.fireUniform.uColor3.value = this.fireUniform.uColor3.value
+    //         })
+    //     }
+    // }
     update() {
-        this.fireUniform.uTime.value = this.experience.time.elapsed / 1000
+		const time = this.experience.time.elapsed / 1000
+        this.fireUniform.uTime.value = time
+		this.fireGlobe.material.uniforms.uTime.value = time
     }
 }

@@ -31,6 +31,8 @@ export default class PointsAnimation extends EventEmitter {
         this.pointInfoOpen = false
         this.pointsGroup = this.world.children.find( child => child.name === 'pointsGroup' )
         this.cloudsGroup = this.world.children.find( child => child.name === 'cloudsGroup' )
+		this.towerGroup = this.world.children.find( child => child.name === 'towerGroup' )
+		this.runic = this.towerGroup.children.find((child) => child.name === 'runic')
         this.raycaster = new Raycaster()
         this.intersect = null
         this.clickedPoint = null
@@ -106,6 +108,11 @@ export default class PointsAnimation extends EventEmitter {
                 return tl
             }
         })
+		this.runicAnimation = gsap.timeline({ poused: true })
+		this.runicAnimation.to( this.runic.material.uniforms.uFinal, {
+			value: 1,
+			duration: 0.7
+		})
 
         // Debug
         if (this.debug.active) {
@@ -445,12 +452,20 @@ export default class PointsAnimation extends EventEmitter {
                 
                 this.tl = gsap.timeline()
                 this.tl.pointsShow( this.intersect.scale, {x: 0.15, y: 0.15} )
+				if ( this.intersect.name === 'point-1' ) {
+					if ( this.runicAnimation.progress() === 0) {
+						this.runicAnimation.play(0)
+					}
+				}
             }
         } else {
             // Cursor default
             if (document.documentElement.style.cursor === 'pointer') {
                 document.documentElement.style.cursor = 'default'
             }
+			if ( this.runicAnimation.progress() !== 0) {
+				this.runicAnimation.reverse()
+			}
             this.clean()
         }
     }

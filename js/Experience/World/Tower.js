@@ -2,8 +2,11 @@ import { Color, DoubleSide, Group, MeshBasicMaterial, ShaderMaterial } from 'thr
 import Experience from '../Experience'
 
 // Portal shaders
-import vertexShader from '../../../asstes/shaders/portal/portalVertex.glsl?raw'
-import fragmentShader from '../../../asstes/shaders/portal/portalFragment.glsl?raw'
+import portalVertex from '../../../asstes/shaders/portal/portalVertex.glsl?raw'
+import portalFragment from '../../../asstes/shaders/portal/portalFragment.glsl?raw'
+import runicVertex from '../../../asstes/shaders/runic/runicVertex.glsl?raw'
+import runicFragment from '../../../asstes/shaders/runic/runicFragment.glsl?raw'
+import gsap from 'gsap'
 
 export default class Tower {
     constructor () {
@@ -40,10 +43,20 @@ export default class Tower {
             map: this.resources.items.towerTexture3
         })
         this.towerMaterial4 = new ShaderMaterial({
+            uniforms: {
+				uTexture: { value: this.resources.items.towerTexture3 },
+				uColorMap: { value: this.resources.items.towerTexture4 },
+				uTime: { value: 0 },
+				uFinal: { value: 0.0 }
+			},
+            vertexShader: runicVertex,
+            fragmentShader: runicFragment,
+        })
+        this.towerMaterial5 = new ShaderMaterial({
             uniforms: this.customUniform,
             side: DoubleSide,
-            vertexShader,
-            fragmentShader,
+            vertexShader: portalVertex,
+            fragmentShader: portalFragment,
         })
 
         if (this.debug.active) {
@@ -69,7 +82,8 @@ export default class Tower {
         const towerPart1 = towerScene.children.find((child) => child.name === 'floor')
         const towerPart2 = towerScene.children.find((child) => child.name === 'walls')
         const towerPart3 = towerScene.children.find((child) => child.name === 'components')
-        const towerPart4 = towerScene.children.find((child) => child.name === 'portal')
+        const towerPart4 = towerScene.children.find((child) => child.name === 'runic')
+        const towerPart5 = towerScene.children.find((child) => child.name === 'portal')
 
         towerPart4.geometry.computeVertexNormals()        
         
@@ -77,13 +91,16 @@ export default class Tower {
         towerPart2.material = this.towerMaterial2
         towerPart3.material = this.towerMaterial3
         towerPart4.material = this.towerMaterial4
+        towerPart5.material = this.towerMaterial5	
         
-        tower.add( towerPart1, towerPart2, towerPart3, towerPart4 )
+        tower.add( towerPart1, towerPart2, towerPart3, towerPart4, towerPart5 )
         tower.scale.set( 0.47, 0.47, 0.47 )
 
         this.towerGroup = tower
     }
     update() {
-        this.customUniform.uTime.value = this.experience.time.elapsed / 1000
+		const time = this.experience.time.elapsed / 1000
+        this.customUniform.uTime.value = time
+		this.towerMaterial4.uniforms.uTime.value = time
     }
 }

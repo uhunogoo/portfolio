@@ -41,6 +41,12 @@ export default [
         path: `/textures/tower/otherTextures${ formatJPG }`
     },
     {
+        name: 'towerTexture4',
+        type: 'texture',
+        asset: 'startParams',
+        path: `/textures/tower/runic${ formatJPG }`
+    },
+    {
         name: 'shadowMap',
         type: 'texture',
         asset: 'startParams',

@@ -11,7 +11,7 @@ export default class Animation {
         // Defaults
         this.experience = new Experience()
         this.preload = this.experience.preload
-        this.uiAnimation = new UIAnimation()
+        this.uiAnimation = new UIAnimation(target)
         this.pointsAnimation = new PointsAnimation( target, this.uiAnimation ) 
         this.intersect = null
         this.followingCursor = new followingCursor( this.intersect )

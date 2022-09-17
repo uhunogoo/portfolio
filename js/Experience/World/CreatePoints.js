@@ -27,6 +27,7 @@ export default class Createpoints {
         this.points.forEach( point => {
             const sprite = new Sprite( material.clone() )
             
+			sprite.name = point.name
             sprite.position.copy( point.position )
             sprite.scale.setScalar(0)
             sprite.geometry.computeBoundingBox()
