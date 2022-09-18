@@ -105,7 +105,7 @@ export default class Grass {
         const { count } = this.grassParameters
 		
         const sampler = new MeshSurfaceSampler( this.floor ).setWeightAttribute( null ).build()
-		sampler.geometry.scale( 0.46, 0.47, 0.47 )
+		// sampler
         
         // resample basic
         const dummy = new Object3D()
@@ -186,6 +186,7 @@ export default class Grass {
         
         // Bounding sphere for frustumculled 
         instancedGrassMesh.geometry.computeBoundingSphere()
+        instancedGrassMesh.rotation.y = - Math.PI * 0.5
         instancedGrassMesh.geometry.boundingSphere.radius = this.grassParameters.size * 0.5
 
         this.grassGroup.add( instancedGrassMesh )
@@ -235,7 +236,9 @@ export default class Grass {
     createFloor() {
 		const towerScene = this.resources.items.towerModel.scene
         const floorGeometry = towerScene.children.find((child) => child.name === 'ground')
-		floorGeometry.scale.setScalar(0.47)
+		floorGeometry.rotation.y = - Math.PI * 0.5
+		floorGeometry.geometry.scale( 0.47, 0.47, 0.47 )
+		
 		
         this.resources.items.sandTexture.wrapS = RepeatWrapping
         this.resources.items.sandTexture.wrapT = RepeatWrapping

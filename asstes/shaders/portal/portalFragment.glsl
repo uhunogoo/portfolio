@@ -37,7 +37,7 @@ float snoise(vec2 v){
 
 void main() {
     vec2 st = vUv;
-    float noise = snoise( (st * 40.0 + uTime * 0.5) + snoise( (st * 2.0) + snoise( (st * 10.0 - uTime * 0.01) )) );
+    float noise = snoise( (st * 10.0 + uTime * 0.5) + snoise( (st * 2.0) + snoise( (st * 10.0 - uTime * 0.01) )) );
 
     vec3 color = mix( uColor1, uColor2, vec3(noise * 2.0) );
     color = mix( color, uColor2, vec3(1.0 - abs(noise)) );

@@ -40,7 +40,7 @@ export default class UIAnimation {
             duration: 0.4,
             stagger: 0.05
         })
-		this.runicAnimation = gsap.timeline({ poused: true })
+		this.runicAnimation = gsap.timeline({ paused: true })
 		this.runicAnimation.to( this.runic.material.uniforms.uFinal, {
 			value: 1,
 			duration: 0.7

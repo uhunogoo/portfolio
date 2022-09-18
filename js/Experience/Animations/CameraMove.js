@@ -9,21 +9,27 @@ export default class CameraMove {
         this.target = target        
         this.experience = new Experience()
         this.scene = this.experience.scene
-        this.camera = this.experience.camera.instance
-        this.cameraGroup = this.experience.camera.instanceGroup
+        this.camera = this.experience.camera
+        this.cameraEmpty = this.camera.instanceEmpty
         this.mouse = this.experience.mouse
         this.deviceOrientationEvent = this.experience.deviceOrientationEvent
         
         // Defaults
+		this.cameraEmptyDefaults = this.cameraEmpty.clone()
         this.deviceOrientationSupported = false
         this.cloudsGroup = this.target.children.find( child => child.name === 'cloudsGroup' )
         this.tempCloudsRotation = this.cloudsGroup.rotation.clone()
         this.parameters = this.experience.camera.parameters
-        this.parameters.angle = 1.75        
+        this.parameters.angle = 2        
 
         // Animations
         this.towerInAnimation = gsap.timeline({
             paused: true,
+			onUpdate: () => {
+				this.camera.instance.position.copy( this.camera.cameraPosition() )
+				this.camera.instance.lookAt( this.camera.cameraLookAt() )
+			},
+			onComplete: () => { this.cameraEmptyDefaults = this.cameraEmpty.clone() },
             defaults: {
                 duration: 2,
                 ease: 'power2.inOut'
@@ -33,19 +39,8 @@ export default class CameraMove {
         // Functions
         this.animations()
     }
+
     animations() {
-        this.towerInAnimation.to(this.parameters.lookAt, {
-            keyframes: {
-                '50%': {
-                    y: 0.4,
-                    ease: 'power1.out'
-                },
-                '100%': {
-                    y: 1,
-                    ease: 'power2.in'
-                }
-            }
-        })
         this.towerInAnimation.to(this.target.rotation, {
             keyframes: {
                 '35%': {
@@ -57,19 +52,17 @@ export default class CameraMove {
                     ease: 'power2.out'
                 }
             }
-        }, '<')
-        this.towerInAnimation.to(this.camera.position, {
+        }, 0)
+        this.towerInAnimation.to(this.cameraEmpty.position, {
             keyframes: {
                 '35%': {
-                    x: this.parameters.radius * 0.5,
-                    y: this.parameters.cameraY + (this.camera.position.y - this.parameters.cameraY) / 2,
-                    z: this.parameters.radius * 0.5,
+                    y: this.parameters.cameraY + (this.cameraEmpty.position.y - this.parameters.cameraY) / 2,
+                    z: this.parameters.radius,
                     ease: 'power1.in'
                 },
                 '100%': {
-                    x: this.parameters.radius,
-                    y: this.parameters.cameraY,
-                    z: this.parameters.radius,
+                    y: this.parameters.cameraY * 0.5,
+                    z: this.parameters.radius * 1.2,
                     ease: 'power2.out'
                 }
             },
@@ -88,18 +81,30 @@ export default class CameraMove {
         }, '<')
     }
     cameraRotation(x, y) {
-        const tl = gsap.timeline()
-        tl.fromTo(this.cameraGroup.rotation, {
-            x: this.cameraGroup.rotation.x,
-            y: this.cameraGroup.rotation.y
+		if ( !this.cameraEmptyDefaults.position.equals( this.cameraEmpty.position ) ) return 
+        const tl = gsap.timeline({
+			onUpdate: () => {
+				this.camera.instance.position.copy( this.camera.cameraPosition() )
+				this.camera.instance.lookAt( this.camera.cameraLookAt() )
+			}
+		})
+        tl.fromTo(this.cameraEmpty.rotation, {
+            x: this.cameraEmpty.rotation.x,
+            y: this.cameraEmpty.rotation.y
         }, {
+            x: Math.PI * 0.03 * y,
             y: Math.PI * 0.03 * x,
-            x: - Math.PI * 0.03 * y,
             ease: 'power1.out',
             duration: 0.6
         }, 0)
-        tl.fromTo(this.cloudsGroup.rotation, {y: this.cloudsGroup.rotation.y}, {
-            y: this.tempCloudsRotation.y + x * 0.05,
+        tl.fromTo(this.scene.rotation, {
+            x: this.scene.rotation.x,
+            y: this.scene.rotation.y
+        }, {
+            x: Math.PI * 0.03 * y,
+            y: Math.PI * 0.03 * x,
+            ease: 'power1.out',
+            duration: 0.6
         }, 0)
     }
     mouseMove() {        

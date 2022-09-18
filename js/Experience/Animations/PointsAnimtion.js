@@ -19,7 +19,9 @@ export default class PointsAnimation extends EventEmitter {
         this.debug = this.experience.debug
         this.scene = this.experience.scene
         this.points = this.experience.points.list
-        this.camera = this.experience.camera.instance
+        // this.camera = this.experience.camera.instance
+		this.camera = this.experience.camera
+        this.cameraEmpty = this.camera.instanceEmpty
         this.cameraGroup = this.experience.camera.instanceGroup
         this.mouse = this.experience.mouse
         this.preload = this.experience.preload.mesh
@@ -82,33 +84,7 @@ export default class PointsAnimation extends EventEmitter {
                 return tl
             }
         })
-        gsap.registerEffect({
-            name: "clickEffect",
-            extendTimeline:true,
-            effect: (target, parameters) => {                
-                const tl = gsap.timeline({
-                    defaults: {
-                        duration: 2,
-                        ease: 'power4.inOut'
-                    },
-                })
-                tl.to(this.parameters.lookAt, {
-                    y: parameters.y,
-                })
-                tl.to(this.world.rotation, {
-                    y: Math.PI * parameters.angle
-                }, '<')
-                tl.to(this.camera.position, {
-                    x: parameters.x,
-                    y: parameters.y + 0.75,
-                    z: parameters.z,
-                    ease: 'power3.inOut'
-                }, '<')
-
-                return tl
-            }
-        })
-		this.runicAnimation = gsap.timeline({ poused: true })
+		this.runicAnimation = gsap.timeline({ paused: true })
 		this.runicAnimation.to( this.runic.material.uniforms.uFinal, {
 			value: 1,
 			duration: 0.7
@@ -138,6 +114,18 @@ export default class PointsAnimation extends EventEmitter {
         this.showNav()
         this.startStyles()
     }
+	cameraUpdate() {
+		gsap.to( this.cameraEmpty.rotation, {
+			y: Math.PI * 2,
+			onUpdate: () => {
+				this.camera.instance.position.copy( this.camera.cameraPosition() )
+				this.camera.instance.lookAt( this.camera.cameraLookAt() )
+			},
+			duration: 20,
+			repeat: -1,
+			ease: 'none'
+		})
+	}
     startStyles() {
         gsap.set('.work', 
         {
@@ -179,40 +167,33 @@ export default class PointsAnimation extends EventEmitter {
         }, 0.15)
     }
     towerAnimation(target) {  
-        const lookAt = (target.id > 0) ? 5 : 0   
-         
+        const lookAt = (target.id > 0) ? 5 : 0    
         
-        const tl = gsap.timeline()
+        const tl = gsap.timeline({
+			onUpdate: () => {
+				this.camera.instance.position.copy( this.camera.cameraPosition() )
+				this.camera.instance.lookAt( this.camera.cameraLookAt() )
+			}
+		})
         tl.to(this.pointsScale, {
             x: 0,
             y: 0,
             stagger: 0.1,
             ease: 'power3.inOut'
         })
-        tl.to(this.world.rotation, {
-            y: '-=' + target.animationParameters.angle,
+        tl.to(this.cameraEmpty.position, {
+			x: target.position.x,
+			y: target.position.y,
+			z: target.position.z,
             duration: 1,
             ease: 'power3.inOut'
-        }, '<')
-        tl.to(this.parameters.lookAt, {
-            duration: 1,
-            y: target.position.y,
-            z: lookAt,
-            ease: 'power3.inOut'
-        }, '<')
-        tl.to(this.cameraGroup.rotation, {
-            x: 0,
-            y: 0,
+        }, 0)
+        tl.to(this.cameraEmpty.rotation, {
+			x: target.animationParameters.angle.x,
+			y: target.animationParameters.angle.y,
             duration: 1,
             ease: 'power3.inOut'
-        }, '<')
-        tl.to(this.camera.position, {
-            duration: 1,
-            x: target.animationParameters.radius + 0.2,
-            y: target.position.y + 0.75,
-            z: target.animationParameters.radius + 0.2,
-            ease: 'power3.inOut'
-        }, '<')
+        }, 0)
 
         return tl
     }
@@ -436,7 +417,7 @@ export default class PointsAnimation extends EventEmitter {
     }
     raycasterAnimation() {
         const mouse = { x: this.mouse.x, y: this.mouse.y }
-        this.raycaster.setFromCamera(mouse, this.camera)
+        this.raycaster.setFromCamera(mouse, this.camera.instance)
         const intersects = this.raycaster.intersectObjects( this.pointsGroup.children )
 
         if( intersects.length > 0 ) {

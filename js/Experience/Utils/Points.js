@@ -7,9 +7,9 @@ export default class Points {
                 name: 'point-2',
                 id: 0,
                 element: document.getElementById('point-1'),
-                position: new Vector3( -0.2, 1, 0 ),
+                position: new Vector3( 0, 1, 0.2 ),
                 animationParameters: {
-                    angle: 0,
+                    angle: { x: - Math.PI * 0.3, y: 0 },
                     radius: 1
                 }
             },
@@ -17,9 +17,9 @@ export default class Points {
                 name: 'point-1',
                 id: 1,
                 element: document.getElementById('point-0'),
-                position: new Vector3( 3.85, 0.3, 1.2 ),
+                position: new Vector3( -1.2, 0.65, 3.85 ),
                 animationParameters: {
-                    angle: Math.PI * 0.05,
+                    angle: { x: 0, y: Math.PI * 0.5 },
                     radius: 2.5
                 }
             },

@@ -140,8 +140,7 @@ export default class Skybox {
             this.cloudsGroup.add(cloud)
         }
         // Clouds global parameters
-        this.cloudsGroup.rotation.y = Math.PI * 0.5
-        this.cloudsGroup.position.x = -6.25
+        this.cloudsGroup.position.z = -6.25
 
         // Animate clouds
         const positiontoanimate = this.cloudsGroup.children.map( cloud => cloud.position )

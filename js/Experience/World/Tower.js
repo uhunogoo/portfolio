@@ -47,7 +47,7 @@ export default class Tower {
 				uTexture: { value: this.resources.items.towerTexture3 },
 				uColorMap: { value: this.resources.items.towerTexture4 },
 				uTime: { value: 0 },
-				uFinal: { value: 0.0 }
+				uFinal: { value: 0 }
 			},
             vertexShader: runicVertex,
             fragmentShader: runicFragment,
@@ -97,6 +97,7 @@ export default class Tower {
         tower.scale.set( 0.47, 0.47, 0.47 )
 
         this.towerGroup = tower
+		this.towerGroup.rotation.y = - Math.PI * 0.5
     }
     update() {
 		const time = this.experience.time.elapsed / 1000

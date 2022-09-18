@@ -21,9 +21,9 @@ export default class Fire {
         
         // Setup
         this.options = {}
-        this.options.x = 3.82
         this.options.y = 0.53
-        this.options.z = -1.77
+        this.options.x = 1.77
+        this.options.z = 3.82
         this.fireUniform = {
             uTime: { value: 0 },
             uStrength: { value: 0.92 },
@@ -78,10 +78,9 @@ export default class Fire {
 		this.fireGlobe.position.x = this.options.x
 		this.fireGlobe.position.y = 0.45
 		this.fireGlobe.position.z = this.options.z
+		this.fireGlobe.rotation.y = - Math.PI * 0.5
 
-		// this.fireGroup.add( fire.group )
 		this.fireGroup.add( fire.group, this.fireGlobe )
-
         // Debug shader material
         if (this.debug.active) {
 			this.debugFolder.add( this.fireGlobe.position, 'y').name('firePositionY').min(0).max(1).step(0.001)
