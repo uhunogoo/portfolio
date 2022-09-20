@@ -9,20 +9,22 @@ import bell from '../../../asstes/sounds/intro.mp3?url'
 import splash from '../../../asstes/sounds/splash.mp3?url'
 
 export default class PointsAnimation extends EventEmitter {
-    constructor ( world, UI ) {
+    constructor ( world, UI, cameraMove ) {
         super()
 
         // Setup
         this.world = world
         this.uiAnimations = UI
+		this.cameraMove = cameraMove
+		
         this.experience = new Experience()
         this.debug = this.experience.debug
         this.scene = this.experience.scene
         this.points = this.experience.points.list
-        // this.camera = this.experience.camera.instance
+		
 		this.camera = this.experience.camera
         this.cameraEmpty = this.camera.instanceEmpty
-        this.cameraGroup = this.experience.camera.instanceGroup
+
         this.mouse = this.experience.mouse
         this.preload = this.experience.preload.mesh
         this.bloomPass = this.experience.renderer.unrealBloomPass
@@ -167,33 +169,16 @@ export default class PointsAnimation extends EventEmitter {
         }, 0.15)
     }
     towerAnimation(target) {  
-        const lookAt = (target.id > 0) ? 5 : 0    
-        
-        const tl = gsap.timeline({
-			onUpdate: () => {
-				this.camera.instance.position.copy( this.camera.cameraPosition() )
-				this.camera.instance.lookAt( this.camera.cameraLookAt() )
-			}
-		})
+        const id = target.id
+		
+        const tl = gsap.timeline()
         tl.to(this.pointsScale, {
             x: 0,
             y: 0,
             stagger: 0.1,
             ease: 'power3.inOut'
         })
-        tl.to(this.cameraEmpty.position, {
-			x: target.position.x,
-			y: target.position.y,
-			z: target.position.z,
-            duration: 1,
-            ease: 'power3.inOut'
-        }, 0)
-        tl.to(this.cameraEmpty.rotation, {
-			x: target.animationParameters.angle.x,
-			y: target.animationParameters.angle.y,
-            duration: 1,
-            ease: 'power3.inOut'
-        }, 0)
+		tl.add( this.cameraMove.animateCamera(id).timeScale(2), 0 )
 
         return tl
     }

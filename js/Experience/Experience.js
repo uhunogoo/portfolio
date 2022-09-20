@@ -36,6 +36,7 @@ export default class Experience {
 
         this.debug = new Debug()
         this.scene = new Scene()
+        this.scene1 = new Scene()
         this.camera = new Camera()
         this.renderer = new Renderer()
         this.preload = new Preload()

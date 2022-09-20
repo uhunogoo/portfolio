@@ -9,13 +9,14 @@ export default class Camera {
         this.experience = new Experience()
         this.sizes = this.experience.sizes
         this.scene = this.experience.scene
+        this.scene1 = this.experience.scene1
         this.canvas = this.experience.canvas
         this.resources = this.experience.resources
         
         // Wait for environment
         this.parameters = {}
-        this.parameters.radius = 0
-        this.parameters.cameraY = 0
+        this.parameters.radius = 5
+        this.parameters.cameraY = 1.25
         this.parameters.position = new Vector3(0, 2, 2)
 		this.parameters.cameraPosition = new Vector3(0, 0.5, 1)
         this.parameters.lookAt = new Vector3(0, 0, 0)
@@ -56,29 +57,33 @@ export default class Camera {
 		
         // Base camera
         this.instance = new PerspectiveCamera(45, aspect, 0.1, 50)
+        this.instance1 = new PerspectiveCamera(45, aspect, 0.1, 50)
         this.scene.add(this.instance)
+        this.scene1.add( this.instance )
 
         const radius = 4 / aspect
-        this.parameters.cameraY = this.calculateY( aspect )
-        this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
+        // this.parameters.cameraY = this.calculateY( aspect )
 		this.parameters.lookAt.z -= this.parameters.radius
 
 		// Calculate camera
         this.instance.position.copy( this.cameraPosition() )
 		this.instance.lookAt( this.cameraLookAt() )
+		
+		this.instance1.position.set( 0, 0, 4 )
     }
     resize() {
         const aspect = this.sizes.width / this.sizes.height
         this.instance.aspect = aspect
+        this.instance1.aspect = aspect
 
-        const radius = 4 / aspect        
-        this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
+        // const radius = 4 / aspect        
+        // this.parameters.radius = gsap.utils.clamp( 5, 6.5, radius )
 
-        this.instance.position.y = this.calculateY( aspect )
-        this.instance.position.z = this.parameters.radius
-        this.instance.position.x = this.parameters.radius
+        // this.instance.position.y = this.calculateY( aspect )
+        // this.instance.position.z = this.parameters.radius
 
         this.instance.updateProjectionMatrix()
+        this.instance1.updateProjectionMatrix()
     }
     
     update() {

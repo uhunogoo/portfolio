@@ -7,7 +7,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-import { ACESFilmicToneMapping, CineonToneMapping, CustomToneMapping, LinearFilter, LinearToneMapping, NoToneMapping, ReinhardToneMapping, RGBAFormat, ShaderChunk, sRGBEncoding, Vector2, WebGLRenderer, WebGLRenderTarget } from 'three'
+import { ACESFilmicToneMapping, BoxGeometry, CineonToneMapping, Color, CustomToneMapping, LinearFilter, LinearToneMapping, Mesh, MeshBasicMaterial, NoToneMapping, ReinhardToneMapping, RGBAFormat, ShaderChunk, sRGBEncoding, Vector2, WebGLRenderer, WebGLRenderTarget } from 'three'
 
 
 export default class Renderer {
@@ -19,6 +19,7 @@ export default class Renderer {
         this.scene1 = this.experience.scene1
         this.canvas = this.experience.canvas
         this.camera = this.experience.camera
+        // this.camera1 = this.experience.camera.instance.clone()
         this.debug = this.experience.debug
 
         // Debug
@@ -49,7 +50,7 @@ export default class Renderer {
             canvas: this.canvas,
             powerPreference: "high-performance"
         })
-
+		this.instance.autoClear = false
         this.instance.outputEncoding = sRGBEncoding
 
         ShaderChunk.tonemapping_pars_fragment = ShaderChunk.tonemapping_pars_fragment.replace(
@@ -64,7 +65,10 @@ export default class Renderer {
 
         this.instance.toneMapping = toneMappingOptions[ params.toneMapping ]
         this.instance.toneMappingExposure = params.exposure 
-        
+
+		this.instance.setSize(this.sizes.width, this.sizes.height)
+		this.instance.setPixelRatio( Math.min(this.sizes.pixelRatio, 2) )
+
         // Debug renderer
         if (this.debug.active) {
             this.debugFolder
@@ -80,10 +84,6 @@ export default class Renderer {
                 .max(2)
                 .step(0.001)
         }
-
-
-        this.instance.setSize(this.sizes.width, this.sizes.height)
-        this.instance.setPixelRatio( Math.min(this.sizes.pixelRatio, 2) )
     }
     setPostprocess() {
         const renderTarget = new WebGLRenderTarget(
@@ -102,7 +102,7 @@ export default class Renderer {
         this.effectComposer = new EffectComposer(this.instance, renderTarget)
         this.effectComposer.setPixelRatio( Math.min(this.sizes.pixelRatio, 2) )
         this.effectComposer.setSize(this.sizes.width, this.sizes.height)
-
+		
         // Render pass
         const renderPass = new RenderPass(this.scene, this.camera.instance)
         this.effectComposer.addPass(renderPass)
@@ -233,7 +233,16 @@ export default class Renderer {
         this.displacementPass.material.uniforms.uAspect.value = this.sizes.width / this.sizes.height
     }
     update() {
+		// //render scene1
         // Tick effect composer
+        // this.effectComposer1.render()
+		// this.effectComposer.renderer.clear()
+		// renderer.autoClear = true;
+		
+		
+		this.instance.clear()
         this.effectComposer.render()
+		this.instance.clearDepth()
+		this.instance.render(this.scene1, this.camera.instance1)
     }
 }

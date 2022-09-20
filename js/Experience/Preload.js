@@ -18,6 +18,7 @@ export default class Preload extends EventEmitter {
         // Setup
         this.experience = new Experience()
         this.scene = this.experience.scene
+        this.scene1 = this.experience.scene1
         this.mouse = this.experience.mouse
         this.resources = this.experience.resources
         
@@ -87,16 +88,14 @@ export default class Preload extends EventEmitter {
                 uProgress: { value: 1 },
                 uAspect: { value: aspect }
             },
-            depthTest: false,
             transparent: true,
             vertexShader,
             fragmentShader,
         })
         
         this.mesh = new Mesh( plane, material )
-        this.mesh.position.copy( this.experience.camera.instance.position )
-        this.mesh.renderOrder = 1
-        this.scene.add( this.mesh )
+        this.mesh.position.z = -2
+        this.scene1.add( this.mesh )
     }
     loadingProcess() {
         gsap.fromTo(this.progress, { value: this.progress.value }, {
@@ -234,3 +233,4 @@ export default class Preload extends EventEmitter {
         this.mesh.material.uniforms.uAspect.value = aspect
     }
 }
+

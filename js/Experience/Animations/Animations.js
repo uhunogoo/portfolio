@@ -12,10 +12,15 @@ export default class Animation {
         this.experience = new Experience()
         this.preload = this.experience.preload
         this.uiAnimation = new UIAnimation(target)
-        this.pointsAnimation = new PointsAnimation( target, this.uiAnimation ) 
+        this.cameraMove = new CameraMove( target )
+        this.pointsAnimation = new PointsAnimation( 
+			target, 
+			this.uiAnimation, 
+			this.cameraMove 
+		)
+		 
         this.intersect = null
         this.followingCursor = new followingCursor( this.intersect )
-        this.cameraMove = new CameraMove( target )
         this.load = false
         this.informationBlockOpen = false
 
