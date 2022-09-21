@@ -111,27 +111,35 @@ void main() {
     float strength =  mod(rotatedUV.x * floor(uFlameSpire) - 0.5, 1.0);
     strength = length(strength - 0.5) * (1.0 - st.y * uStrength);
 	
-	float scaleX = mix( 4.0, 20.0, uFireType );
-	float scaleNoise = mix( 2.0, 1.0, uFireType );
-	float scaleTime = mix( .76, 0.5, uFireType );
+	float scaleX = mix( 3.0, 20.0, uFireType );
+	float scaleNoise = mix( 1.0, 1.0, uFireType );
+	float scaleTime = mix( 0.0, 1., uFireType );
+	// float scaleX = mix( 10.0, 20.0, uFireType );
+	// float scaleNoise = mix( 1.0, 1.0, uFireType );
+	// float scaleTime = mix( 0.0, 0.5, uFireType );
 
-    vec2 noiseCoord = vec2( strength + st.x * scaleX, noiseP.y) * vec2(scaleNoise, 10.0) - vec2(newTime * scaleTime, newTime);
-    float noise = cnoise( vec3( noiseCoord, 0) + cnoise( vec3( noiseCoord, 0) ) + cnoise( vec3( noiseCoord, 0) ) );
+
+    vec2 noiseCoord = vec2( strength + st.x * scaleX, st.y) * vec2(scaleNoise, 4.0) - vec2(newTime * scaleTime, newTime);
+    float noise = cnoise( vec3( noiseCoord, uTime) + cnoise( vec3( noiseCoord, -uTime) ) + cnoise( vec3( noiseCoord, 0) ) );
     float absNoise = 1.0 - abs(noise);
 
+    // float fire = smoothstep( 0.2, 0.5, strength * 4.0 + absNoise - 1.0 );
+    // fire += 1.0 - smoothstep(0.1, 1.0 * (uStrengthBottom / 8.0), st.y * 4.0 + noise - 1.0);
 
-    float fire = smoothstep( 0.2, 0.5, strength * 4.0 + absNoise - 1.0 );
-    fire += 1.0 - smoothstep(0.1, 1.0 * (uStrengthBottom / 8.0), st.y * 4.0 + noise - 1.0);
+	float fire = smoothstep( 0.2, 0.5, strength * uStrengthBottom + absNoise - 1.0 );
+	fire += 1.0 - smoothstep(0.1, 1.0, st.y * uStrengthBottom + (fire + sin(noise * 4.0)) * 0.5 - 1.0);
+
 
     float activePath = ( 1.0 + sin(smoothstep(0.1, 1.0, strength * 4.0 + absNoise - 1.0) * 6.0)) / 2.0;
     activePath *= strength;
 
-    // calmped
+    // // calmped
     fire = clamp(fire, 0.0, 1.0);
     float mask = clamp( side * fire, 0.0, 1.0 );
+
     if (mask < 0.1) discard;
 
-    // collor
+    // // collor
     vec3 color_1 = uColor1;
     vec3 color_2 = uColor2;
     vec3 color_3 = uColor3;
@@ -139,7 +147,8 @@ void main() {
     mixedColor = mix( mixedColor, color_3, activePath * noise * 10.0 );
     mixedColor = clamp( mixedColor, vec3(0.0), vec3(1.0) );
 
+	
     // final
     gl_FragColor = vec4( mixedColor, mask);
-    // gl_FragColor = vec4( vec3(strength), 1.0);
+    // gl_FragColor = vec4( vec3(fire), 1.0);
 }

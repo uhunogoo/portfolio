@@ -1,6 +1,6 @@
 // import { Matrix4 } from 'three'
 import gsap from 'gsap'
-import { BufferGeometry, CatmullRomCurve3, Line, LineBasicMaterial, QuadraticBezierCurve3, Vector3 } from 'three'
+import { QuadraticBezierCurve3 } from 'three'
 
 import Experience from '../Experience'
 
@@ -31,13 +31,14 @@ export default class CameraMove {
 		this.cameraAnimationVariation = {
 			curves: [],
 			animationParameters: [
-				{ x: -Math.PI * 0.2, y: [ Math.PI * 0.03, -Math.PI * 0.03 ] },
-				{ x: -Math.PI * 0.3, y: [ -Math.PI * 0.02,  Math.PI * 0.6 ] },
+				{ x: -Math.PI * 0.2, y: -Math.PI * 0.03 },
+				{ x: -Math.PI * 0.1, y: Math.PI * 0.5},
 			]
 		}
         // Animations
         this.towerInAnimation = gsap.timeline({
             paused: true,
+			// onUpdate: () => this.updateCamera(),
 			onComplete: () => { 
 				this.cameraEmptyDefaults = this.cameraEmpty.clone()
 				this.cameraCurve()
@@ -55,25 +56,25 @@ export default class CameraMove {
             effect: (target, parameters) => {
 				// Defaults 
 				const length = target[0].getLength() / 5
-				const roateDirection = (parameters.y[1] > 1) ? -1 : 1
-				
+				const path = target[0].getPoints( 400 )
+
 				// Animation
 				const tl = gsap.timeline({
 					onUpdate: () => {
-						// push path coordinates to empty
-						target[0].getPoint(
-							this.cameraMove.progress, 
-							this.cameraEmpty.position
-						)
+						const t = this.cameraMove.progress
+						const ID = Math.round(t * (path.length - 1 ))
+						
+						// this.cameraEmpty.position.lerp( path[ ID ], 0.7 )
+						this.cameraEmpty.position.copy( path[ ID ] )
 					}
 				})
 				tl.to( this.cameraMove, {
 					progress: 1,
 					duration: 1 + length,
-					ease: 'sine.out'
+					ease: 'power1.inOut'
 				}, 0)
 				tl.to( this.cameraEmpty.rotation, {
-					y: parameters.y[1],
+					y: parameters.y,
 					x: parameters.x,
 					overwrite: true,
 					duration: 1 + length,
@@ -83,6 +84,7 @@ export default class CameraMove {
                 return tl
             }
         })
+
 
         // Functions
         this.animations()
@@ -104,7 +106,7 @@ export default class CameraMove {
 		const curve2Coords = []
 		// First curve
 		const curv1Point2 = this.points.list[1].position.clone()
-		curv1Point2.x = 0.2
+		curv1Point2.x = 0.0
 		curv1Point2.y = 0.0
 		curv1Point2.z += 0.5
 		curve1Coords.push( this.cameraEmptyDefaults.position )
@@ -113,9 +115,9 @@ export default class CameraMove {
 		
 		// second curve
 		const curv2Point2 = this.points.list[1].position.clone()
-		curv2Point2.x = 0.9
-		curv2Point2.y = 0.15
-		curv2Point2.z -= 0.6
+		curv2Point2.x = 0.1
+		curv2Point2.y = 0.5
+		curv2Point2.z += 0.3
 		curve2Coords.push( this.cameraEmptyDefaults.position )
 		curve2Coords.push( curv2Point2 )
 		curve2Coords.push( this.points.list[1].position )
@@ -123,22 +125,18 @@ export default class CameraMove {
 		
 		//Create a closed wavey loop
 		this.curve1 = new QuadraticBezierCurve3( ...curve1Coords )
-		this.cameraAnimationVariation.curves.push( this.curve1 )
-		
 		this.curve2 = new QuadraticBezierCurve3( ...curve2Coords )
+		
+		this.cameraAnimationVariation.curves.push( this.curve1 )
 		this.cameraAnimationVariation.curves.push( this.curve2 )
-		
-		// console.log( this.curve1.getLength() )
-		// console.log( this.curve2.getLength() )
-		
-		
-		
+
 		// Show for debug
 		// this.points1 = this.curve1.getPoints( 50 )
 		// this.points2 = this.curve2.getPoints( 50 )
+		
 		// const lineMaterial = new LineBasicMaterial( { color: 0xff0000 } )
-		// const lineGeometry1 = new BufferGeometry().setFromPoints( this.points1 )
-		// const lineGeometry2 = new BufferGeometry().setFromPoints( this.points2 )
+		// const lineGeometry1 = new Geometry().setFromPoints( this.points1 )
+		// const lineGeometry2 = new Geometry().setFromPoints( this.points2 )
 
 		// const curveObject1 = new Line( lineGeometry1, lineMaterial )
 		// const curveObject2 = new Line( lineGeometry2, lineMaterial )
@@ -186,7 +184,6 @@ export default class CameraMove {
     }
     cameraRotation(x, y) {
 		if ( !this.cameraEmptyDefaults.position.equals( this.cameraEmpty.position ) ) return
-		// this.updateCamera()
         const tl = gsap.timeline()
         tl.fromTo(this.cameraEmpty.rotation, { x: this.cameraEmpty.rotation.x, y: this.cameraEmpty.rotation.y },{
             x: Math.PI * 0.03 * y,
@@ -194,15 +191,15 @@ export default class CameraMove {
             ease: 'power3.out',
             duration: 0.9
         }, 0)
-        // tl.fromTo(this.scene.rotation, {
-		// 	x: this.scene.rotation.x,
-        //     y: this.scene.rotation.y
-        // }, {
-		// 	x: Math.PI * 0.002 * y,
-        //     y: Math.PI * 0.002 * x,
-        //     ease: 'sine.out',
-        //     duration: 0.6
-        // }, 0)
+        tl.fromTo(this.scene.rotation, {
+			x: this.scene.rotation.x,
+            y: this.scene.rotation.y
+        }, {
+			x: Math.PI * 0.002 * y,
+            y: Math.PI * 0.002 * x,
+            ease: 'sine.out',
+            duration: 0.6
+        }, 0)
     }
     mouseMove() {        
         // Return if use device orientation 

@@ -1,4 +1,4 @@
-import { Color, PlaneBufferGeometry, SphereGeometry, DoubleSide, Group, Mesh, ShaderMaterial, BufferAttribute } from 'three'
+import { Color, SphereGeometry, DoubleSide, Group, Mesh, ShaderMaterial } from 'three'
 import Experience from '../Experience'
 
 // Sword shaders
@@ -27,7 +27,7 @@ export default class Fire {
         this.fireUniform = {
             uTime: { value: 0 },
             uStrength: { value: 0.92 },
-            uStrengthBottom: { value: 8.0 },
+            uStrengthBottom: { value: 3.0 },
 			uFlameSpire: { value: 1 },
 			uFireType: { value: 0 },
             uColor1: { value: new Color('#ff0000') },
@@ -41,7 +41,7 @@ export default class Fire {
 		const fire = {}
 		fire.detail = 4
 		fire.size = { x: 0.33, y: 0.4 }
-		fire.geometry = new PlaneBufferGeometry(1, 1)
+		// fire.geometry = new PlaneGeometry(1, 1)
 		fire.material = new ShaderMaterial({
             uniforms: this.fireUniform,
             side: DoubleSide,
@@ -50,25 +50,28 @@ export default class Fire {
         })
 		fire.group = new Group()
 
-		// Generate fire
-		for (let i = 0; i < fire.detail; i++ ) {
-			const geometry = fire.geometry.clone() 
-			const material = fire.material
-			const fireMesh = new Mesh( geometry, material )
+		// // Generate fire
+		// for (let i = 0; i < fire.detail; i++ ) {
+		// 	const geometry = fire.geometry.clone() 
+		// 	const material = fire.material
+		// 	const fireMesh = new Mesh( geometry, material )
 
-			fireMesh.scale.set( fire.size.x, fire.size.y, 1 )
-			fireMesh.rotation.y = Math.PI * ( 1 / fire.detail ) * i
+		// 	fireMesh.scale.set( fire.size.x, fire.size.y, 1 )
+		// 	fireMesh.rotation.y = Math.PI * ( 1 / fire.detail ) * i
 			
-			fire.group.add( fireMesh )
-		}
+		// 	fire.group.add( fireMesh )
+		// }
 		
+		// fire.group.position.x = 0
+        // fire.group.position.y = 1
+        // fire.group.position.z = 5
 		fire.group.position.x = this.options.x
         fire.group.position.y = this.options.y - fire.size.y * 0.08
         fire.group.position.z = this.options.z
 		
 
 		this.fireGlobe = new Mesh( 
-			new SphereGeometry(0.17, 8, 6),
+			new SphereGeometry(0.17, 10, 10),
 			fire.material.clone()
 		)
 		
@@ -80,7 +83,8 @@ export default class Fire {
 		this.fireGlobe.position.z = this.options.z
 		this.fireGlobe.rotation.y = - Math.PI * 0.5
 
-		this.fireGroup.add( fire.group, this.fireGlobe )
+		// this.fireGroup.add( fire.group )
+		this.fireGroup.add( this.fireGlobe )
         // Debug shader material
         if (this.debug.active) {
 			this.debugFolder.add( this.fireGlobe.position, 'y').name('firePositionY').min(0).max(1).step(0.001)
@@ -104,7 +108,7 @@ export default class Fire {
     }
     // createFire() {
     //     // Shape around te sword
-    //     const geometry = new CylinderBufferGeometry(0.12, 0.15, 0.25, 10, 10)
+    //     const geometry = new CylinderGeometry(0.12, 0.15, 0.25, 10, 10)
         
     //     // Generate fire around the sword
     //     // const fireGeometry

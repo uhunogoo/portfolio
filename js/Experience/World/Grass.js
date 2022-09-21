@@ -1,4 +1,4 @@
-import { BufferAttribute, BufferGeometry, CircleGeometry, Color, DoubleSide, Float32BufferAttribute, Group, InstancedBufferAttribute, InstancedBufferGeometry, Mesh, MeshBasicMaterial, Object3D, Points, RepeatWrapping, ShaderMaterial, sRGBEncoding, Vector2, Vector3 } from 'three'
+import { BufferAttribute, Color, DoubleSide, Float32BufferAttribute, Group, InstancedBufferAttribute, InstancedBufferGeometry, Mesh, MeshBasicMaterial, Object3D, Points, RepeatWrapping, ShaderMaterial, sRGBEncoding, Vector2, Vector3, BufferGeometry } from 'three'
 import { MeshSurfaceSampler } from 'three/examples/jsm/math/MeshSurfaceSampler'
 import Experience from '../Experience'
 import gsap from 'gsap'

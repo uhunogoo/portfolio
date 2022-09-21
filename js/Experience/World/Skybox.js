@@ -1,4 +1,4 @@
-import { CylinderGeometry, Group, Mesh, MeshBasicMaterial, PlaneBufferGeometry, Vector3 } from 'three';
+import { CylinderGeometry, Group, Mesh, MeshBasicMaterial, PlaneGeometry, Vector3 } from 'three';
 import { Sky } from 'three/examples/jsm/objects/Sky'
 import Experience from '../Experience'
 import gsap from 'gsap'
@@ -110,7 +110,7 @@ export default class Skybox {
             this.resources.items.cloud,
             this.resources.items.cloud2
         ]
-        const geometry = new PlaneBufferGeometry( 1, 1 )
+        const geometry = new PlaneGeometry( 1, 1 )
         const material = new MeshBasicMaterial({ transparent: true, depthWrite: false })
 
         // Generate clouds

@@ -1,5 +1,4 @@
-import gsap from 'gsap'
-import { Group, Vector3, PerspectiveCamera, BoxBufferGeometry, Mesh, MeshBasicMaterial } from 'three'
+import { Group, Vector3, PerspectiveCamera, BoxGeometry, Mesh, MeshBasicMaterial } from 'three'
 
 import Experience from './Experience'
 
@@ -18,7 +17,7 @@ export default class Camera {
         this.parameters.radius = 5
         this.parameters.cameraY = 1.25
         this.parameters.position = new Vector3(0, 2, 2)
-		this.parameters.cameraPosition = new Vector3(0, 0.5, 1)
+		this.parameters.cameraPosition = new Vector3(0, 0.4, 1)
         this.parameters.lookAt = new Vector3(0, 0, 0)
 
         // call method
@@ -29,10 +28,11 @@ export default class Camera {
         return Math.max(1.25, ( aspect < 1) ? 2 / aspect : 1.25) 
     }
 	setCamenraEmpty() {
-		const geometry = new BoxBufferGeometry(0.2, 0.3, 0.2 )
-		const material = new MeshBasicMaterial()
+		const geometry = new BoxGeometry(0.2, 0.3, 0.2 )
+		const material = new MeshBasicMaterial({ wireframe: true })
 		
 		this.instanceEmpty = new Mesh( geometry, material )
+		this.instanceEmpty.rotation.reorder('YXZ')
 		this.instanceEmpty.position.copy( this.parameters.position )
 
 		// this.scene.add(this.instanceEmpty)
@@ -56,13 +56,11 @@ export default class Camera {
         const aspect = this.sizes.width / this.sizes.height
 		
         // Base camera
-        this.instance = new PerspectiveCamera(45, aspect, 0.1, 50)
-        this.instance1 = new PerspectiveCamera(45, aspect, 0.1, 50)
+        this.instance = new PerspectiveCamera(47, aspect, 0.8, 30)
+        this.instance1 = new PerspectiveCamera(45, aspect, 0.8, 30)
         this.scene.add(this.instance)
         this.scene1.add( this.instance )
 
-        const radius = 4 / aspect
-        // this.parameters.cameraY = this.calculateY( aspect )
 		this.parameters.lookAt.z -= this.parameters.radius
 
 		// Calculate camera
