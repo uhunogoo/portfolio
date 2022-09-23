@@ -1,6 +1,6 @@
 // import { Matrix4 } from 'three'
 import gsap from 'gsap'
-import { QuadraticBezierCurve3 } from 'three'
+import { QuadraticBezierCurve3, Vector3 } from 'three'
 
 import Experience from '../Experience'
 
@@ -9,6 +9,7 @@ export default class CameraMove {
         // Setup 
         this.target = target        
         this.experience = new Experience()
+		this.sizes = this.experience.sizes
         this.scene = this.experience.scene
         this.camera = this.experience.camera
         this.cameraEmpty = this.camera.instanceEmpty
@@ -18,9 +19,14 @@ export default class CameraMove {
         
         // Defaults
 		this.cameraMove = { 
-			progress: 0.0, 
-			angle: 0
+			progress: 0.0,
+			rotateXY: { x: 0, y: 0 }, 
+			angle: {
+                lineAnimation: new Vector3(),
+                mouseAnimation: new Vector3()
+            }
 		}
+		this.angleScale = 0
 		this.cameraEmptyDefaults = this.cameraEmpty.clone()
         this.deviceOrientationSupported = false
         this.cloudsGroup = this.target.children.find( child => child.name === 'cloudsGroup' )
@@ -29,7 +35,7 @@ export default class CameraMove {
         this.parameters.angle = 2   
 		
 		this.cameraAnimationVariation = {
-			curves: [],
+			curves: {},
 			animationParameters: [
 				{ x: -Math.PI * 0.2, y: -Math.PI * 0.03 },
 				{ x: -Math.PI * 0.1, y: Math.PI * 0.5},
@@ -40,7 +46,7 @@ export default class CameraMove {
             paused: true,
 			// onUpdate: () => this.updateCamera(),
 			onComplete: () => { 
-				this.cameraEmptyDefaults = this.cameraEmpty.clone()
+				this.cameraEmptyDefaults.position.copy( this.cameraEmpty.position.clone() )
 				this.cameraCurve()
 				
 			},
@@ -55,8 +61,8 @@ export default class CameraMove {
             extendTimeline:true,
             effect: (target, parameters) => {
 				// Defaults 
-				const length = target[0].getLength() / 5
-				const path = target[0].getPoints( 400 )
+				const pathLength = target[0].pathLength / 5
+				const path = target[0].points
 
 				// Animation
 				const tl = gsap.timeline({
@@ -64,21 +70,19 @@ export default class CameraMove {
 						const t = this.cameraMove.progress
 						const ID = Math.round(t * (path.length - 1 ))
 						
-						// this.cameraEmpty.position.lerp( path[ ID ], 0.7 )
 						this.cameraEmpty.position.copy( path[ ID ] )
 					}
 				})
 				tl.to( this.cameraMove, {
 					progress: 1,
-					duration: 1 + length,
-					ease: 'power1.inOut'
+					duration: 1 + pathLength,
+					ease: 'power1.in'
 				}, 0)
-				tl.to( this.cameraEmpty.rotation, {
+				tl.to( this.cameraMove.angle.lineAnimation, {
 					y: parameters.y,
 					x: parameters.x,
-					overwrite: true,
-					duration: 1 + length,
-					ease: 'power1.inOut'
+					duration: 1 + pathLength,
+					ease: 'power1.in'
 				}, 0)
 
                 return tl
@@ -88,11 +92,16 @@ export default class CameraMove {
 
         // Functions
         this.animations()
+		this.cameraRotationTimelines()
     }
 	animateCamera(id) {
+		const target = {
+			pathLength: this.cameraAnimationVariation.curves.pathLength[id],
+			points: this.cameraAnimationVariation.curves.curvePoints[id]
+		}
 		const tl = gsap.timeline()
 		tl.cameraMoveAnimation( 
-			this.cameraAnimationVariation.curves[id], 
+			target, 
 			this.cameraAnimationVariation.animationParameters[id] 
 		)
 		return tl
@@ -109,7 +118,7 @@ export default class CameraMove {
 		curv1Point2.x = 0.0
 		curv1Point2.y = 0.0
 		curv1Point2.z += 0.5
-		curve1Coords.push( this.cameraEmptyDefaults.position )
+		curve1Coords.push( this.cameraEmptyDefaults.position.clone() )
 		curve1Coords.push( curv1Point2 )
 		curve1Coords.push( this.points.list[0].position )
 		
@@ -118,7 +127,7 @@ export default class CameraMove {
 		curv2Point2.x = 0.1
 		curv2Point2.y = 0.5
 		curv2Point2.z += 0.3
-		curve2Coords.push( this.cameraEmptyDefaults.position )
+		curve2Coords.push( this.cameraEmptyDefaults.position.clone() )
 		curve2Coords.push( curv2Point2 )
 		curve2Coords.push( this.points.list[1].position )
 		
@@ -126,13 +135,15 @@ export default class CameraMove {
 		//Create a closed wavey loop
 		this.curve1 = new QuadraticBezierCurve3( ...curve1Coords )
 		this.curve2 = new QuadraticBezierCurve3( ...curve2Coords )
-		
-		this.cameraAnimationVariation.curves.push( this.curve1 )
-		this.cameraAnimationVariation.curves.push( this.curve2 )
 
-		// Show for debug
-		// this.points1 = this.curve1.getPoints( 50 )
-		// this.points2 = this.curve2.getPoints( 50 )
+		this.cameraAnimationVariation.curves.pathLength = [
+			this.curve1.getLength(),
+			this.curve2.getLength()
+		]
+		this.cameraAnimationVariation.curves.curvePoints = [
+			this.curve1.getPoints( 300 ),
+			this.curve2.getPoints( 300 )
+		]
 		
 		// const lineMaterial = new LineBasicMaterial( { color: 0xff0000 } )
 		// const lineGeometry1 = new Geometry().setFromPoints( this.points1 )
@@ -182,57 +193,108 @@ export default class CameraMove {
             }
         }, '<')
     }
-    cameraRotation(x, y) {
-		if ( !this.cameraEmptyDefaults.position.equals( this.cameraEmpty.position ) ) return
-        const tl = gsap.timeline()
-        tl.fromTo(this.cameraEmpty.rotation, { x: this.cameraEmpty.rotation.x, y: this.cameraEmpty.rotation.y },{
-            x: Math.PI * 0.03 * y,
-            y: Math.PI * 0.05 * x,
-            ease: 'power3.out',
-            duration: 0.9
-        }, 0)
-        tl.fromTo(this.scene.rotation, {
-			x: this.scene.rotation.x,
-            y: this.scene.rotation.y
-        }, {
-			x: Math.PI * 0.002 * y,
-            y: Math.PI * 0.002 * x,
-            ease: 'sine.out',
-            duration: 0.6
-        }, 0)
+    cameraRotationCalculation() {
+        const startRotation = this.cameraEmptyDefaults.rotation.clone()
+
+        const mouseMoveRotation = this.cameraMove.angle.mouseAnimation
+        const lineMoveRotation = this.cameraMove.angle.lineAnimation	
+		
+        const combineBothMoveX = mouseMoveRotation.x + lineMoveRotation.x
+        const combineBothMoveY = mouseMoveRotation.y + lineMoveRotation.y
+		
+        this.cameraEmpty.rotation.x = startRotation.x + combineBothMoveX
+        this.cameraEmpty.rotation.y = startRotation.y + combineBothMoveY
     }
-    mouseMove() {        
+    cameraRotationTimelines() {
+		this.rotateCameraY = gsap.timeline({
+			paused: true,
+			defaults: {
+				ease: 'none',
+				duration: 1
+			}
+		})
+        this.rotateCameraY.fromTo(this.cameraMove.angle.mouseAnimation, {
+            y: () => 0.18 + this.angleScale
+		},{
+			y: () => (0.18 + this.angleScale) * -1 
+        })
+		this.rotateCameraY.fromTo(this.scene.rotation, {
+            y: Math.PI * 0.002,
+		},{
+            y: - Math.PI * 0.002,
+        }, 0)
+
+
+		this.rotateCameraX = gsap.timeline({
+			paused: true,
+			defaults: {
+				ease: 'none',
+				duration: 1
+			}
+		})
+        this.rotateCameraX.fromTo(this.cameraMove.angle.mouseAnimation, {
+            x: - Math.PI * 0.05,
+		},{
+            x: Math.PI * 0.05,
+        })
+		this.rotateCameraX.fromTo(this.scene.rotation, {
+            x: - Math.PI * 0.002,
+		},{
+            x: Math.PI * 0.002,
+        }, 0)      
+    }
+	cameraRotationAnimation( x, y ) {	
+		const update = () => {
+			const {x, y} = this.cameraMove.rotateXY
+			this.rotateCameraX.progress( x )
+			this.rotateCameraY.progress( y )
+		}
+		gsap.to(this.cameraMove.rotateXY, {
+			x: (y + 1) / 2,
+			y: (x + 1) / 2,
+			immediateRender: true,
+			ease: 'sine',
+			duration: 0.65,
+			onUpdate: update
+		})
+	}
+    mouseMove() {     
         // Return if use device orientation 
-        if ( this.deviceOrientationSupported ) return
+        if ( !this.deviceOrientationSupported ) {
+			// Get mouse coordinates
+			const { x, y } = this.mouse
+			
+			this.angleScale = 1.0 - Math.min(this.sizes.width / 1000, 1)
+			this.cameraRotationAnimation( x, y )
+		}
 
-        // Get mouse coordinates 
-        const { x, y } = this.mouse       
-
-        this.cameraRotation(-x * 1.3, y * 1.1)
     }
-    deviceOrientation() {
+	resize() {
+		this.rotateCameraY.kill()
+		this.rotateCameraX.kill()
+		this.cameraRotationTimelines()
+	}
+    deviceOrientation() {		
         if (this.deviceOrientationEvent.deviceOrientationTarget) {
-            const target = this.deviceOrientationEvent.deviceOrientationTarget
-            const gammaAngle = 20
-            
-            const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle,target.gamma )
-            const frontToBack = gsap.utils.clamp(10, 55,target.beta )
-
-            this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
-            
-            this.cameraRotation( (leftToRight / gammaAngle) * 2, -( frontToBack / 55 ) * 1.5)
+			if( typeof this.deviceOrientationEvent.deviceOrientationTarget.gamma === 'number') {
+				const gammaAngle = 20
+				const target = this.deviceOrientationEvent.deviceOrientationTarget
+				this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
+				
+				const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle, target.gamma )
+				const frontToBack = gsap.utils.clamp(10, 55,target.beta )
+	
+				
+				const x = - leftToRight / gammaAngle
+				const y = frontToBack / 55
+				
+				this.angleScale = 1.0 - Math.min(this.sizes.width / 1000, 1)
+				this.cameraRotationAnimation( x, y )
+			}
         }
     }
     update() {
 		this.updateCamera()
-        // let vector = new THREE.Vector3()
-        // this.camera.getWorldPosition(vector)
-        // vector.applyMatrix4(this.rotatioMatrix)
-        // vector.negate()
-
-        // this.cloudsGroup.position.x = vector.x
-        // this.cloudsGroup.position.z = vector.z
-        // this.cloudsGroup.position.y = vector.y + 2
-        // this.cloudsGroup.lookAt( 0, 0, 0 )
+		this.cameraRotationCalculation()
     }
 }

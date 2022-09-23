@@ -132,7 +132,7 @@ export default class UIAnimation {
 
         // Each section animation
         sections.forEach( section => {
-            gsap.fromTo( section.querySelector('picture'), { x: '-40%', scale: 0.3, rotate: '15deg' },{ 
+            gsap.fromTo( section.querySelector('.work__link'), { x: '-40%', scale: 0.3, rotate: '15deg' },{ 
                 x: '-60%',
 				rotate: '-15deg',
 				scale: 1,
@@ -277,7 +277,7 @@ export default class UIAnimation {
             this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
             
             gsap.to('.compass__dots', {
-                xPercent: -50 - 6 * (leftToRight / gammaAngle)
+                xPercent: -50 + 6 * (leftToRight / gammaAngle)
             })
             
         }

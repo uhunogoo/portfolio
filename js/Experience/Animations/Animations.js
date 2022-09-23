@@ -70,7 +70,7 @@ export default class Animation {
         }
 
         // Check iformation block state
-        if ( this.informationBlockOpen ) return 
+        // if ( this.informationBlockOpen ) return 
         
         if ( this.cameraMove ) {
             this.cameraMove.mouseMove()
@@ -88,6 +88,9 @@ export default class Animation {
     resize() {
         if ( this.uiAnimation ) {
             this.uiAnimation.resize()
+        }
+		if ( this.cameraMove ) {
+            this.cameraMove.resize()
         }
     }
 }

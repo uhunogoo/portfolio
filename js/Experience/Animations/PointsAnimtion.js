@@ -72,7 +72,7 @@ export default class PointsAnimation extends EventEmitter {
                 const tl = gsap.timeline({
                     defaults: {
                       duration: 1,
-                      ease: 'power4.out'
+                      ease: 'none'
                     },
                     onReverseComplete: () => {
                         const tl = gsap.timeline()
@@ -80,7 +80,7 @@ export default class PointsAnimation extends EventEmitter {
                     }
                 })
                 tl.add( this.uiAnimations.showMenu().timeScale(3).reverse())                
-                tl.add( this.towerAnimation(target[0]), 0)                
+                tl.add( this.towerAnimation(target[0]).timeScale(2), 0)                
                 tl.add( parameters.function.play(), 0 )
 
                 return tl
@@ -168,17 +168,16 @@ export default class PointsAnimation extends EventEmitter {
             stagger: 0.02
         }, 0.15)
     }
-    towerAnimation(target) {  
-        const id = target.id
+    towerAnimation(target) {
 		
-        const tl = gsap.timeline()
+        const tl = gsap.timeline({ defaults: { ease: 'none', }})
         tl.to(this.pointsScale, {
             x: 0,
             y: 0,
             stagger: 0.1,
             ease: 'power3.inOut'
         })
-		tl.add( this.cameraMove.animateCamera(id).timeScale(2), 0 )
+		tl.add( this.cameraMove.animateCamera( target.id ), 0 )
 
         return tl
     }
@@ -316,12 +315,12 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.2,
             stagger: 0.1,
         })
-        tl.fromTo('.work__image', {scale: 0.6}, {
-            scale: 1,
-            stagger: 0.07,
-            duration: 1.25,
-            ease: 'power2'
-        }, '<')
+        // tl.fromTo('.work__image picture', {scale: 0.6}, {
+        //     scale: 1,
+        //     stagger: 0.07,
+        //     duration: 1.25,
+        //     ease: 'power2'
+        // }, '<')
         tl.fromTo('.works__titles', {scale: 0.6, y: 60, opacity: 0}, {
             scale: 1,
             y: 0,
