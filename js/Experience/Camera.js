@@ -1,3 +1,4 @@
+import gsap from 'gsap'
 import { Group, Vector3, PerspectiveCamera, BoxGeometry, Mesh, MeshBasicMaterial } from 'three'
 
 import Experience from './Experience'

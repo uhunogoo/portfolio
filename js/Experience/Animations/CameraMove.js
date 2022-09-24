@@ -1,6 +1,6 @@
 // import { Matrix4 } from 'three'
 import gsap from 'gsap'
-import { QuadraticBezierCurve3, Vector3 } from 'three'
+import { BufferGeometry, CubicBezierCurve3, Line, LineBasicMaterial, QuadraticBezierCurve3, Vector3 } from 'three'
 
 import Experience from '../Experience'
 
@@ -44,7 +44,6 @@ export default class CameraMove {
         // Animations
         this.towerInAnimation = gsap.timeline({
             paused: true,
-			// onUpdate: () => this.updateCamera(),
 			onComplete: () => { 
 				this.cameraEmptyDefaults.position.copy( this.cameraEmpty.position.clone() )
 				this.cameraCurve()
@@ -66,13 +65,21 @@ export default class CameraMove {
 
 				// Animation
 				const tl = gsap.timeline({
+					smoothChildTiming: true,
 					onUpdate: () => {
 						const t = this.cameraMove.progress
 						const ID = Math.round(t * (path.length - 1 ))
 						
 						this.cameraEmpty.position.copy( path[ ID ] )
+						this.camera.instance.updateProjectionMatrix()
 					}
 				})
+				tl.to( this.camera.instance, {
+					fov: 20,
+					zoom: 0.8,
+					duration: 1 + pathLength,
+					ease: 'power1.in'
+				}, 0)
 				tl.to( this.cameraMove, {
 					progress: 1,
 					duration: 1 + pathLength,
@@ -120,21 +127,23 @@ export default class CameraMove {
 		curv1Point2.z += 0.5
 		curve1Coords.push( this.cameraEmptyDefaults.position.clone() )
 		curve1Coords.push( curv1Point2 )
+		curve1Coords.push( new Vector3( 0, 3, 4 ) )
 		curve1Coords.push( this.points.list[0].position )
 		
 		// second curve
 		const curv2Point2 = this.points.list[1].position.clone()
 		curv2Point2.x = 0.1
-		curv2Point2.y = 0.5
+		curv2Point2.y -= 0.5
 		curv2Point2.z += 0.3
 		curve2Coords.push( this.cameraEmptyDefaults.position.clone() )
 		curve2Coords.push( curv2Point2 )
+		curve2Coords.push( new Vector3( 0, 1, 4 ) )
 		curve2Coords.push( this.points.list[1].position )
 		
 		
 		//Create a closed wavey loop
-		this.curve1 = new QuadraticBezierCurve3( ...curve1Coords )
-		this.curve2 = new QuadraticBezierCurve3( ...curve2Coords )
+		this.curve1 = new CubicBezierCurve3( ...curve1Coords )
+		this.curve2 = new CubicBezierCurve3( ...curve2Coords )
 
 		this.cameraAnimationVariation.curves.pathLength = [
 			this.curve1.getLength(),
@@ -146,8 +155,8 @@ export default class CameraMove {
 		]
 		
 		// const lineMaterial = new LineBasicMaterial( { color: 0xff0000 } )
-		// const lineGeometry1 = new Geometry().setFromPoints( this.points1 )
-		// const lineGeometry2 = new Geometry().setFromPoints( this.points2 )
+		// const lineGeometry1 = new BufferGeometry().setFromPoints( this.cameraAnimationVariation.curves.curvePoints[0] )
+		// const lineGeometry2 = new BufferGeometry().setFromPoints( this.cameraAnimationVariation.curves.curvePoints[1] )
 
 		// const curveObject1 = new Line( lineGeometry1, lineMaterial )
 		// const curveObject2 = new Line( lineGeometry2, lineMaterial )
@@ -211,7 +220,7 @@ export default class CameraMove {
 			defaults: {
 				ease: 'none',
 				duration: 1
-			}
+			},
 		})
         this.rotateCameraY.fromTo(this.cameraMove.angle.mouseAnimation, {
             y: () => 0.18 + this.angleScale
@@ -253,8 +262,8 @@ export default class CameraMove {
 			x: (y + 1) / 2,
 			y: (x + 1) / 2,
 			immediateRender: true,
-			ease: 'sine',
-			duration: 0.65,
+			ease: 'power1',
+			duration: 0.5,
 			onUpdate: update
 		})
 	}

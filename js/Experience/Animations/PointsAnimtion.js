@@ -37,7 +37,20 @@ export default class PointsAnimation extends EventEmitter {
         this.cloudsGroup = this.world.children.find( child => child.name === 'cloudsGroup' )
 		this.towerGroup = this.world.children.find( child => child.name === 'towerGroup' )
 		this.runic = this.towerGroup.children.find((child) => child.name === 'runic')
-        this.raycaster = new Raycaster()
+
+		this.pointsSettings = {
+			scale: [],
+			introScale: [],
+			hoverScale: []
+		}
+		this.pointsGroup.children[0].children.map( el => { 
+			// Push data to points object
+			this.pointsSettings.scale.push( el.scale )
+			this.pointsSettings.introScale.push({ v: 0 })
+			this.pointsSettings.hoverScale.push({ v: 0 })
+		})
+        
+		this.raycaster = new Raycaster()
         this.intersect = null
         this.clickedPoint = null
         this.hitSound = new Audio( bell )
@@ -46,25 +59,6 @@ export default class PointsAnimation extends EventEmitter {
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
 
-        // Animation
-        gsap.registerEffect({
-            name: "pointsShow",
-            extendTimeline:true,
-            effect: (target, parameters) => {                
-                const tl = gsap.timeline({
-                    defaults: {
-                        duration: 0.3,
-                        ease: 'power2'
-                    },
-                })
-                tl.to(target, {
-                    x: parameters.x,
-                    y: parameters.y,
-                })
-
-                return tl
-            }
-        })
         gsap.registerEffect({
             name: "openInformationBlock",
             extendTimeline:true,
@@ -74,10 +68,6 @@ export default class PointsAnimation extends EventEmitter {
                       duration: 1,
                       ease: 'none'
                     },
-                    onReverseComplete: () => {
-                        const tl = gsap.timeline()
-                        tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
-                    }
                 })
                 tl.add( this.uiAnimations.showMenu().timeScale(3).reverse())                
                 tl.add( this.towerAnimation(target[0]).timeScale(2), 0)                
@@ -115,7 +105,9 @@ export default class PointsAnimation extends EventEmitter {
 
         this.showNav()
         this.startStyles()
+		this.pointsScaleCalculation()
     }
+
 	cameraUpdate() {
 		gsap.to( this.cameraEmpty.rotation, {
 			y: Math.PI * 2,
@@ -128,14 +120,9 @@ export default class PointsAnimation extends EventEmitter {
 			ease: 'none'
 		})
 	}
+
     startStyles() {
-        gsap.set('.work', 
-        {
-            scale: 0.5,
-            y: '180%',
-            opacity: 0
-        })
-        
+        gsap.set('.work', { scale: 0.5, y: '180%', opacity: 0 })
         gsap.set( '#myPhoto', { clipPath: 'inset(0% 0% 100% 0%)' }) // to bottom
         gsap.set( '#myPhoto img', { scale: 1.4 })
         gsap.set( '.content__title span', { yPercent: 100 })
@@ -144,20 +131,28 @@ export default class PointsAnimation extends EventEmitter {
         gsap.set( '.content__links img', { opacity: 0, scale: 0.1 })
         gsap.set( '.content .decor', { opacity: 0, scale: 1.6, rotate: '90deg', x: '100%', y: '-60%' })
     }
+	pointsScaleCalculation() {
+		const scales = this.pointsSettings.scale
+		const { introScale, hoverScale } = this.pointsSettings
+
+		for ( let id in scales) {
+			const combineScale = introScale[ id ].v + hoverScale[ id ].v
+			scales[ id ].setScalar( combineScale )
+		}
+	}
     showNav() {
         const clear = () => {
             this.showPoints.kill()
         }
         this.showPoints = gsap.timeline({ 
             paused: true,
-            onComplete: clear
-        })        
-        this.pointsScale = this.pointsGroup.children[0].children.map( el => el.scale )
+            onComplete: clear,
+			onUpdate: () => this.pointsScaleCalculation()
+        }) 
         this.cloudssScale = this.cloudsGroup.children.map( el => el.scale )
         
-        this.showPoints.to( this.pointsScale, {
-            x: 0.1,
-            y: 0.1,
+        this.showPoints.to( this.pointsSettings.introScale, {
+            v: 0.1,
             ease: 'back',
             stagger: 0.2
         })
@@ -170,10 +165,16 @@ export default class PointsAnimation extends EventEmitter {
     }
     towerAnimation(target) {
 		
-        const tl = gsap.timeline({ defaults: { ease: 'none', }})
-        tl.to(this.pointsScale, {
-            x: 0,
-            y: 0,
+        const tl = gsap.timeline({ 
+			smoothChildTiming: true, 
+			defaults: { ease: 'none' },
+			onUpdate: () => this.pointsScaleCalculation()
+		})
+
+        tl.to( this.pointsSettings.introScale, {
+            v: 0,
+			overwrite: true,
+			immediateRender: true,
             stagger: 0.1,
             ease: 'power3.inOut'
         })
@@ -315,12 +316,6 @@ export default class PointsAnimation extends EventEmitter {
             duration: 1.2,
             stagger: 0.1,
         })
-        // tl.fromTo('.work__image picture', {scale: 0.6}, {
-        //     scale: 1,
-        //     stagger: 0.07,
-        //     duration: 1.25,
-        //     ease: 'power2'
-        // }, '<')
         tl.fromTo('.works__titles', {scale: 0.6, y: 60, opacity: 0}, {
             scale: 1,
             y: 0,
@@ -392,10 +387,12 @@ export default class PointsAnimation extends EventEmitter {
     
     clean() {
         if (this.intersect) {
-            this.tl.kill()
-
-            this.tl = gsap.timeline()
-            this.tl.pointsShow( this.pointsScale, {x: 0.1, y: 0.1} )
+			gsap.to(this.pointsSettings.hoverScale, {
+				v: 0,
+				duration: 0.3,
+				ease: 'power2',
+				onUpdate: () => this.pointsScaleCalculation()
+			})
             this.intersect = null
         }
     }
@@ -411,12 +408,17 @@ export default class PointsAnimation extends EventEmitter {
                 
                 // Cursor pointer
                 document.documentElement.style.cursor = 'pointer'
+				const point = this.points.find( (el, i) => el.name === this.intersect.name)
+				const id = point.id
+				
+				// SCALE POINTS ON HOVER
+				gsap.to(this.pointsSettings.hoverScale[id], {
+					v: 0.05,
+					duration: 0.3,
+					ease: 'power2',
+					onUpdate: () => this.pointsScaleCalculation()
+				})
 
-                // Scale up animation
-                if( this.tl ) this.tl.kill()
-                
-                this.tl = gsap.timeline()
-                this.tl.pointsShow( this.intersect.scale, {x: 0.15, y: 0.15} )
 				if ( this.intersect.name === 'point-1' ) {
 					if ( this.runicAnimation.progress() === 0) {
 						this.runicAnimation.play(0)
