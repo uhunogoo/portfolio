@@ -1,8 +1,11 @@
 
+import gsap from 'gsap'
+import { SlowMo } from 'gsap/all'
+gsap.registerPlugin( SlowMo )
+
 import { Raycaster } from 'three'
 import Experience from '../Experience'
 import EventEmitter from '../Utils/EventEmitter'
-import gsap from 'gsap'
 
 
 import bell from '../../../asstes/sounds/intro.mp3?url'
@@ -279,12 +282,12 @@ export default class PointsAnimation extends EventEmitter {
         tl.to(this.preload.material.uniforms.uProgress, {
             value: 1,
             duration: 1.6,
-            ease: 'power2.inOut'
+            ease: 'power2'
         }, 0)
         tl.to(this.bloomPass, {
             strength: 1,
             duration: 1.6,
-            ease: 'power3.inOut'
+            ease: 'power2'
         }, 0)
         tl.to([ '.informationPart', target.element], {
             autoAlpha: 1,
@@ -298,7 +301,7 @@ export default class PointsAnimation extends EventEmitter {
         }, 0.6)
         if (target.name === 'point-1') {
             // Open my works
-            tl.add( this.myWorksBlockAnimation().timeScale(2.6), 0.65 )
+            tl.add( this.myWorksBlockAnimation().timeScale(2.6), 0.45 )
         } else if (target.name === 'point-2') {
             // Open about me
             tl.add( this.aboutMeAnimation().timeScale(1.8), 0.65 )

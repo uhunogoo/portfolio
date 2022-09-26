@@ -193,7 +193,7 @@ export default class Grass {
     }
     createAmbientSparks() {
         // Particles defaults
-        const count = 100
+        const count = 50
         const PI = Math.PI
         const offset = []
         const speed = []
@@ -214,7 +214,7 @@ export default class Grass {
             if( r > 2.05 ) {
                 const x = r * Math.cos(theta)
                 const z = r * Math.sin(theta)
-                offset.push( x, Math.random() * 0.5, z )
+                offset.push( x, Math.random() * 0.25, z )
                 speed.push( (0.2 + Math.random() ) / 1.2 )
                 
                 // increase 
@@ -229,7 +229,7 @@ export default class Grass {
         this.particlesBufferGeometry.setAttribute('vSpeed', new BufferAttribute( new Float32Array( speed ), 1))
 
         const instancedParticlesMesh = new Points( this.particlesBufferGeometry, ambientParticlesMaterial )
-        instancedParticlesMesh.position.y = 0.6
+        instancedParticlesMesh.position.y = 0.3
         
         this.grassGroup.add( instancedParticlesMesh )
     }

@@ -1,7 +1,9 @@
 // import { Matrix4 } from 'three'
 import gsap from 'gsap'
-import { BufferGeometry, CubicBezierCurve3, Line, LineBasicMaterial, QuadraticBezierCurve3, Vector3 } from 'three'
+import { SlowMo } from 'gsap/all'
+gsap.registerPlugin( SlowMo )
 
+import { BufferGeometry, CubicBezierCurve3, Line, LineBasicMaterial, QuadraticBezierCurve3, Vector3 } from 'three'
 import Experience from '../Experience'
 
 export default class CameraMove {
@@ -38,7 +40,7 @@ export default class CameraMove {
 			curves: {},
 			animationParameters: [
 				{ x: -Math.PI * 0.2, y: -Math.PI * 0.03 },
-				{ x: -Math.PI * 0.1, y: Math.PI * 0.5},
+				{ x: 0, y: Math.PI * 0.5},
 			]
 		}
         // Animations
@@ -59,39 +61,8 @@ export default class CameraMove {
             name: "cameraMoveAnimation",
             extendTimeline:true,
             effect: (target, parameters) => {
-				// Defaults 
-				const pathLength = target[0].pathLength / 5
-				const path = target[0].points
-
 				// Animation
-				const tl = gsap.timeline({
-					smoothChildTiming: true,
-					onUpdate: () => {
-						const t = this.cameraMove.progress
-						const ID = Math.round(t * (path.length - 1 ))
-						
-						this.cameraEmpty.position.copy( path[ ID ] )
-						this.camera.instance.updateProjectionMatrix()
-					}
-				})
-				tl.to( this.camera.instance, {
-					fov: 20,
-					zoom: 0.8,
-					duration: 1 + pathLength,
-					ease: 'power1.in'
-				}, 0)
-				tl.to( this.cameraMove, {
-					progress: 1,
-					duration: 1 + pathLength,
-					ease: 'power1.in'
-				}, 0)
-				tl.to( this.cameraMove.angle.lineAnimation, {
-					y: parameters.y,
-					x: parameters.x,
-					duration: 1 + pathLength,
-					ease: 'power1.in'
-				}, 0)
-
+				const tl = this.cameraMoveTimelineContructor( target, parameters )
                 return tl
             }
         })
@@ -101,6 +72,48 @@ export default class CameraMove {
         this.animations()
 		this.cameraRotationTimelines()
     }
+	cameraMoveTimelineContructor(target, parameters) {
+		// Defaults 
+		const pathLength = target[0].pathLength / 5
+		const path = target[0].points
+
+		const update = () => {
+			const t = this.cameraMove.progress
+			const ID = Math.round(t * (path.length - 1 ))
+			
+			gsap.to( this.cameraEmpty.position, {
+				x: path[ ID ].x,
+				y: path[ ID ].y,
+				z: path[ ID ].z,
+				ease: 'none',
+				duration: 0.1
+			})
+
+			this.camera.instance.updateProjectionMatrix()
+		}
+		// Animation
+		const tl = gsap.timeline({
+			defaults: {
+				ease: 'slow(0.1, 0.2)',
+				duration: 1 + pathLength
+			},
+			onUpdate: update
+		})
+		tl.to( this.camera.instance, {
+			fov: 20,
+			zoom: 0.8,
+		}, 0)
+		tl.to( this.cameraMove, {
+			progress: 1,
+			ease: 'slow(0.1, 0.4)'
+		}, 0)
+		tl.to( this.cameraMove.angle.lineAnimation, {
+			y: parameters.y,
+			x: parameters.x,
+		}, 0)
+
+		return tl
+	}
 	animateCamera(id) {
 		const target = {
 			pathLength: this.cameraAnimationVariation.curves.pathLength[id],
@@ -137,7 +150,7 @@ export default class CameraMove {
 		curv2Point2.z += 0.3
 		curve2Coords.push( this.cameraEmptyDefaults.position.clone() )
 		curve2Coords.push( curv2Point2 )
-		curve2Coords.push( new Vector3( 0, 1, 4 ) )
+		curve2Coords.push( new Vector3( -0.4, 0.7, 4.5 ) )
 		curve2Coords.push( this.points.list[1].position )
 		
 		
@@ -151,7 +164,7 @@ export default class CameraMove {
 		]
 		this.cameraAnimationVariation.curves.curvePoints = [
 			this.curve1.getPoints( 300 ),
-			this.curve2.getPoints( 300 )
+			this.curve2.getPoints( 500 )
 		]
 		
 		// const lineMaterial = new LineBasicMaterial( { color: 0xff0000 } )
@@ -204,6 +217,7 @@ export default class CameraMove {
     }
     cameraRotationCalculation() {
         const startRotation = this.cameraEmptyDefaults.rotation.clone()
+		const mutiplier = (1 - this.cameraMove.progress)
 
         const mouseMoveRotation = this.cameraMove.angle.mouseAnimation
         const lineMoveRotation = this.cameraMove.angle.lineAnimation	
@@ -211,8 +225,8 @@ export default class CameraMove {
         const combineBothMoveX = mouseMoveRotation.x + lineMoveRotation.x
         const combineBothMoveY = mouseMoveRotation.y + lineMoveRotation.y
 		
-        this.cameraEmpty.rotation.x = startRotation.x + combineBothMoveX
-        this.cameraEmpty.rotation.y = startRotation.y + combineBothMoveY
+        this.cameraEmpty.rotation.x = startRotation.x * mutiplier + combineBothMoveX
+        this.cameraEmpty.rotation.y = startRotation.y * mutiplier + combineBothMoveY
     }
     cameraRotationTimelines() {
 		this.rotateCameraY = gsap.timeline({
@@ -223,9 +237,9 @@ export default class CameraMove {
 			},
 		})
         this.rotateCameraY.fromTo(this.cameraMove.angle.mouseAnimation, {
-            y: () => 0.18 + this.angleScale
+            y: () => 0.16 + this.angleScale
 		},{
-			y: () => (0.18 + this.angleScale) * -1 
+			y: () => (0.16 + this.angleScale) * -1 
         })
 		this.rotateCameraY.fromTo(this.scene.rotation, {
             y: Math.PI * 0.002,
@@ -292,7 +306,6 @@ export default class CameraMove {
 				
 				const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle, target.gamma )
 				const frontToBack = gsap.utils.clamp(10, 55,target.beta )
-	
 				
 				const x = - leftToRight / gammaAngle
 				const y = frontToBack / 55
