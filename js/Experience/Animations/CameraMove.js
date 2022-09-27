@@ -105,7 +105,7 @@ export default class CameraMove {
 		}, 0)
 		tl.to( this.cameraMove, {
 			progress: 1,
-			ease: 'slow(0.1, 0.4)'
+			ease: 'slow(0.1, 0.2)'
 		}, 0)
 		tl.to( this.cameraMove.angle.lineAnimation, {
 			y: parameters.y,

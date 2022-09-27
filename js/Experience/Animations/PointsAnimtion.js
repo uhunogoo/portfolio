@@ -129,7 +129,7 @@ export default class PointsAnimation extends EventEmitter {
         gsap.set( '#myPhoto', { clipPath: 'inset(0% 0% 100% 0%)' }) // to bottom
         gsap.set( '#myPhoto img', { scale: 1.4 })
         gsap.set( '.content__title span', { yPercent: 100 })
-        gsap.set( '.animate-text', { opacity: 0, y: 100 })
+        gsap.set( '.animate-text span', { opacity: 0, y: 100 })
         gsap.set( '.content__text span.icon', { opacity: 0, scale: 0.1 })
         gsap.set( '.content__links img', { opacity: 0, scale: 0.1 })
         gsap.set( '.content .decor', { opacity: 0, scale: 1.6, rotate: '90deg', x: '100%', y: '-60%' })
@@ -317,9 +317,8 @@ export default class PointsAnimation extends EventEmitter {
             y: 0,
             opacity: 1,
             duration: 1.2,
-            stagger: 0.1,
         })
-        tl.fromTo('.works__titles', {scale: 0.6, y: 60, opacity: 0}, {
+        tl.fromTo('.works__titles', {scale: 0.4, y: 60, opacity: 0}, {
             scale: 1,
             y: 0,
             opacity: 1,
@@ -355,7 +354,7 @@ export default class PointsAnimation extends EventEmitter {
                 ease: 'power2'
             }
         }, '<')
-        tl.to('.animate-text', {
+        tl.to('.animate-text span', {
             opacity: 1,
             y: 0,
             stagger: {

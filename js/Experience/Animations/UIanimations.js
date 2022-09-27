@@ -132,10 +132,10 @@ export default class UIAnimation {
 
         // Each section animation
         sections.forEach( section => {
-            gsap.fromTo( section.querySelector('.work__link'), { x: '-40%', scale: 0.3, rotate: '15deg' },{ 
-                x: '-60%',
+            gsap.fromTo( section.querySelector('.work__link'), { x: '-20%', scale: 0.4, rotate: '15deg' },{ 
+                x: '-80%',
 				rotate: '-15deg',
-				scale: 1,
+				scale: 1.2,
                 ease: "none",
                 scrollTrigger: {
                     trigger: section,
