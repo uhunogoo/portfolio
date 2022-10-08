@@ -46,6 +46,21 @@ export default class UIAnimation {
 			duration: 0.7
 		})
 
+		this.decorCircleY = gsap.quickTo('.title-decor div', 'rotationY', {
+			duration: 0.2, 
+			ease: 'power1',
+			transformOrigin:'50% 50%',
+		})
+		this.decorCircleX = gsap.quickTo('.title-decor div', 'rotationX', {
+			duration: 0.2, 
+			ease: 'power1',
+			transformOrigin:'50% 50%'
+		})
+		this.compassRotate = gsap.quickTo('.compass__dots', 'xPercent', {
+			duration: 0.2, 
+			ease: 'power1',
+		})
+
         // Add close button animation to mouse follow timeline
 
         // Scrolltrigger
@@ -195,22 +210,16 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
-        let isFocused = false
+        const { x, y } = this.mouse
+		let isFocused = false
         
         if (!isPreloadHiden) {
-            gsap.to('.title-decor div', {
-                rotationY: -10 * this.mouse.x,
-                rotationX: -10 * this.mouse.y,
-                duration: 0.2, 
-                ease: 'power1',
-                transformOrigin:'50% 50%'
-            })
+			this.decorCircleX( -10 * y )
+			this.decorCircleY( -10 * x )
         }
         // Run if device orientation is not using 
         if ( !this.deviceOrientationSupported && isPreloadHiden ) {
-            gsap.to('.compass__dots', {
-                xPercent: -50 - 6 * this.mouse.x
-            })
+            this.compassRotate( -50 - 6 * x )
         }
 
         // Buttons animation
@@ -270,16 +279,12 @@ export default class UIAnimation {
         const isPreloadHiden = this.preload.classList.contains('close')
         if (this.deviceOrientationEvent.deviceOrientationTarget && isPreloadHiden) {
             const target = this.deviceOrientationEvent.deviceOrientationTarget
-            const gammaAngle = 20
-            
-            const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle,target.gamma )
-
             this.deviceOrientationSupported = (target.gamma ||target.beta ) ? true : false
             
-            gsap.to('.compass__dots', {
-                xPercent: -50 + 6 * (leftToRight / gammaAngle)
-            })
-            
+            const gammaAngle = 20
+            const leftToRight = gsap.utils.clamp(-gammaAngle, gammaAngle, target.gamma )
+
+            this.compassRotate( -50 + 6 * (leftToRight / gammaAngle) )
         }
     }
     resize() {

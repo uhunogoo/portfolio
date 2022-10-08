@@ -36,9 +36,9 @@ export default class Tower {
         this.towerMaterial1 = new MeshBasicMaterial({
             map: this.resources.items.towerTexture1
         })
-        this.towerMaterial2 = new MeshBasicMaterial({
-            map: this.resources.items.towerTexture2
-        })
+        // this.towerMaterial2 = new MeshBasicMaterial({
+        //     map: this.resources.items.towerTexture2
+        // })
         this.towerMaterial3 = new MeshBasicMaterial({
             map: this.resources.items.towerTexture3
         })
@@ -79,21 +79,23 @@ export default class Tower {
         const tower = new Group()
         tower.name = 'towerGroup'
 
-        const towerPart1 = towerScene.children.find((child) => child.name === 'floor')
-        const towerPart2 = towerScene.children.find((child) => child.name === 'walls')
-        const towerPart3 = towerScene.children.find((child) => child.name === 'components')
-        const towerPart4 = towerScene.children.find((child) => child.name === 'runic')
-        const towerPart5 = towerScene.children.find((child) => child.name === 'portal')
+        // const towerPart1 = towerScene.children.find((child) => child.name === 'floor')
+        // const towerPart2 = towerScene.children.find((child) => child.name === 'walls')
+        const towerPart1 = towerScene.getObjectByName( 'tower' )
+        const towerPart3 = towerScene.getObjectByName( 'components' )
+        const towerPart4 = towerScene.getObjectByName( 'runic' )
+        const towerPart5 = towerScene.getObjectByName( 'portal' )
 
         towerPart4.geometry.computeVertexNormals()        
         
         towerPart1.material = this.towerMaterial1
-        towerPart2.material = this.towerMaterial2
+        // towerPart2.material = this.towerMaterial2
         towerPart3.material = this.towerMaterial3
         towerPart4.material = this.towerMaterial4
         towerPart5.material = this.towerMaterial5	
         
-        tower.add( towerPart1, towerPart2, towerPart3, towerPart4, towerPart5 )
+        // tower.add( towerPart1, towerPart2, towerPart3, towerPart4, towerPart5 )
+        tower.add( towerPart1, towerPart3, towerPart4, towerPart5 )
         tower.scale.set( 0.47, 0.47, 0.47 )
 
         this.towerGroup = tower

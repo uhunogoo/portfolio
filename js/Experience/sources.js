@@ -22,17 +22,23 @@ export default [
         path: '/geometry/postament-draco-new.glb?url'
     },
     //  TOWER
+    // {
+    //     name: 'towerTexture1',
+    //     type: 'texture',
+    //     asset: 'startParams',
+    //     path: `/textures/tower/floorTexture${ formatJPG }`
+    // },
+    // {
+    //     name: 'towerTexture2',
+    //     type: 'texture',
+    //     asset: 'startParams',
+    //     path: `/textures/tower/wallTexture${ formatJPG }`
+    // },
     {
         name: 'towerTexture1',
         type: 'texture',
         asset: 'startParams',
-        path: `/textures/tower/floorTexture${ formatJPG }`
-    },
-    {
-        name: 'towerTexture2',
-        type: 'texture',
-        asset: 'startParams',
-        path: `/textures/tower/wallTexture${ formatJPG }`
+        path: `/textures/tower/largeTextures${ formatJPG }`
     },
     {
         name: 'towerTexture3',

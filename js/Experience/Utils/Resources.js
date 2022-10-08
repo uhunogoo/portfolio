@@ -1,4 +1,4 @@
-import { AudioLoader, LinearFilter, sRGBEncoding, TextureLoader } from 'three'
+import { LinearFilter, LinearMipmapLinearFilter, sRGBEncoding, TextureLoader } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
@@ -28,7 +28,7 @@ export default class Resources extends EventEmitter {
         this.loaders.gltfLoader = new GLTFLoader()
         this.loaders.gltfLoader.setDRACOLoader(dracoLoader)
         this.loaders.textureLoader = new TextureLoader()
-		this.loaders.audioLoader = new AudioLoader()
+		// this.loaders.audioLoader = new AudioLoader()
     }
     startLoading() {
         // Load each source
@@ -40,8 +40,8 @@ export default class Resources extends EventEmitter {
                         // Basic textures parameters
                         file.flipY = false
                         file.encoding = sRGBEncoding
-                        file.minFilter = LinearFilter
                         file.magFilter = LinearFilter
+                        file.minFilter = LinearFilter
                     }
                     
                     this.sourceLoaded(source, file)
@@ -50,11 +50,12 @@ export default class Resources extends EventEmitter {
                 this.loaders.gltfLoader.load( source.path, (file) => {
                     this.sourceLoaded(source, file)
                 })
-            } else if (source.type === 'sound') {
-				this.loaders.audioLoader.load( source.path, (file) => {
-                    this.sourceLoaded(source, file)
-                })
-			}
+            } 
+			// else if (source.type === 'sound') {
+			// 	this.loaders.audioLoader.load( source.path, (file) => {
+            //         this.sourceLoaded(source, file)
+            //     })
+			// }
         }
     }
     sourceLoaded(source, file) {

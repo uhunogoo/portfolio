@@ -453,38 +453,35 @@
 	z-index: 5;
 
 	&.active {
-
+		.work,
 		.work__link,
+		.work__name span,
+		.works__scroller,
 		#myPhoto img,
-		.works__name span,
-		.content__title span,
-		.works__scroller {
+		.content__title span {
 			will-change: transform;
-		}
-		#myPhoto {
-			will-change: opacity, clip-path;
 		}
 	
 		.decor,
-		.work,
 		.content__links img,
 		.animate-text .icon,
 		.animate-text span {
 			will-change: transform, opacity;
 		}
 	}
-	
-	.work__link,
-	.decor,
-	.content__links img,
-	.work,
-	#myPhoto,
-	#myPhoto img,
-	.content__title span,
-	.works__scroller,
-	.animate-text .icon,
-	.animate-text span {
-		will-change: auto;
+	&:not( .active ) {
+		.decor,
+		.content__links img,
+		#myPhoto img,
+		.content__title span,
+		.work,
+		.work__link,
+		.work__name span,
+		.works__scroller,
+		.animate-text .icon,
+		.animate-text span {
+			will-change: auto;
+		}
 	}
 }
 

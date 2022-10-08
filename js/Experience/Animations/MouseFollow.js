@@ -33,6 +33,17 @@ export default class followingCursor {
         this.followButtonIn = gsap.timeline({ 
             paused: true, 
         })
+		
+		// basic values for mouse following block
+		gsap.set('.following', { transformOrigin: '50% 50%' })
+		this.mouseFollowX = gsap.quickTo('.following', 'x', {
+            duration: 0.3,
+            ease: 'power1'
+        })
+		this.mouseFollowY = gsap.quickTo('.following', 'y', {
+            duration: 0.3,
+            ease: 'power1'
+        })
         
         this.createSvg( this.svgParameters )
     }
@@ -101,13 +112,12 @@ export default class followingCursor {
 
         if ( this.body.clientWidth < 767.5 ) return 
         const { x, y } = this.mouse
+		
+		// console.log( x )
+		// console.log(  )
+		this.mouseFollowX( ( (x + 1) / 2 ) * this.size.width - this.targetBlockSizes.width * 0.5  )
+		this.mouseFollowY( ( ( - y + 1) / 2 ) * this.size.height - this.targetBlockSizes.height * 0.5  )
         
-        gsap.to('.following', {
-            x: ( (x + 1) / 2 ) * this.size.width - this.targetBlockSizes.width * 0.5,
-            y: ( (- y + 1) / 2 ) * this.size.height - this.targetBlockSizes.height * 0.5,
-            duration: 0.3,
-            ease: 'power1'
-        })
         
     }
 

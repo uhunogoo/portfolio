@@ -56,14 +56,13 @@ export default class CameraMove {
                 ease: 'power2.inOut'
             }
         })
-
+		
 		gsap.registerEffect({
             name: "cameraMoveAnimation",
-            extendTimeline:true,
+            extendTimeline: true,
             effect: (target, parameters) => {
 				// Animation
-				const tl = this.cameraMoveTimelineContructor( target, parameters )
-                return tl
+                return this.cameraMoveTimelineConstructor( target, parameters )
             }
         })
 
@@ -72,45 +71,52 @@ export default class CameraMove {
         this.animations()
 		this.cameraRotationTimelines()
     }
-	cameraMoveTimelineContructor(target, parameters) {
+	cameraMoveTimelineConstructor(target, parameters) {
+		
 		// Defaults 
 		const pathLength = target[0].pathLength / 5
+		const d = 1 + pathLength
 		const path = target[0].points
-
-		const update = () => {
-			const t = this.cameraMove.progress
-			const ID = Math.round(t * (path.length - 1 ))
-			
-			gsap.to( this.cameraEmpty.position, {
-				x: path[ ID ].x,
-				y: path[ ID ].y,
-				z: path[ ID ].z,
-				ease: 'none',
-				duration: 0.1
-			})
-
-			this.camera.instance.updateProjectionMatrix()
-		}
-		// Animation
+		
 		const tl = gsap.timeline({
 			defaults: {
-				ease: 'slow(0.1, 0.2)',
-				duration: 1 + pathLength
+				ease: 'slow(0.1, 0.4)',
+				duration: d
 			},
-			onUpdate: update
 		})
+		// Animation
 		tl.to( this.camera.instance, {
 			fov: 20,
 			zoom: 0.8,
 		}, 0)
 		tl.to( this.cameraMove, {
 			progress: 1,
-			ease: 'slow(0.1, 0.2)'
+			ease: 'none'
+		}, 0)
+		
+		// camera empty move animation 
+		const move = ( axis ) => {
+			const t = tl.progress()
+			const ID = Math.round(t * (path.length - 1 ))
+			return path[ ID ][axis]
+		}
+		tl.to( this.cameraEmpty.position, {
+			x: path[ (path.length - 1 ) ].x,
+			y: path[ (path.length - 1 ) ].y,
+			z: path[ (path.length - 1 ) ].z,
+			modifiers: {
+				x: () => move('x'),
+				y: () => move('y'),
+				z: () => move('z')
+			}
 		}, 0)
 		tl.to( this.cameraMove.angle.lineAnimation, {
 			y: parameters.y,
 			x: parameters.x,
+			ease: 'power1.in',
+			duration: 1
 		}, 0)
+
 
 		return tl
 	}
@@ -163,9 +169,10 @@ export default class CameraMove {
 			this.curve2.getLength()
 		]
 		this.cameraAnimationVariation.curves.curvePoints = [
-			this.curve1.getPoints( 300 ),
+			this.curve1.getPoints( 500 ),
 			this.curve2.getPoints( 500 )
 		]
+		
 		
 		// const lineMaterial = new LineBasicMaterial( { color: 0xff0000 } )
 		// const lineGeometry1 = new BufferGeometry().setFromPoints( this.cameraAnimationVariation.curves.curvePoints[0] )
@@ -216,7 +223,9 @@ export default class CameraMove {
         }, '<')
     }
     cameraRotationCalculation() {
-        const startRotation = this.cameraEmptyDefaults.rotation.clone()
+        const startRotation = this.cameraEmptyDefaults.rotation
+		// const mutiplier = 1
+		// const mutiplier = (1 - this.cameraMoveTimeline.progress())
 		const mutiplier = (1 - this.cameraMove.progress)
 
         const mouseMoveRotation = this.cameraMove.angle.mouseAnimation
@@ -264,23 +273,30 @@ export default class CameraMove {
             x: - Math.PI * 0.002,
 		},{
             x: Math.PI * 0.002,
-        }, 0)      
-    }
-	cameraRotationAnimation( x, y ) {	
-		const update = () => {
+        }, 0)
+
+		// Set quick To method
+		const update = (axis) => {
 			const {x, y} = this.cameraMove.rotateXY
-			this.rotateCameraX.progress( x )
-			this.rotateCameraY.progress( y )
+			if ( axis === 'x' ) {
+				this.rotateCameraX.progress( x )
+			} else if ( axis ==='y' ) {
+				this.rotateCameraY.progress( y )
+			}
 		}
-		gsap.to(this.cameraMove.rotateXY, {
-			x: (y + 1) / 2,
-			y: (x + 1) / 2,
-			immediateRender: true,
-			ease: 'power1',
-			duration: 0.5,
-			onUpdate: update
+		this.xTo = gsap.quickTo(this.cameraMove.rotateXY, "x", {
+			duration: 0.6, 
+			immediateRender: true, 
+			ease: "power3", 
+			onUpdate: () => update('x') 
+		}),
+    	this.yTo = gsap.quickTo(this.cameraMove.rotateXY, "y", {
+			duration: 0.6, 
+			immediateRender: true, 
+			ease: "power3", 
+			onUpdate: () => update('y')
 		})
-	}
+    }
     mouseMove() {     
         // Return if use device orientation 
         if ( !this.deviceOrientationSupported ) {
@@ -288,7 +304,9 @@ export default class CameraMove {
 			const { x, y } = this.mouse
 			
 			this.angleScale = 1.0 - Math.min(this.sizes.width / 1000, 1)
-			this.cameraRotationAnimation( x, y )
+
+			this.xTo( (y + 1) / 2 )
+			this.yTo( (x + 1) / 2 )
 		}
 
     }
@@ -311,12 +329,14 @@ export default class CameraMove {
 				const y = frontToBack / 55
 				
 				this.angleScale = 1.0 - Math.min(this.sizes.width / 1000, 1)
-				this.cameraRotationAnimation( x, y )
+				// this.cameraRotationAnimation( x, y )
+				this.xTo( (y + 1) / 2 )
+				this.yTo( (x + 1) / 2 )
 			}
         }
     }
     update() {
-		this.updateCamera()
 		this.cameraRotationCalculation()
+		this.updateCamera()
     }
 }

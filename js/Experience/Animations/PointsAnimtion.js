@@ -21,6 +21,7 @@ export default class PointsAnimation extends EventEmitter {
 		this.cameraMove = cameraMove
 		
         this.experience = new Experience()
+        this.sizes = this.experience.sizes
         this.debug = this.experience.debug
         this.scene = this.experience.scene
         this.points = this.experience.points.list
@@ -125,14 +126,33 @@ export default class PointsAnimation extends EventEmitter {
 	}
 
     startStyles() {
+		// Match media
+		this.mm = gsap.matchMedia()
+		
         gsap.set('.work', { scale: 0.5, y: '180%', opacity: 0 })
-        gsap.set( '#myPhoto', { clipPath: 'inset(0% 0% 100% 0%)' }) // to bottom
-        gsap.set( '#myPhoto img', { scale: 1.4 })
         gsap.set( '.content__title span', { yPercent: 100 })
         gsap.set( '.animate-text span', { opacity: 0, y: 100 })
         gsap.set( '.content__text span.icon', { opacity: 0, scale: 0.1 })
         gsap.set( '.content__links img', { opacity: 0, scale: 0.1 })
         gsap.set( '.content .decor', { opacity: 0, scale: 1.6, rotate: '90deg', x: '100%', y: '-60%' })
+
+		// Media queries
+		this.mm.add( '(min-width: 797.5px)', () => {
+			gsap.set( '#myPhoto img', { 
+				scale: .6,
+				xPercent: -20, 
+				yPercent: -110, 
+				rotate: '-10deg'
+			})
+		})
+		this.mm.add( '(max-width: 797.5px)', () => {
+			gsap.set( '#myPhoto img', { 
+				scale: .6,
+				xPercent:  20, 
+				yPercent:  110, 
+				rotate: '-10deg'
+			})
+		})
     }
 	pointsScaleCalculation() {
 		const scales = this.pointsSettings.scale
@@ -336,16 +356,13 @@ export default class PointsAnimation extends EventEmitter {
     }
     aboutMeAnimation() {
         const tl = gsap.timeline()
-        tl.to('#myPhoto', {
-            opacity: 1,
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 1,
-            ease: 'power4'
-        })
         tl.to('#myPhoto img', {
+			xPercent: 0,
+			yPercent: 0,
+			rotate: 0,
             scale: 1,
             duration: 1,
-            ease: 'power1'
+            ease: 'power2'
         }, '<')
         tl.to('.content__title span', {
             yPercent: 0,

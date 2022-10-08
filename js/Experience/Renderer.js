@@ -19,7 +19,6 @@ export default class Renderer {
         this.scene1 = this.experience.scene1
         this.canvas = this.experience.canvas
         this.camera = this.experience.camera
-        // this.camera1 = this.experience.camera.instance.clone()
         this.debug = this.experience.debug
 
         // Debug
@@ -233,13 +232,6 @@ export default class Renderer {
         this.displacementPass.material.uniforms.uAspect.value = this.sizes.width / this.sizes.height
     }
     update() {
-		// //render scene1
-        // Tick effect composer
-        // this.effectComposer1.render()
-		// this.effectComposer.renderer.clear()
-		// renderer.autoClear = true;
-		
-		
 		this.instance.clear()
         this.effectComposer.render()
 		this.instance.clearDepth()
