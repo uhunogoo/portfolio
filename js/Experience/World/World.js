@@ -31,7 +31,6 @@ export default class World {
             this.tower.towerGroup, 
             this.fire.fireGroup
         )
-        sceneGroup.renderOrder = 0
         
         this.scene.add( sceneGroup )
         this.animation = new Animation( sceneGroup )

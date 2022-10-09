@@ -1,4 +1,4 @@
-import { LinearFilter, LinearMipmapLinearFilter, sRGBEncoding, TextureLoader } from 'three'
+import { LinearFilter, LinearMipmapLinearFilter, NearestFilter, sRGBEncoding, TextureLoader } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
@@ -39,9 +39,13 @@ export default class Resources extends EventEmitter {
                     if ( source.asset === 'startParams' ) {
                         // Basic textures parameters
                         file.flipY = false
+						// file.repeat.x = 0.9995
+						// file.repeat.y = 0.9995
+						// file.center.x = 0.5
+						// file.center.y = 0.5
                         file.encoding = sRGBEncoding
                         file.magFilter = LinearFilter
-                        file.minFilter = LinearFilter
+                        file.minFilter = NearestFilter
                     }
                     
                     this.sourceLoaded(source, file)

@@ -76,6 +76,11 @@ export default [
         type: 'texture',
         path: `/textures/runes/grass${ formatPNG }`
     },
+    {
+        name: 'grassTexture1',
+        type: 'texture',
+        path: `/textures/runes/grass-1${ formatPNG }`
+    },
     //  Clouds
     {
         name: 'cloud',

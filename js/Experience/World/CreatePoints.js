@@ -21,7 +21,9 @@ export default class Createpoints {
     createPoints() {
         // Default points geometry and material
         const points = new Group()
-        const material = new SpriteMaterial( { map: this.resources.items.pointTexture } )
+        const material = new SpriteMaterial( { 
+			map: this.resources.items.pointTexture
+		 })
         
         // Create points
         this.points.forEach( point => {

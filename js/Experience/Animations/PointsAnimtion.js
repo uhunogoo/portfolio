@@ -112,19 +112,6 @@ export default class PointsAnimation extends EventEmitter {
 		this.pointsScaleCalculation()
     }
 
-	cameraUpdate() {
-		gsap.to( this.cameraEmpty.rotation, {
-			y: Math.PI * 2,
-			onUpdate: () => {
-				this.camera.instance.position.copy( this.camera.cameraPosition() )
-				this.camera.instance.lookAt( this.camera.cameraLookAt() )
-			},
-			duration: 20,
-			repeat: -1,
-			ease: 'none'
-		})
-	}
-
     startStyles() {
 		// Match media
 		this.mm = gsap.matchMedia()

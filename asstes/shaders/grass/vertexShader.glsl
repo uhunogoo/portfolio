@@ -10,10 +10,12 @@ varying float vNoise;
 varying float vScale;
 varying float vMultiply;
 varying float vWind;
+varying float vTextureType;
 
 attribute vec3 offset;
 attribute vec2 rotation;
 attribute float scale;
+attribute float textureType;
 
 #define PI 3.14159265359
 #define TWO_PI 6.28318530718
@@ -76,9 +78,7 @@ void main(){
 	
 	// generate small grass around the road
 	vec2 groundUV = ( offset.xz - 0.5 ) / ( 11.78 * 0.5 ) + .5;
-	// vec2 shadowNewUV= (vPosition - 0.5) / 2.0 + 0.5;
 	float shadow = smoothstep( 0.1, 0.2 * scale, length(groundUV.y - 0.415) );
-	// shadow *= ;
 	// Scaling
 	vec3 st=position*scale;
 	st*=.5+staticNoise;
@@ -93,9 +93,6 @@ void main(){
 	// Base rotation
 	st.zy*=get2dRotateMatrix( PI * rotation.y * 0.1 );
 	st.xz*=get2dRotateMatrix( PI * 0.5 + (rotation.y + staticNoise2) * 0.5);
-	// st.xz*=get2dRotateMatrix( (PI*rotation.y+staticNoise2));
-	// st.xy*=get2dRotateMatrix((rotation.y+staticNoise2)*.05);
-	// st.zy*=get2dRotateMatrix(sin(rotation.y*2.)*staticNoise2*.2);
 	
 	// Wind grass moving
 	float newWind=((1.+wind)*.5);
@@ -115,6 +112,7 @@ void main(){
 	vNoise=clamp(wind,0.,1.)*.1+staticNoise;
 	vWind=noise;
 	vPosition=(offset.xz-.5)/(11.78*.5)+.5;
+	vTextureType = textureType;
 	
 	vScale=scale;
 	vMultiply=clamp(staticNoise2,scale*.4+(staticNoise*staticNoise2),1.);

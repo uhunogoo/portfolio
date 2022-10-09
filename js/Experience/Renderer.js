@@ -92,7 +92,7 @@ export default class Renderer {
                 minFilter: LinearFilter,
                 magFilter: LinearFilter,
                 format: RGBAFormat,
-                samples: this.instance.getPixelRatio() === 1 ? 2 : 0
+                samples: this.instance.getPixelRatio() === 1 ? 3 : 0
             }
         )
         
@@ -226,7 +226,7 @@ export default class Renderer {
 
         // Update effect composer
         this.effectComposer.setSize(this.sizes.width, this.sizes.height)
-        this.effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        this.effectComposer.setPixelRatio( Math.min(this.sizes.pixelRatio, 2) )
 
         // Update bokhe shader
         this.displacementPass.material.uniforms.uAspect.value = this.sizes.width / this.sizes.height

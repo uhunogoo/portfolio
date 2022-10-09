@@ -34,13 +34,15 @@ export default class Tower {
     }
     loadMaterials() {
         this.towerMaterial1 = new MeshBasicMaterial({
-            map: this.resources.items.towerTexture1
+            map: this.resources.items.towerTexture1,
         })
         // this.towerMaterial2 = new MeshBasicMaterial({
-        //     map: this.resources.items.towerTexture2
-        // })
-        this.towerMaterial3 = new MeshBasicMaterial({
-            map: this.resources.items.towerTexture3
+			//     map: this.resources.items.towerTexture2
+			// })
+		this.towerMaterial3 = new MeshBasicMaterial({
+			map: this.resources.items.towerTexture3,
+			precision: 'highp',
+			dithering: true
         })
         this.towerMaterial4 = new ShaderMaterial({
             uniforms: {

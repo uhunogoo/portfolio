@@ -4,12 +4,14 @@ varying vec2 vPosition;
 varying float vScale;
 varying float vMultiply;
 varying float vWind;
+varying float vTextureType;
 
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 uniform vec2 uShadowVec;
 uniform float uTime;
 uniform sampler2D uTexture;
+uniform sampler2D uTexture1;
 uniform sampler2D uShadows;
 
 #define PI 3.14159265359
@@ -27,10 +29,17 @@ void main(){
 
 	float wavyMotion = sin(vWind  + st.x * 2.0);
 	float grassStrength = smoothstep(0.0, 1.0, st.y );
-	vec4 grassTexture = texture2D( 
-      uTexture, 
-      st + wavyMotion * vec2( grassStrength * 0.06, wavyMotion * grassStrength * 0.03  ) 
-    );
+	vec4 grassTexture = mix(
+		texture2D( 
+		uTexture, 
+		st + wavyMotion * vec2( grassStrength * 0.06, wavyMotion * grassStrength * 0.03  ) 
+		),
+		texture2D( 
+		uTexture1, 
+		st + wavyMotion * vec2( grassStrength * 0.06, wavyMotion * grassStrength * 0.03  ) 
+		),
+		1.0 - vTextureType
+	);
 	
 	if(grassTexture.a<.65)discard;
 	

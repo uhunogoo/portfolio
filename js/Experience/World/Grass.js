@@ -20,7 +20,7 @@ export default class Grass {
 
         // Parameters
         this.grassParameters = {
-            count: 100000,
+            count: 110000,
             size: 11.78
         }
         this.resources.items.shadowMap.flipY = false
@@ -29,6 +29,7 @@ export default class Grass {
             uIntesity: { value: 0.38 },
             uTime: { value: 0 },
             uTexture: { value: this.resources.items.grassTexture },
+            uTexture1: { value: this.resources.items.grassTexture1 },
             uShadows: { value: this.resources.items.shadowMap },
             uShadowVec: { value: new Vector2(0.042, 0.042) },
             uColor1: { value: new Color('#8f3838') },
@@ -136,10 +137,14 @@ export default class Grass {
         }
         const offset = []
         const scales = []
+        const textureType = []
         const rotations = []
 
         // Transform
         const PI = Math.PI
+		const proportion = gsap.utils.clamp(0.6, 0.75, Math.random())
+		const baseTextureTypeCount = Math.round(proportion * count)
+		
 
         // Calculation
         const pushGeometryData = (x, z, scale) => {
@@ -166,6 +171,13 @@ export default class Grass {
 			const { x, z } = dummy.position
 			
 			// Set parameters
+			if (i < baseTextureTypeCount) {
+				// First texture
+				textureType.push(0)
+			} else {
+				// Second texture
+				textureType.push(1)
+			}
 			pushGeometryData(x, z, scale)
 		}
 
@@ -181,6 +193,7 @@ export default class Grass {
         this.grassBufferGeometry.setAttribute('rotation', new InstancedBufferAttribute( new Float32Array( rotations ), 2))
         this.grassBufferGeometry.setAttribute('offset', new InstancedBufferAttribute( new Float32Array( offset ), 3))
         this.grassBufferGeometry.setAttribute('scale', new InstancedBufferAttribute( new Float32Array( scales ), 1))
+        this.grassBufferGeometry.setAttribute('textureType', new InstancedBufferAttribute( new Float32Array( textureType ), 1))
 
         const instancedGrassMesh = new Mesh( this.grassBufferGeometry, this.grassMaterial )
         
