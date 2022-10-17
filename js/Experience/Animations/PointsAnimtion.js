@@ -1,24 +1,20 @@
 
 import gsap from 'gsap'
-import { SlowMo } from 'gsap/all'
-gsap.registerPlugin( SlowMo )
 
 import { Raycaster } from 'three'
 import Experience from '../Experience'
 import EventEmitter from '../Utils/EventEmitter'
 
-
-import bell from '../../../asstes/sounds/intro.mp3?url'
-import splash from '../../../asstes/sounds/splash.mp3?url'
-
 export default class PointsAnimation extends EventEmitter {
-    constructor ( world, UI, cameraMove ) {
+    constructor ( world, UI, cameraMove, preload ) {
         super()
 
         // Setup
         this.world = world
         this.uiAnimations = UI
 		this.cameraMove = cameraMove
+		this.preload = preload
+		
 		
         this.experience = new Experience()
         this.sizes = this.experience.sizes
@@ -30,7 +26,7 @@ export default class PointsAnimation extends EventEmitter {
         this.cameraEmpty = this.camera.instanceEmpty
 
         this.mouse = this.experience.mouse
-        this.preload = this.experience.preload.mesh
+        this.preloadMesh = this.preload.mesh
         this.bloomPass = this.experience.renderer.unrealBloomPass
         this.bloomPass = this.experience.renderer.unrealBloomPass
         
@@ -57,8 +53,6 @@ export default class PointsAnimation extends EventEmitter {
 		this.raycaster = new Raycaster()
         this.intersect = null
         this.clickedPoint = null
-        this.hitSound = new Audio( bell )
-        this.outSound = new Audio( splash )
 
         this.parameters = this.experience.camera.parameters
         this.parameters.angle = 1.75
@@ -195,8 +189,8 @@ export default class PointsAnimation extends EventEmitter {
     
     mouseClick() {
         const playHitSound = () => {
-            this.outSound.currentTime = 0
-            this.outSound.play()
+			const audio = this.preload.audios.closeSound
+            audio.play()
         }
         const openInformationBlock = (targetPoint) => {
             this.trigger('menuWasOpen')
@@ -255,8 +249,8 @@ export default class PointsAnimation extends EventEmitter {
 
     showInformation(target) {
         const playHitSound = () => {
-            this.hitSound.currentTime = 0
-            this.hitSound.play()
+			const audio = this.preload.audios.openSound
+            audio.play()
         }
         const clear = () => {
             this.open.kill()
@@ -286,7 +280,7 @@ export default class PointsAnimation extends EventEmitter {
 
         const tl = gsap.timeline({ paused: true, onStart: sound })
 
-        tl.to(this.preload.material.uniforms.uProgress, {
+        tl.to(this.preloadMesh.material.uniforms.uProgress, {
             value: 1,
             duration: 1.6,
             ease: 'power2'

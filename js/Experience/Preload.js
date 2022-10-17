@@ -2,7 +2,6 @@ import gsap from 'gsap'
 
 import Experience from './Experience'
 import EventEmitter from './Utils/EventEmitter'
-import bell from '../../asstes/sounds/CinematicStrike.mp3?url'
 
 // Postprocessing
 
@@ -10,6 +9,7 @@ import bell from '../../asstes/sounds/CinematicStrike.mp3?url'
 import vertexShader from '../../asstes/shaders/preloader/preloadVertex.glsl?raw'
 import fragmentShader from '../../asstes/shaders/preloader/preloadFragment.glsl?raw'
 import { Mesh, PlaneGeometry, ShaderMaterial } from 'three'
+import AddAudio from './World/Audio'
 
 export default class Preload extends EventEmitter {
     constructor() {
@@ -21,8 +21,11 @@ export default class Preload extends EventEmitter {
         this.scene1 = this.experience.scene1
         this.mouse = this.experience.mouse
         this.resources = this.experience.resources
+		this.addAudio = new AddAudio()
+
         
         // Defaults
+		this.audios = null
         this.progress = { value: 0, complete: false }
         this.progressBlock = document.querySelector('.loader span')
         this.preloadBlock = document.querySelector('.preload')
@@ -30,7 +33,6 @@ export default class Preload extends EventEmitter {
         
         this.preloadHovered = false
         this.debug = this.experience.debug
-        this.hitSound = new Audio( bell )
 
         // actions
         this.loadingAnimation()
@@ -149,8 +151,9 @@ export default class Preload extends EventEmitter {
         const beforeOut = () => {
             this.preload.kill()
             this.playInAnimation.kill()
-            this.hitSound.currentTime = 0
-            this.hitSound.play()
+			
+			// Play audio
+            this.audios.enterSound.play()
         }
         const clear = () => {
             this.playOutAnimation.kill()
@@ -219,6 +222,9 @@ export default class Preload extends EventEmitter {
             
             // Check target 
             if ( target && target.classList.contains('preload__enter') ) {
+
+				// Add audio
+				this.audios = this.addAudio.createAudio()
 
                 target.classList.add('active')
                 this.preloadBlock.classList.add('close')

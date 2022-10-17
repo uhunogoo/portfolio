@@ -186,7 +186,6 @@ export default class Renderer {
 
                     vec3 color = mix( texture.rgb, texture.rgb - (1.0 - bokhe) * 0.8, greyMap );
                     color = mix( color, color - (noise * 0.1), greyMap );
-                    // color = mix( color, color + vec3(grey, 0.0, 0.0) * 0.2, greyMap );
                     color = clamp( color, vec3(0.0), vec3(1.0) );
 
                     gl_FragColor = vec4( color, 1.0);

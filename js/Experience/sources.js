@@ -22,18 +22,6 @@ export default [
         path: '/geometry/postament-draco-new.glb?url'
     },
     //  TOWER
-    // {
-    //     name: 'towerTexture1',
-    //     type: 'texture',
-    //     asset: 'startParams',
-    //     path: `/textures/tower/floorTexture${ formatJPG }`
-    // },
-    // {
-    //     name: 'towerTexture2',
-    //     type: 'texture',
-    //     asset: 'startParams',
-    //     path: `/textures/tower/wallTexture${ formatJPG }`
-    // },
     {
         name: 'towerTexture1',
         type: 'texture',
@@ -91,5 +79,21 @@ export default [
         name: 'cloud2',
         type: 'texture',
         path: `/backgrounds/cloud-2${ formatPNG }`
+    },
+	//  Sounds
+	{
+        name: 'enterSound',
+        type: 'audio',
+        path: `/audio/enter-sound.mp3`
+    },
+	{
+        name: 'openSound',
+        type: 'audio',
+        path: `/audio/open-sound.mp3`
+    },
+	{
+        name: 'closeSound',
+        type: 'audio',
+        path: `/audio/close-sound.mp3`
     },
 ]

@@ -13,6 +13,8 @@ export default class UIAnimation {
         this.towerGroup = scene.children.find( child => child.name === 'towerGroup' )
 		
         // Defaults
+		this.isButton = false
+		this.isAboutMeLink = false
 		this.runic = this.towerGroup.children.find((child) => child.name === 'runic')
         this.deviceOrientationSupported = false
         this.closeButtonHover = false
@@ -37,6 +39,7 @@ export default class UIAnimation {
                 '50%': { color: '#F3B754', ease: 'power1.out' },
                 '100%': { color: '#121F2F', ease: 'power1.in' },
             },
+			overwrite: true,
             duration: 0.4,
             stagger: 0.05
         })
@@ -60,8 +63,12 @@ export default class UIAnimation {
 			duration: 0.2, 
 			ease: 'power1',
 		})
-
-        // Add close button animation to mouse follow timeline
+		this.linksAnimation = gsap.to('.content__links a', {
+			paused: true,
+			opacity: 0.2,
+			duration: 0.3, 
+			ease: 'power1',
+		})
 
         // Scrolltrigger
         this.worksContainer = document.querySelector('.works')
@@ -210,8 +217,9 @@ export default class UIAnimation {
     }
     mouseMove() {
         const isPreloadHiden = this.preload.classList.contains('close')
+		const mouseTargetClassList = this.mouse.moveTarget.classList
         const { x, y } = this.mouse
-		let isFocused = false
+		
         
         if (!isPreloadHiden) {
 			this.decorCircleX( -10 * y )
@@ -238,20 +246,21 @@ export default class UIAnimation {
                 return role
             }
             // Test if target role is button   
-            isFocused = targetRole() === 'button'
+            this.isButton = targetRole() === 'button'
+            this.isAboutMeLink = targetRole() === 'link'
             
             // Button animation part
-            if ( isFocused ) {
-                const isCloseButton = this.mouse.moveTarget.classList.contains('close_btn')
-                const isEnterButton = this.mouse.moveTarget.classList.contains('preload__enter_animated')
-                const isWorksButton = this.mouse.moveTarget.classList.contains('menu__item_works')
+            if ( this.isButton ) {
+                const isCloseButton = mouseTargetClassList.contains('close_btn')
+                const isEnterButton = mouseTargetClassList.contains('preload__enter_animated')
+                const isWorksButton = mouseTargetClassList.contains('menu__item_works')
 				
 
                 if (isCloseButton) {
                     this.closeButton.play()
                 }
                 
-                if (isEnterButton) {                   
+                if (isEnterButton) {                 
                     if ( this.enterButton.progress() === 0) {
                         this.enterButton.play(0)
                     }
@@ -261,7 +270,7 @@ export default class UIAnimation {
 						this.runicAnimation.play(0)
 					}
                 }
-            } else {
+            } else if ( !this.isButton ) {
                 if ( this.closeButton.progress() !== 0) {
                     this.closeButton.reverse()
                 }
@@ -272,6 +281,30 @@ export default class UIAnimation {
                     this.runicAnimation.reverse()
                 }
             }
+			
+			const linksParent = document.querySelector('.content__links')
+			const isLinkActive = linksParent.classList.contains('active')  
+			const links = document.querySelectorAll('.content__links a')
+			if ( this.isAboutMeLink ) {
+				if ( !isLinkActive ) {
+					linksParent.classList.add('active')
+					const noActive = [...links].forEach( el => {
+						if (el !== this.mouse.moveTarget ) {
+							const isAnimate = el.classList.contains('animate')
+							if ( !isAnimate ) {
+								el.classList.add('animate')
+							}
+						}
+					})
+				}
+			} else if( !this.isAboutMeLink ) {
+				if ( isLinkActive ) {
+					linksParent.classList.remove('active')
+					const noActive = [...links].forEach( el => {
+						el.classList.remove('animate')
+					})
+				}
+			}
         }
         
     }

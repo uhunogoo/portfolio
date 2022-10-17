@@ -16,7 +16,8 @@ export default class Animation {
         this.pointsAnimation = new PointsAnimation( 
 			target, 
 			this.uiAnimation, 
-			this.cameraMove 
+			this.cameraMove,
+			this.preload
 		)
 		 
         this.intersect = null

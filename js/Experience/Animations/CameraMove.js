@@ -170,7 +170,7 @@ export default class CameraMove {
 		]
 		this.cameraAnimationVariation.curves.curvePoints = [
 			this.curve1.getPoints( 500 ),
-			this.curve2.getPoints( 500 )
+			this.curve2.getPoints( 400 )
 		]
 		
 		

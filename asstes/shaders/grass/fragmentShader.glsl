@@ -32,7 +32,7 @@ void main(){
 	vec4 grassTexture = mix(
 		texture2D( 
 		uTexture, 
-		st + wavyMotion * vec2( grassStrength * 0.06, wavyMotion * grassStrength * 0.03  ) 
+		vec2( 1.0 - st.x, st.y) + wavyMotion * vec2( grassStrength * 0.06, wavyMotion * grassStrength * 0.03  ) 
 		),
 		texture2D( 
 		uTexture1, 

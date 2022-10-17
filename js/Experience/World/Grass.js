@@ -142,7 +142,7 @@ export default class Grass {
 
         // Transform
         const PI = Math.PI
-		const proportion = gsap.utils.clamp(0.6, 0.75, Math.random())
+		const proportion = gsap.utils.clamp(0.7, 0.85, Math.random())
 		const baseTextureTypeCount = Math.round(proportion * count)
 		
 
