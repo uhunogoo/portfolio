@@ -18,6 +18,7 @@ export default class CameraMove {
         this.mouse = this.experience.mouse
 		this.points = this.experience.points
         this.deviceOrientationEvent = this.experience.deviceOrientationEvent
+        this.debug = this.experience.debug
         
         // Defaults
 		this.cameraMove = { 
@@ -66,6 +67,19 @@ export default class CameraMove {
             }
         })
 
+		// Debug
+        if (this.debug.active) {
+            this.debugFolder = this.debug.ui.addFolder('Animate camera')
+
+			const that = this
+			const myObject = {
+				towerInAnimation: () => {
+					that.towerInAnimation.restart()
+				}
+			}
+			this.debugFolder.add( myObject, 'towerInAnimation' )
+		}
+
 
         // Functions
         this.animations()
@@ -108,11 +122,13 @@ export default class CameraMove {
 				x: () => move('x'),
 				y: () => move('y'),
 				z: () => move('z')
-			}
+			},
+			immediateRender: true,
+			ease: 'power1.in',
 		}, 0)
 		tl.to( this.cameraMove.angle.lineAnimation, {
 			y: parameters.y,
-			x: parameters.x,
+			x: parameters.x * 0.5,
 			ease: 'power1.in',
 			duration: 1
 		}, 0)
@@ -183,49 +199,22 @@ export default class CameraMove {
 		// this.scene.add( curveObject1, curveObject2 )
 	}
     animations() {
-        this.towerInAnimation.to(this.target.rotation, {
-            keyframes: {
-                '35%': {
-                    y: Math.PI * this.parameters.angle * 0.45,
-                    ease: 'power1.in'
-                },
-                '100%': {
-                    y: Math.PI * this.parameters.angle,
-                    ease: 'power2.out'
-                }
-            }
-        }, 0)
+		this.cameraEmpty.position.y = this.parameters.cameraY * 0.5
         this.towerInAnimation.to(this.cameraEmpty.position, {
             keyframes: {
                 '35%': {
-                    y: this.parameters.cameraY + (this.cameraEmpty.position.y - this.parameters.cameraY) / 2,
                     z: this.parameters.radius,
                     ease: 'power1.in'
                 },
                 '100%': {
-                    y: this.parameters.cameraY * 0.5,
                     z: this.parameters.radius * 1.2,
                     ease: 'power2.out'
                 }
             },
-        }, '<')
-        this.towerInAnimation.to(this.scene.rotation, {
-            keyframes: {
-                '25%': {
-                    z: -Math.PI * 0.1,
-                    ease: 'back(1.2)'
-                },
-                '100%': {
-                    z: 0,
-                    ease: 'back(3.4)'
-                }
-            }
-        }, '<')
+        }, 0)
     }
     cameraRotationCalculation() {
         const startRotation = this.cameraEmptyDefaults.rotation
-		// const mutiplier = 1
-		// const mutiplier = (1 - this.cameraMoveTimeline.progress())
 		const mutiplier = (1 - this.cameraMove.progress)
 
         const mouseMoveRotation = this.cameraMove.angle.mouseAnimation

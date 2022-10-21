@@ -244,10 +244,10 @@ export default class Renderer {
 				ease: 'power1',
 			}
 		})
-		tl.to(this.displacementPass.material.uniforms.uFishEyeStrength, {
+		tl.fromTo(this.displacementPass.material.uniforms.uFishEyeStrength, {value: 1.2}, {
 			value: 0,
 		})
-		tl.to(this.displacementPass.material.uniforms.uFishEyeEnd, {
+		tl.fromTo(this.displacementPass.material.uniforms.uFishEyeEnd, {value: 1.4}, {
 			value: 1,
 		}, 0.3)
 		return tl

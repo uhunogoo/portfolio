@@ -20,15 +20,16 @@ export default class PointsAnimation extends EventEmitter {
         this.sizes = this.experience.sizes
         this.debug = this.experience.debug
         this.scene = this.experience.scene
+        this.mouse = this.experience.mouse
+        
         this.points = this.experience.points.list
 		
 		this.camera = this.experience.camera
         this.cameraEmpty = this.camera.instanceEmpty
-
-        this.mouse = this.experience.mouse
+        
         this.preloadMesh = this.preload.mesh
-        this.bloomPass = this.experience.renderer.unrealBloomPass
-        this.bloomPass = this.experience.renderer.unrealBloomPass
+        this.renderer = this.experience.renderer
+        this.bloomPass = this.renderer.unrealBloomPass
         
         
         // Defaults
@@ -278,34 +279,41 @@ export default class PointsAnimation extends EventEmitter {
             ease: 'power1'
         }, 0.6)
 
+        let delay = 0
+        const displacementAnimation = this.renderer.displacementAnimation().timeScale(1.2).reverse()
         const tl = gsap.timeline({ paused: true, onStart: sound })
 
+        tl.add( displacementAnimation, delay )
+        delay += 0.1
+        
         tl.to(this.preloadMesh.material.uniforms.uProgress, {
             value: 1,
             duration: 1.6,
             ease: 'power2'
-        }, 0)
+        }, delay)
         tl.to(this.bloomPass, {
             strength: 1,
             duration: 1.6,
             ease: 'power2'
-        }, 0)
+        }, delay)
         tl.to([ '.informationPart', target.element], {
             autoAlpha: 1,
             duration: 0.1,
-        }, 0)
+        }, delay)
+        delay += 0.6
+
         tl.to('.close_btn', {
             scale: 1,
             duration: 0.8,
             autoAlpha: 1,
             ease: 'back'
-        }, 0.6)
+        }, delay)
         if (target.name === 'point-1') {
             // Open my works
-            tl.add( this.myWorksBlockAnimation().timeScale(2.6), 0.45 )
+            tl.add( this.myWorksBlockAnimation().timeScale(2.6), delay - 0.15 )
         } else if (target.name === 'point-2') {
             // Open about me
-            tl.add( this.aboutMeAnimation().timeScale(1.8), 0.65 )
+            tl.add( this.aboutMeAnimation().timeScale(1.8), delay + 0.05 )
         }
 
         return tl

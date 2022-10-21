@@ -138,10 +138,15 @@ export default class Preload extends EventEmitter {
     loadingComplete() {
         // Debug
         if (this.debug.active) {
+            const that = this
             this.debugFolder = this.debug.ui.addFolder('Preload')
-        }
-        // Debug renderer
-        if (this.debug.active) {
+            const myObject = {
+                myFunction: () => {
+                    that.playOutAnimation.restart()
+                }
+            }
+            this.debugFolder.add( myObject, 'myFunction' )
+
             this.debugFolder
                 .add( this.mesh.material.uniforms.uProgress, 'value')
                 .min(0)
@@ -214,7 +219,7 @@ export default class Preload extends EventEmitter {
             duration: 0.8,
             ease: 'power1'
         }, 0.8)
-		this.playOutAnimation.add( this.renderer.displacementAnimation().play().timeScale(0.8), 0.6)
+		this.playOutAnimation.add( this.renderer.displacementAnimation().play().timeScale(1.4), 0.3)
         this.playOutAnimation.timeScale(0.9)
     }
 
