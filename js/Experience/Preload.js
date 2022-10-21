@@ -20,6 +20,7 @@ export default class Preload extends EventEmitter {
         this.scene = this.experience.scene
         this.scene1 = this.experience.scene1
         this.mouse = this.experience.mouse
+        this.renderer = this.experience.renderer
         this.resources = this.experience.resources
 		this.addAudio = new AddAudio()
 
@@ -213,6 +214,7 @@ export default class Preload extends EventEmitter {
             duration: 0.8,
             ease: 'power1'
         }, 0.8)
+		this.playOutAnimation.add( this.renderer.displacementAnimation().play().timeScale(0.8), 0.6)
         this.playOutAnimation.timeScale(0.9)
     }
 

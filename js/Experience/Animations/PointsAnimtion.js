@@ -340,18 +340,18 @@ export default class PointsAnimation extends EventEmitter {
         tl.to('#myPhoto img', {
 			xPercent: 0,
 			yPercent: 0,
-			rotate: 0,
+			rotate: '0deg',
             scale: 1,
             duration: 1,
             ease: 'power2'
-        }, '<')
+        }, 0)
         tl.to('.content__title span', {
             yPercent: 0,
             stagger: {
                 each: 0.1,
                 ease: 'power2'
             }
-        }, '<')
+        }, 0)
         tl.to('.animate-text span', {
             opacity: 1,
             y: 0,
@@ -359,7 +359,7 @@ export default class PointsAnimation extends EventEmitter {
                 each: 0.07,
                 ease: 'power1'
             }
-        }, '<')
+        }, 0)
         tl.to('.content__text span.icon', {
             opacity: 1,
             scale: 1,

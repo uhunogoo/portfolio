@@ -52,7 +52,7 @@ export default class Resources extends EventEmitter {
                 })
             } 
 			else if (source.type === 'audio') {
-				this.loaders.audioLoader.load( source.path, (file) => {				
+				this.loaders.audioLoader.load( source.path, (file) => {			
                     this.sourceLoaded(source, file)
                 })
 			}

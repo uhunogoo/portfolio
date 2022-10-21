@@ -8,6 +8,7 @@ import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectio
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 import { ACESFilmicToneMapping, BoxGeometry, CineonToneMapping, Color, CustomToneMapping, LinearFilter, LinearToneMapping, Mesh, MeshBasicMaterial, NoToneMapping, ReinhardToneMapping, RGBAFormat, ShaderChunk, sRGBEncoding, Vector2, WebGLRenderer, WebGLRenderTarget } from 'three'
+import gsap from 'gsap'
 
 
 export default class Renderer {
@@ -128,7 +129,10 @@ export default class Renderer {
                 tDiffuse: { value: null },
                 uProgress: { value: 1 },
                 uBokhe: { value: null },
-                uAspect: { value: this.sizes.width / this.sizes.height }
+                uFishEye: { value: null },
+                uFishEyeStrength: { value: null },
+                uFishEyeEnd: { value: null },
+                uAspect: { value: null }
             },
             vertexShader: `
                 varying vec2 vUv;
@@ -143,6 +147,9 @@ export default class Renderer {
             fragmentShader: `
                 uniform sampler2D tDiffuse;
                 uniform vec2 uBokhe;
+                uniform vec2 uFishEye;
+                uniform float uFishEyeStrength;
+                uniform float uFishEyeEnd;
                 uniform float uAspect;
                 uniform float uProgress;
 
@@ -163,11 +170,11 @@ export default class Renderer {
                 {
                     vec2 st = vUv;
 
-                    float scale = 400.0;
+                    float scale = 1.0;
                     vec2 scaleXY = vec2( scale, scale / uAspect );
 
-                    vec2 ipos = floor( st * scaleXY );
-                    vec2 fpos = fract( st * scaleXY );
+                    vec2 ipos = floor( (st - 0.5) * scaleXY + 0.5);
+                    vec2 fpos = fract( (st - 0.5) * scaleXY + 0.5);
                     vec2 xyStep = ipos / scaleXY;
                     
                     // Bokhe
@@ -179,7 +186,10 @@ export default class Renderer {
                     
                     float noise = random( st + xyStep );
                     noise = clamp(noise, 0.0, 1.0);
+					
+					float fishEye = smoothstep(uFishEye.x, uFishEye.y, distance( fpos, vec2(0.5) ) ) * uFishEyeStrength;
 
+					st = mix( st, (st - 0.5) / uFishEyeEnd + 0.5, 1.0 - fishEye);
                     vec4 texture = texture2D(tDiffuse, st + (1.0 - noise) * 0.0006 );
                     float grey = (texture.r + texture.g + texture.b) / 3.0;
                     float greyMap = 1.0 - floor(grey);
@@ -189,6 +199,7 @@ export default class Renderer {
                     color = clamp( color, vec3(0.0), vec3(1.0) );
 
                     gl_FragColor = vec4( color, 1.0);
+                    // gl_FragColor = vec4( vec3(fishEye), 1.0);
                 }
             `
         }
@@ -197,12 +208,19 @@ export default class Renderer {
         this.displacementPass = new ShaderPass(DisplacementShader)
         // this.displacementPass.enabled = false
         this.displacementPass.material.uniforms.uBokhe.value = new Vector2(0.4, 0.823)
+        this.displacementPass.material.uniforms.uFishEye.value = new Vector2(0.01, 0.6)
+        this.displacementPass.material.uniforms.uFishEyeStrength.value = 1.2
+        this.displacementPass.material.uniforms.uFishEyeEnd.value = 1.4
+        this.displacementPass.material.uniforms.uAspect.value = this.sizes.width / this.sizes.height
         this.effectComposer.addPass(this.displacementPass)
         
         // Debug renderer
         if (this.debug.active) {
             this.debugFolder.add(this.displacementPass.material.uniforms.uBokhe.value, 'x').name('bokeh width').min(-1).max(1).step(0.001)
             this.debugFolder.add(this.displacementPass.material.uniforms.uBokhe.value, 'y').name('bokeh height').min(-1).max(1).step(0.001)
+            this.debugFolder.add(this.displacementPass.material.uniforms.uFishEye.value, 'x').name('FishEye x').min(-1).max(1).step(0.001)
+            this.debugFolder.add(this.displacementPass.material.uniforms.uFishEye.value, 'y').name('FishEye y').min(-1).max(1).step(0.001)
+            this.debugFolder.add(this.displacementPass.material.uniforms.uFishEyeStrength, 'value').name('FishEye strength').min(0).max(2).step(0.001)
         }
         
         // Gamma correction pass
@@ -217,7 +235,23 @@ export default class Renderer {
 
             console.log('Using SMAA')
         }
+
     }
+	displacementAnimation() {
+		const tl = gsap.timeline({
+			paused: true,
+			defaults: {
+				ease: 'power1',
+			}
+		})
+		tl.to(this.displacementPass.material.uniforms.uFishEyeStrength, {
+			value: 0,
+		})
+		tl.to(this.displacementPass.material.uniforms.uFishEyeEnd, {
+			value: 1,
+		}, 0.3)
+		return tl
+	}
     resize() {
         // Update renderer
         this.instance.setSize(this.sizes.width, this.sizes.height)
