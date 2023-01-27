@@ -74,7 +74,7 @@
 }
 
 .preload__titleContainer {
-    height: calc(var(--largeTitle) * 2.2);
+    height: 4.5rem;
     position: relative;
     overflow: hidden;
 }

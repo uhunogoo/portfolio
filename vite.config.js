@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-// import dns from 'dns'
 
+// import dns from 'dns'
 // dns.setDefaultResultOrder('verbatim')
+
 const isCodeSandbox = !!process.env.SANDBOX_URL
+
 export default defineConfig({
     root: "src/",
     publicDir: "../public/",
