@@ -1,0 +1,35 @@
+.compass {
+	height: auto;
+	left: 50%;
+	margin-top: 2rem;
+	position: fixed;
+	transform: translate(-50%, 0);
+	max-width: 25rem;
+	width: 90vw;
+	will-change: transform;
+}
+@media screen and (min-width: 1300px) {
+    .compass {
+        margin-top: 1.7rem;
+    }
+}
+
+.compass__dots {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    width: 70%;
+    will-change: transform;
+}
+.compass__dots::after {
+    background: url(/backgrounds/compass-letter.png) no-repeat center;
+    background-size: contain;
+    content: '';
+    display: block;
+    height: 0.7rem;
+    left: 50%;
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, -165%);
+    width: 0.7rem;
+}

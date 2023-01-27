@@ -1,28 +1,30 @@
-import basicSsl from '@vitejs/plugin-basic-ssl'
-import { createHtmlPlugin } from 'vite-plugin-html'
-// import { defineConfig } from 'vite'
-/**
-* @type {import('vite').UserConfig}
-*/
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+// import dns from 'dns'
 
-export default {
+// dns.setDefaultResultOrder('verbatim')
+const isCodeSandbox = !!process.env.SANDBOX_URL
+export default defineConfig({
+    root: "src/",
+    publicDir: "../public/",
+    base: "./",
     build: {
-        minify: 'terser',
-        cssCodeSplit: false,
+        outDir: "../dist",
+        emptyOutDir: true,
         sourcemap: true,
+        cssCodeSplit: true,
+        rollupOptions: {
+            treeshake: true
+        }
     },
-        // loader
-        
-    // },
     server: {
-        https: true,
-        host: '192.168.31.122',
-        port: '3000'
+        host: true,
+        port: '3000',
+        strictPort: true,
+        // open: !isCodeSandbox,
+        hmr: true
     },
     plugins: [
-        basicSsl(),
-        createHtmlPlugin({
-            minify: true,
-        })
+        react()
     ]
-}
+})

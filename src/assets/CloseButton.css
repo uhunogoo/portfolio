@@ -1,0 +1,27 @@
+.close_btn {
+	cursor: pointer;
+	height: 2rem;
+	position: absolute;
+	right: 0.65rem;
+	top: 0.65rem;
+	transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+	transform: scale(0);
+	width: 2rem;
+	z-index: 6;
+	opacity: 0;
+}
+.close_btn svg {
+    pointer-events: none;
+}
+
+.close_btn #square {
+    fill: var(--gold);
+}
+
+.close_btn .st0 {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 100;
+    stroke-dasharray: 400;
+    stroke-dashoffset: 0;
+}

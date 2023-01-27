@@ -1,0 +1,101 @@
+.menu {
+	background: url(/backgrounds/menu.svg) no-repeat 50% 50%;
+	background-size: 50% 50%;
+	bottom: 1.5rem;
+	height: 3rem;
+	left: 1.5rem;
+	position: fixed;
+    pointer-events: all;
+	width: 3rem;
+    will-change: transform;
+}
+@media screen and (max-width: 767.5px) {
+    .menu {
+        transform: scale(0.85);
+    }
+}
+.menu::after,
+.menu::before {
+    background: url(/backgrounds/target.svg) no-repeat 50% 50%;
+    content: '';
+    display: block;
+    left: 50%;
+    opacity: 0.6;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.menu::before {
+    height: 110%;
+    width: 110%;
+}
+.menu::after {
+    height: 300%;
+    width: 300%;
+    z-index: -1;
+}
+
+
+.menu__icon {
+    background: linear-gradient(223.26deg, #2A445F 15.12%, #2C4763 59.94%, #365575 91.58%);
+    border: 0.1rem solid var(--gold);
+    border-radius: 2.5rem;
+    box-shadow: inset 0px 0.05rem 0.2rem var(--dark);
+    display: block;
+    height: 2.5rem;
+    margin: 0 auto;
+    pointer-events: none;
+    position: relative;
+    width: 2.5rem;
+    transition: filter 0.4s linear, transform 0.13s ease-in;
+    will-change: transform;
+}
+.menu__icon img {
+    height: 70%;
+    width: 70%;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: transform 0.13s ease-in;
+    will-change: transform;
+}
+
+.menu__item {
+    align-items: center;
+    color: var(--white);
+    cursor: pointer;
+    text-shadow:
+        -1px -1px 0 var(--dark),
+        1px -1px 0 var(--dark),
+        -1px 1px 0 var(--dark),
+        1px 1px 0 var(--dark);
+    position: absolute;
+    top: 0;
+    text-align: center;
+}
+.menu__item span {
+    display: block;
+    font-size: var(--textSize);
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    width: 5rem;
+    will-change: transform;
+}
+
+.menu__item_about {
+    transform: translate(180%, 0);
+}
+
+.menu__item_works {
+    transform: translate(0, -170%);
+}
+
+.menu__item:hover .menu__icon {
+    filter: brightness(1.3);
+    transform: translateY(-10%) scale(1.1);
+}
+.menu__item:hover img {
+    transform: translate(-50%, -50%) scale(0.75);
+}

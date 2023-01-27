@@ -1,22 +1,31 @@
 {
-  "name": "starter-project",
+  "name": "empty-reference",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "work": "vite --host 192.168.31.227 --https ",
     "build": "vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "vite": "^3.1.0"
-  },
   "dependencies": {
-    "@vitejs/plugin-basic-ssl": "^0.1.2",
-    "gsap": "^3.11.1",
-    "lodash-es": "^4.17.21",
-    "postcss-nested": "^5.0.6",
-    "three": "^0.143.0",
-    "vite-plugin-html": "^3.2.0"
+    "@react-three/drei": "^9.56.4",
+    "@react-three/fiber": "^8.10.1",
+    "@react-three/postprocessing": "^2.7.0",
+    "@reduxjs/toolkit": "^1.9.1",
+    "gsap": "^3.11.4",
+    "leva": "^0.9.34",
+    "postprocessing": "^6.29.3",
+    "r3f-perf": "^6.6.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "three": "^0.148.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^3.0.1",
+    "vite": "^4.0.4"
   }
 }

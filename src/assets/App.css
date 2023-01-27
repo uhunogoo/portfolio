@@ -1,0 +1,14 @@
+#root, 
+.webgl {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.webgl {
+  z-index: 1;
+  height: 100vh !important;
+  width: 100vw !important;
+}

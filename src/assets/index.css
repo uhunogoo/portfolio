@@ -1,0 +1,70 @@
+:root {
+  --white: #ffffff;
+  --dark: #121F2F;
+  --red: #F72C3B;
+  --gold: #F3B754;
+  --titleFont: 'Romanica', sans-serif;
+  --textSize: max( 20px, 2.5vmin );
+  --loading: 3.75vmin;
+  --largeTitle: max( 30px, 5vmin );
+  /* --smallTitle: max( 20px, 2.5vmin ); */
+}
+
+@font-face {
+  font-family: 'Romanica';
+  src: url(/fonts/Romanica/Romanica.woff) format('woff');
+  font-display: swap;
+  font-weight: 400
+}
+
+html,
+body {
+  color: #2d2d2d;
+  font-family: var(--titleFont);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--textSize);
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  width: 100vw;
+}
+p {
+  color: var(--dark);
+  opacity: 0.9;
+  font-size: 0.7rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+picture {
+  display: block;
+}
+
+img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+#app {
+  height: 100%;
+  width: 100vw;
+}
+#root, 
+.webgl {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.webgl {
+  z-index: 1;
+  height: 100vh !important;
+  width: 100vw !important;
+}
