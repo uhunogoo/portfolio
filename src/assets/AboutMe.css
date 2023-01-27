@@ -60,7 +60,7 @@
 }
 @media screen and (min-width: 991.5px) {
     .content__block {
-        height: 100%;
+        min-height: 100%;
         grid-template-columns: 40% 45%;
         grid-template-areas: 'image text'
                              'image text1';
@@ -102,6 +102,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     position: relative;
     margin: 15px auto 0;
     width: 140px;
@@ -113,16 +114,14 @@
         position: absolute;
         right: 0;
         top: 50%;
-        transform: translate(6.5vw, -50%);
-        width: auto;
+        transform: translate(100%, -50%);
+        width: 22%;
     }
 }
 
 @media screen and (min-width: 991.5px) {
     .content__links {
-        left: 0;
-        position: fixed;
-        transform: translate(47%, -50%);
+        width: 37.5%;
     }
 }
 
