@@ -5,15 +5,11 @@ import { BlendFunction } from 'postprocessing'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 
-import { useControls } from 'leva'
 import { useSelector } from 'react-redux'
 import { getMenuState } from '../menuButtonSlice.js'
 
 const EfectsWrapper = ({ children }) => {
     const composer = useRef(null)
-    const effecttComposerSettings = useControls('Effect Composer settings',{
-        enabled: true,
-    })
     
     useEffect(() => {
         const target = composer.current
@@ -29,8 +25,6 @@ const EfectsWrapper = ({ children }) => {
             ref={composer}
             multisampling={3} 
             disableNormalPass={ true }
-            // frameBufferType={ THREE.HalfFloatType }
-            { ...effecttComposerSettings }
         >
             { children }
         </EffectComposer>
@@ -56,13 +50,13 @@ const AnimatedBloom = ({target, children}) => {
 }
 
 export default function EffectsLayout({ camera }) {
-    const bloomSettings = useControls('Bloom settings',{
-        intensity: { value: .35, min: 0, max: 2, step: 0.001 },
-        radius: { value: 1, min: 0, max: 2, step: 0.001 },
-        levels: { value: 2, min: 0, max: 2, step: 0.001 },
-        luminanceThreshold: { value: 0, min: 0, max: 2, step: 0.001 },
-        luminanceSmoothing: { value: 0.17, min: 0, max: 1, step: 0.001 },
-    })
+    const bloomSettings = {
+        intensity: .35,
+        radius: 1,
+        levels: 2,
+        luminanceThreshold: 0,
+        luminanceSmoothing: 0.17,
+    }
 	
     const bloom = useRef(null)
     const tl = useMemo( () => gsap.timeline({ paused: true }) )

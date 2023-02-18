@@ -1,7 +1,7 @@
 import './assets/index.css'
 import store from './store.js'
 
-import { lazy } from 'react'
+import React, { lazy } from 'react'
 import { Provider } from 'react-redux'
 
 import { Canvas } from '@react-three/fiber'
@@ -14,19 +14,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	const root = createRoot(document.getElementById('root'))
 	
 	root.render(
-		<Provider store={ store }>
-			<MainPage />
-			<Canvas 
-				dpr={ 1 } 
-				shadows={false}
-				gl={{
-					powerPreference: 'high-performance', 
-					toneMappingExposure: 1.1
-				}}
-				flat={ false } className="webgl" 
-			>
-				<Experience />
-			</Canvas>
-		</Provider>
+		<React.StrictMode>
+			<Provider store={ store }>
+				<MainPage />
+				<Canvas 
+					dpr={ 1 } 
+					shadows={false}
+					gl={{
+						powerPreference: 'high-performance', 
+						toneMappingExposure: 1.1
+					}}
+					flat={ false } className="webgl" 
+				>
+					<Experience />
+				</Canvas>
+			</Provider>
+		</React.StrictMode>
 	)
 })

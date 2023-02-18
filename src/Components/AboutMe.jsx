@@ -5,52 +5,33 @@ import { useLayoutEffect, useRef } from 'react'
 
 export default function AboutMe({ addAnimation }) {
     const aboutMe = useRef()
+    const myPhoto = useRef()
+
     const q = gsap.utils.selector(aboutMe)
     useLayoutEffect( () => {
 		const ctx = gsap.context( () => {
-			gsap.set( q('.content__title span'), { yPercent: 100 })
 			gsap.set( q('.animate-text span'), { opacity: 0, y: 100 })
 			gsap.set( q('.content__text span.icon'), { opacity: 0, x: '-1.6rem', scale: 0.1 })
 			gsap.set( q('.content__links img'), { opacity: 0, scale: 0.1 })
 			gsap.set( q('.content .decor'), { opacity: 0, scale: 1.6, rotate: '90deg', x: '100%', y: '-60%' })
-			
-			// Match media
-			const mm = gsap.matchMedia()
-	
-			// Media queries
-			mm.add( '(min-width: 797.5px)', () => {
-				gsap.set( q('.myPhoto img'), { 
-					scale: .6,
-					xPercent: -20, 
-					yPercent: -110, 
-					rotate: '-10deg'
-				})
-			})
-			mm.add( '(max-width: 797.5px)', () => {
-				gsap.set( q('.myPhoto img'), { 
-					scale: .6,
-					xPercent:  20, 
-					yPercent:  110, 
-					rotate: '-10deg'
-				})
-			})
 		})
-		
+
 		return () => ctx.revert()
     }, [])
 	useLayoutEffect( () => {
 		const ctx = gsap.context(() => {
+	
 			const tl = gsap.timeline({ paused: true, defaults: { immediateRender: true } }) 
-			tl.to(q('.myPhoto img'), {
-				xPercent: 0,
-				yPercent: 0,
-				rotate: '0deg',
-				scale: 1,
+			tl.from(myPhoto.current, {
+				scale: .6,
+				xPercent: -20, 
+				yPercent: -110, 
+				rotate: '-10deg',
 				duration: 1,
 				ease: 'power2'
 			}, 0)
-			tl.to(q('.content__title span'), {
-				yPercent: 0,
+			tl.from(q('.content__title span'), {
+				yPercent: 100,
 				stagger: {
 					each: 0.1,
 					ease: 'power2'
@@ -106,17 +87,17 @@ export default function AboutMe({ addAnimation }) {
 				<figure className="content__image">
 					<picture className="myPhoto">
 						<source srcSet="/backgrounds/image.webp" />
-						<img  width="570" height="856" src="/backgrounds/image.jpg" alt="Yurii" title="Me" />
+						<img ref={ myPhoto } loading="lazy" width="570" height="856" src="/backgrounds/image.jpg" alt="Yurii" title="Me" />
 					</picture>
 					<figcaption className="content__links">
 						<a href="#" role="link" target="_blank" real="nofollow noopener">
-							<img  src="/backgrounds/icon-1.svg" width="20" height="20" alt="linkedin" />
+							<img loading="lazy" src="/backgrounds/icon-1.svg" width="20" height="20" alt="linkedin" />
 						</a>
 						<a href="#" role="link" target="_blank" real="nofollow noopener">
-							<img  src="/backgrounds/icon-2.svg" width="20" height="20" alt="twitter" />
+							<img loading="lazy" src="/backgrounds/icon-2.svg" width="20" height="20" alt="twitter" />
 						</a>
 						<a href="#" role="link" target="_blank" real="nofollow noopener">
-							<img  src="/backgrounds/icon-3.svg" width="20" height="20" alt="github" />
+							<img loading="lazy" src="/backgrounds/icon-3.svg" width="20" height="20" alt="github" />
 						</a>
 					</figcaption>
 				</figure>

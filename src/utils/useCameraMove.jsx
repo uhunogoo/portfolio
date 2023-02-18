@@ -1,12 +1,10 @@
 import gsap from 'gsap'
 
-import { useEffect, useLayoutEffect, useMemo } from 'react'
-import { useDispatch } from 'react-redux'
-import { setMouse } from '../../mouseSlice.js'
+import { useEffect, useMemo } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Vector3, Mesh } from 'three'
-import { BoxGeometry } from 'three'
-import { MeshBasicMaterial } from 'three'
+import { Vector3, Mesh, BoxGeometry, MeshBasicMaterial } from 'three'
+import { useMousePosition } from './useMouse.js'
+
 
 const parameters = {
     position: new Vector3(0, -0.5, 12),
@@ -18,10 +16,11 @@ const cameraEmptyMesh = new Mesh(
     new MeshBasicMaterial()
 )
 
-export function Mouse({ mouse }) {
-    const vec = useMemo(() => new Vector3(), [])
-    const dispatch = useDispatch()
-    const camera = useThree( state => state.camera )
+export function useCameraMove() {
+    const mouse = useMousePosition();
+    const vec = useMemo( () => new Vector3(), [] );
+    const vecClone = useMemo( () => vec.clone(), [] );
+    const camera = useThree( state => state.camera );
     
     const getVector = ( target, cameraEmptyMesh, mouseVec ) => {
         const vector = target.clone()
@@ -39,54 +38,29 @@ export function Mouse({ mouse }) {
             parameters.cameraPosition,
             cameraEmptyMesh,
             vec
-        ))
+        ));
         camera.lookAt(getVector
         (
             parameters.lookAt,
             cameraEmptyMesh,
             vec
-        ))
-        // camera.updateProjectionMatrix()
+        ));
     }
+
     useEffect(() => {
-        cameraEmptyMesh.position.copy(parameters.position)
-        setInstance()
-    }, [])
+        cameraEmptyMesh.position.copy(parameters.position);
+        setInstance();
+    }, []);
 
-    useLayoutEffect(() => {
-        const moveX = gsap.quickTo(vec, 'x', {
-            ease: 'power1.out',
-            duration: 0.6,
-            immediateRender: true
-        })
-        const moveY = gsap.quickTo(vec, 'y', {
-            ease: 'power1.out',
-            duration: 0.6,
-            immediateRender: true
-        })
+    return useFrame((state) => {
+        vec.lerp( vecClone.set( mouse.x * 0.6, mouse.y * 0.3, 0 ), 0.04 );
 
-        const onMove = () => {
-            dispatch(setMouse({ x: mouse.x, y: mouse.y }))
-
-            moveX(mouse.x * 0.5)
-            moveY(mouse.y * 0.25)
-        }
-        window.addEventListener('pointermove', onMove)
-
-        return () => {
-            window.removeEventListener('pointermove', onMove)
-        }
-    }, [])
-
-    
-    return useFrame((state, delta) => {
-        state.camera.updateProjectionMatrix()
-        setInstance()
-    })
+        state.camera.updateProjectionMatrix();
+        setInstance();
+    });
 }
 
 export function useCameraEffect() {
-    // gsap.registerPlugin( SlowMo )
     const effect = gsap.registerEffect({
         name: 'cameraAnimation',
         effect(target) {
@@ -97,6 +71,7 @@ export function useCameraEffect() {
             const tl = gsap.timeline({
                 paused: true,
                 defaults: {
+                    overwrite: true,
                     duration: duration,
                     ease: 'power1',
                 }

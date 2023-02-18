@@ -4,8 +4,6 @@ import { Hud, OrthographicCamera } from '@react-three/drei'
 
 import { useThree } from '@react-three/fiber'
 import React, { useState, useCallback, Suspense, useEffect, createContext } from 'react'
-// import { Perf } from 'r3f-perf'
-import { Leva } from 'leva'
 
 import World from './World/World.jsx'
 import EffectsLayout from './Effects.jsx'
@@ -14,6 +12,7 @@ import AnimatedMaskPlane from './MaskPlane/MaskPlane.jsx'
 
 import { useDispatch } from 'react-redux'
 import { setProgress, setProgressStatus } from '../enterButtonSlice.js'
+import { support_format_webp } from '../utils/modernImageFormat.js'
 
 // There is loaded model/textures
 export const SceneContext = createContext({})
@@ -23,8 +22,6 @@ export default function Experience() {
 
 	return <>
 		<LoadedChecker>
-			{/* <Perf position='top-left' /> */}
-			<Leva hidden/>
 
 			{/* Scene render */}
 			<EffectsLayout />
@@ -45,6 +42,8 @@ function LoadedChecker({ children }) {
 	useEffect(() => {
 		console.log( 'Content was loaded: ', loadinStatus )
 	}, [loadinStatus])
+	const contentImagesWasLoaded = useContentPreloader();
+
 	return <>
 		<Suspense fallback={ null }>
 			<ContentToLoad 
@@ -54,9 +53,60 @@ function LoadedChecker({ children }) {
 		</Suspense>
 
 		<SceneContext.Provider value={ data }>
-			{ loadinStatus ? children : null }
+			{ (loadinStatus && contentImagesWasLoaded) ? children : null }
 		</SceneContext.Provider>
 	</>
+}
+
+function useContentPreloader() {
+	const [ dataWasLoaded, setDataWasLoaded ] = useState( false );
+	const [ loadedItems, setLoadedItems ] = useState(0);
+	const isWebpSupport = support_format_webp()
+    const formatJPG = isWebpSupport ? '.webp' : '.jpg'
+	const contentImages = [
+        '/backgrounds/works.svg',
+        '/backgrounds/about.svg',
+        '/backgrounds/image' + formatJPG,
+        '/backgrounds/myworks/project-1' + formatJPG,
+        '/backgrounds/myworks/project-2' + formatJPG,
+        '/backgrounds/myworks/project-3' + formatJPG,
+        '/backgrounds/myworks/project-4' + formatJPG,
+        '/backgrounds/icon-1.svg',
+        '/backgrounds/icon-2.svg',
+        '/backgrounds/icon-3.svg',
+        '/backgrounds/compass.svg',
+        '/backgrounds/compass-dots.png', 
+        '/backgrounds/compass-letter.png',
+        '/backgrounds/grece.svg',
+        '/backgrounds/dot.svg',
+    ];
+	const sounds = [
+		'/audio/close-sound.mp3',
+		'/audio/enter-sound.mp3',
+		'/audio/open-sound.mp3'
+	]
+
+	useEffect(() => {
+		sounds.forEach( src => {
+			const audio = new Audio(src);
+			audio.onloadeddata = () => {
+				setLoadedItems( current => current + 1);
+			};
+		})
+		contentImages.forEach( src => {
+			const image = new Image();
+			image.src = src;
+			image.onload = () => setLoadedItems( current => current + 1);
+		})
+	}, [])
+	useEffect(() => {
+		const totalCount = sounds.length + contentImages.length;
+		if (loadedItems !== totalCount ) return;
+
+		setDataWasLoaded( true );
+	}, [loadedItems])
+	
+	return dataWasLoaded;
 }
 
 function useLoadingProgress() {

@@ -1,14 +1,13 @@
 import gsap from 'gsap'
 
-import { useThree } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
-import { useState, useEffect, useLayoutEffect, useCallback, useMemo } from 'react'
-import { Mouse, useCameraEffect } from './MouseHook.jsx'
+import { useState, useLayoutEffect, useCallback, useMemo, useRef } from 'react'
 
 import { useSelector } from 'react-redux'
 import { getCameraPoints } from '../../CameraSlice.js'
 import { getEnterState } from '../../enterButtonSlice.js'
 import { getMenuState, getMenuButtonState } from '../../menuButtonSlice.js'
+import { useCameraMove, useCameraEffect } from '../../utils/useCameraMove.jsx'
 
 const cameraSettings = {
     fov: 55,
@@ -17,38 +16,24 @@ const cameraSettings = {
     far: 100,
 }
 
-const EnterAnimation = () => {
-    const enterButtonState = useSelector(getEnterState)
-    // const enterState = useSelector(getEnterButtonState)
-    const camera = useThree( state => state.camera )
-    const [ ctx ] = useState( state => gsap.context(() => { }) )
-    useLayoutEffect(() => {
-        ctx.add('intro',() => {
-            const tl = gsap.timeline()
-            tl.fromTo(camera, { zoom: 0.5, fov: 80 }, { 
-                zoom: cameraSettings.zoom, 
-                fov: cameraSettings.fov, 
-                duration: 2, 
-                delay: 0.7,
-                ease: 'back.out(2)' 
-            })
-
-            return tl
-        })
-        ctx.add(() => {
-            gsap.set(camera, { zoom: 0.5, fov: 80 })
-        })
-
-        return () => ctx.revert()
-    }, [camera])
-    useLayoutEffect(() => {
-        if( !enterButtonState ) {
-            ctx.intro()
-        }
-    }, [enterButtonState])
+export default function Camera() {
+    return <>
+        <CameraMotion>
+            <PathAnimation />
+        </CameraMotion>
+    </>
 }
 
-const AnimateCamera = ({ children }) => {
+function CameraMotion({ children }) {
+    useCameraMove();
+
+    return <>
+        { children }
+    </>;
+}
+
+function PathAnimation() {
+    const camera = useRef( null );
     const cameraTargets = useSelector(getCameraPoints)
     const menuState = useSelector(getMenuButtonState)
 	const menu = useSelector( getMenuState )
@@ -56,11 +41,12 @@ const AnimateCamera = ({ children }) => {
     const audio = useMemo(() => (
         new Audio( '/audio/open-sound.mp3' )
     ), [])
+
     const tl = useMemo( () => gsap.timeline({ paused: true }), [])
-    const [ ctx ] = useState( state => gsap.context(() => { }) )
+    const [ ctx ] = useState( gsap.context(() => { }) )
 
     const cameraEffect = useCameraEffect()
-    const startEnterAnimation = EnterAnimation()
+    useEnterAnimation( camera );
     
     useLayoutEffect(() => {
         return () => ctx.revert()
@@ -101,16 +87,43 @@ const AnimateCamera = ({ children }) => {
     }, [ menu ])
 
     return <>
-        { children }
+        <PerspectiveCamera ref={ camera } {...cameraSettings} makeDefault />
     </>
 }
 
-export default function Camera({ mouse }) {
-    return <>
-        <Mouse mouse={ mouse } />
-        <AnimateCamera>
-            <PerspectiveCamera {...cameraSettings} makeDefault />
-        </AnimateCamera>
-        {/* <OrbitControls makeDefault /> */}
-    </>
+function useEnterAnimation( camera ) {
+    const enterButtonState = useSelector(getEnterState);
+    const [ ctx ] = useState( gsap.context(() => { }) );
+    const [ notPlayed, setNotPlayed ] = useState( true );
+    
+    useLayoutEffect(() => {
+        ctx.add('intro',() => {
+            const tl = gsap.timeline({
+                onComplete: () => setNotPlayed( false ) 
+            });
+            tl.to(camera.current, { 
+                zoom: cameraSettings.zoom, 
+                fov: cameraSettings.fov, 
+                duration: 2, 
+                delay: 0.7,
+                ease: 'back.out(2)' 
+            });
+
+            return tl;
+        });
+        ctx.add(() => {
+            notPlayed && gsap.set(camera.current, { zoom: 0.5, fov: 80 });
+        });
+
+        // Cleanup
+        return () => ctx.revert();
+    }, [ camera ])
+
+    // Play enter animation
+    useLayoutEffect(() => {
+        if( !notPlayed || enterButtonState ) return ;
+        ctx.intro();
+    }, [ enterButtonState, notPlayed ]);
+
+    return notPlayed;
 }

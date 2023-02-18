@@ -7,7 +7,7 @@ import { shaderMaterial } from '@react-three/drei'
 // Shaders
 import groundVertex from './shaders/ground/groundVertex.glsl?raw'
 import groundFragment from './shaders/ground/groundFragment.glsl?raw'
-import { useControls } from 'leva'
+
 import { SceneContext } from '../../Experience.jsx'
 
 // Shader Material
@@ -32,9 +32,6 @@ export default function GroundMaterial( props ) {
         data.shadowMap.clone()
     ], [])
     
-    const controls = useControls('Ground ColorMask', {
-        color: '#fec8a2'
-    })
 
     useEffect(() => {
         groundMaterial.current.uTexture = sandstone
@@ -42,9 +39,6 @@ export default function GroundMaterial( props ) {
         groundMaterial.current.uShadow = shadowMap
         groundMaterial.current.toneMapped = false
     }, [])
-    useEffect(() => {
-        groundMaterial.current.uColorMask = new Color(controls.color)
-    }, [controls])
-
+    
     return <groundShaderMaterial ref={ groundMaterial } {...props} />
 }

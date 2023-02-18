@@ -1,13 +1,10 @@
 import '../assets/Compass.css'
 import gsap from 'gsap'
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-
-import { useSelector } from 'react-redux'
-import { getMouseState } from '../mouseSlice.js'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { useMousePosition } from '../utils/useMouse'
 
 const CompassDots = ({ children }) => {
-    // const compassDots = useRef()
-    const mouse = useSelector( getMouseState )
+    const mouse = useMousePosition()
     const [ctx] = useState( gsap.context(() => {}) )
 
     useLayoutEffect(() => {

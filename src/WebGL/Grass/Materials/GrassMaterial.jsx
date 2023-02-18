@@ -1,6 +1,5 @@
 import { Color } from 'three'
 
-import { useControls } from 'leva'
 import { shaderMaterial } from '@react-three/drei'
 import { extend, useFrame } from '@react-three/fiber'
 import { useContext, useEffect, useRef, useMemo } from 'react'
@@ -36,13 +35,6 @@ export default function GrassMaterial ( { ...props } ) {
         data.texture1.clone(),
         data.texture2.clone()
     ], [data])
-    
-    const controls = useControls('Grass parameters', {
-        color1: '#f2dfc9',
-        color2: '#e4bc7d',
-        intesity: { value: 0.1, min: 0, max: 0.5, step: 0.001 },
-        height: { value: 0.45, min: -1, max: 2, step: 0.001 }
-    })
 
     // Debuggin
     useEffect(() => {
@@ -56,14 +48,6 @@ export default function GrassMaterial ( { ...props } ) {
         // grassMaterial.current.blending = THREE.NormalBlending
     }, [])
     
-    useEffect(() => {
-        // Set uniforms
-        grassMaterial.current.uIntesity = controls.intesity
-        grassMaterial.current.uHeight = controls.height
-        grassMaterial.current.uColor1 = new Color(controls.color1).convertSRGBToLinear()
-        grassMaterial.current.uColor2 = new Color(controls.color2).convertSRGBToLinear()
-    }, [controls])
-
     // Animation
     useFrame((state, delta) => {
         grassMaterial.current.uTime += delta
