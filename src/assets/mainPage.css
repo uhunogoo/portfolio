@@ -1,7 +1,0 @@
-.main-page {
-    height: 100vh;
-    position: relative;
-    pointer-events: none;
-    width: 100vw;
-    z-index: 2;
-}

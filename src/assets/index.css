@@ -7,14 +7,6 @@
   --textSize: max( 20px, 2.5vmin );
   --loading: 3.75vmin;
   --largeTitle: max( 30px, 5vmin );
-  /* --smallTitle: max( 20px, 2.5vmin ); */
-}
-
-@font-face {
-  font-family: 'Romanica';
-  src: url(/fonts/Romanica/Romanica.woff) format('woff');
-  font-display: swap;
-  font-weight: 400
 }
 
 html,

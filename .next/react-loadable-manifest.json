@@ -1,0 +1,17 @@
+{
+  "..\\components\\WebglPart\\WebglPart.js -> ../../lib/useResources": {
+    "id": 6558,
+    "files": [
+      "static/chunks/520.37ea3455b9e62955.js",
+      "static/chunks/558.1dc4ac815df9f627.js"
+    ]
+  },
+  "index.js -> ../components/WebglPart/WebglPart": {
+    "id": 753,
+    "files": [
+      "static/chunks/fb7d5399.c392a14a36e5811f.js",
+      "static/chunks/598.4a4aed8cfdea4207.js",
+      "static/chunks/753.481874fb52784696.js"
+    ]
+  }
+}
