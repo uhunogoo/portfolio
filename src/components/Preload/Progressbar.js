@@ -1,9 +1,59 @@
+import gsap from 'gsap';
 import React from 'react';
 import styles from '../../assets/preload.module.css';
 
-function Progressbar() {
+function Progressbar({ loadingProgress }) {
+  const progressBar = React.useRef();
+  const progressBlock = React.useRef();
+  const [ oldProgress, setOldProgress ] = React.useState( 0 );
+ 
+
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(progressBar.current, {
+        scaleX: 0,
+      });
+    });
+
+    return () => {
+      ctx.revert();
+    }
+  }, []);
+  React.useEffect(() => {
+    if ( typeof loadingProgress !== 'number' ) return;
+
+    const ctx = gsap.context(() => {
+      const outAnimation = gsap.to(progressBlock.current, {
+        paused: true,
+        y: -20,
+        scale: 0.3,
+        opacity: 0,
+        delay: 0.3,
+        ease: 'power1.out',
+        transformOrigin: 'center center'
+      });
+
+      gsap.fromTo( progressBar.current, {
+        scaleX: oldProgress / 100,
+      }, {
+        scaleX: loadingProgress / 100,
+        transformOrigin: '0 100%',
+        duration: 0.3,
+        ease: 'power1',
+        onComplete: () => {
+          if (loadingProgress !== 100) return;
+          outAnimation.play();
+        }
+      })
+    });
+    setOldProgress( loadingProgress );
+
+    return () => {
+      ctx.revert();
+    }
+  }, [ loadingProgress ]);
   return (
-    <div className={ styles.preload__progress }>
+    <div ref={ progressBlock } className={ styles.preload__progress }>
       <svg x="0" y="0" viewBox="0 0 699 59">
         <g>
           <path
@@ -47,9 +97,10 @@ function Progressbar() {
           height="57"
         />
         <rect
+          ref={progressBar}
           x="55"
           y="10"
-          className={ `${styles.progress__bar} ${styles.st2}` }
+          className={ styles.st2 }
           width="588.7"
           height="39"
         />

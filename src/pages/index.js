@@ -6,7 +6,9 @@ export default function Index() {
   return (
     <>
       <Preload />
-      <WebglPart />
+      <React.Suspense fallback={null}>
+        <WebglPart />
+      </React.Suspense>
     </>
   );
 }

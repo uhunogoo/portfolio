@@ -1,5 +1,5 @@
-import { Center, Float, Sparkles } from '@react-three/drei';
 import React from 'react';
+import { Center, Float, Sparkles } from '@react-three/drei';
 import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
 
 function Tower() {
@@ -10,7 +10,7 @@ function Tower() {
     rotationIntensity:  0.3,
     floatingRange: [-0.2, 0.2],
   }
-  console.log( 'Tower call' )
+  
   // Hooks
   const { preloadedContent } = React.useContext(PreloadedContext);
   const [decorMaterial, setDecorMaterial] = React.useState(null);

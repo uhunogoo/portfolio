@@ -1,11 +1,11 @@
 import React from 'react';
-import { LinearFilter, sRGBEncoding, TextureLoader } from 'three';
+import { TextureLoader } from 'three';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { PreloadedContext } from '../components/PreloadedContentProvider/PreloadedContentProvider';
 import sources from './sources';
 
-export default function useResources({ setLoadingProgress }) {
+export function useResources( setLoadingProgress ) {
   if (sources.length === 0) return;
   const { setPreloadedContent } = React.useContext( PreloadedContext );
   const totalCount = sources.length;
@@ -31,7 +31,7 @@ export default function useResources({ setLoadingProgress }) {
       sources.map((source) => {
         manageLoading( source, loaders, setItems )
       });
-    }, 3000);
+    }, 2500);
     
     // When I'm ready to stop the interval, I'd run:
     return () => {

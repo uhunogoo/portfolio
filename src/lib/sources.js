@@ -81,4 +81,15 @@ export default [
     type: 'texture',
     path: `/textures/cloud${formatPNG}`,
   },
+  // Preload texture
+  {
+    name: 'preloadTexture',
+    type: 'texture',
+    path: `/textures/transition-intro.jpg`,
+  },
+  {
+    name: 'noiseTexture',
+    type: 'texture',
+    path: `/textures/perlin-noise.jpg`,
+  },
 ];
