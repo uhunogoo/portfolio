@@ -4,6 +4,7 @@ import { extend, useFrame } from '@react-three/fiber'
 import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
 import { EnterContext } from '../EnterProvider/EnterProvider';
 import gsap from 'gsap';
+import { DoubleSide } from 'three';
 
 const ColorShiftMaterial = shaderMaterial(
   {
@@ -84,9 +85,7 @@ function AnimatedMask() {
   }, [ enterStatus ]);
 
   return (
-    <mesh
-      scale={3}
-    >
+    <mesh scale={12}>
       <planeGeometry args={[2, 2, 1, 1]} />
       <colorShiftMaterial 
         ref={ shader } 

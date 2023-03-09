@@ -1,34 +1,24 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
+import { Float, Hud, OrbitControls, OrthographicCamera, Stats } from '@react-three/drei';
 import { LoadingProgressContext } from '../LoadingProvider/LoadingProvider';
 import { useResources } from '../../lib/useResources';
 
-import Tower from './Tower';
 import AnimatedMask from './AnimatedMask';
-import {
-  Float,
-  Hud,
-  OrbitControls,
-  PerspectiveCamera,
-  Sparkles,
-} from '@react-three/drei';
 import PostEffects from './PostEffects';
 import CustomSky from './CustomSky';
+import Tower from './Tower';
 import Fire from './Fire';
-
-const cameraSettings = {
-  fov: 55,
-  near: 0.1,
-  zoom: 0.75,
-  far: 100,
-  position: [0, 1, 9],
-};
+import ActionCamera from './ActionCamera';
 
 function WebglPart() {
-  const { loadingProgress, setLoadingProgress } = React.useContext(
-    LoadingProgressContext
-  );
-  useResources(setLoadingProgress);
+  const { 
+    loadingProgress, 
+    setLoadingProgress 
+  } = React.useContext( LoadingProgressContext );
+
+  useResources( setLoadingProgress );
+
   return (
     <>
       {loadingProgress === 100 && (
@@ -41,21 +31,27 @@ function WebglPart() {
           }}
           className="webgl"
         >
-          <OrbitControls />
-          <PerspectiveCamera {...cameraSettings} makeDefault />
+          <ActionCamera />
           <MainScene />
           <Hud renderPriority={2}>
-            <orthographicCamera
-              makeDefault
-              position={[0, 0, 1]}
-              near={0.1}
-              far={0.5}
+            <OrbitControls />
+            <OrthographicCamera
+              far={10}
               zoom={80}
-            />
+              near={0.1}
+              position={[0, 0, 2]}
+              makeDefault
+            >
+            </OrthographicCamera>
             <AnimatedMask />
+              {/* <mesh>
+                <boxGeometry />
+                <meshBasicMaterial color={'black'}/>
+              </mesh> */}
           </Hud>
         </Canvas>
       )}
+      <Stats />
     </>
   );
 }
@@ -74,18 +70,18 @@ function MainScene() {
       <PostEffects />
       <CustomSky />
 
-      <Float {...floatingParams}>
+      {/* <Float {...floatingParams}> */}
         <Tower>
           <Fire count={260} radius={0.5} />
         </Tower>
-      </Float>
+      {/* </Float> */}
 
-      <Sparkles
+      {/* <Sparkles
         size={6}
         scale={[26, 0.1, 26]}
         position-y={-0.7}
         count={50}
-      />
+      /> */}
     </>
   );
 }

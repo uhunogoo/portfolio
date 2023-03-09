@@ -14,6 +14,7 @@ const colors = [
 const emptyObject = new PlaneGeometry(0.15, 0.15, 1, 1)
 
 function Fire({ count = 50, radius = 1 }) {
+  console.log( 'fire component' )
   const { preloadedContent } = React.useContext(PreloadedContext);
   const fireTexture = React.useMemo(() => {
     const fireTexture = preloadedContent?.find(

@@ -1,9 +1,9 @@
+import React from 'react';
 import { BackSide } from 'three';
 import { GradientTexture } from '@react-three/drei';
-import React from 'react';
+import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
+import Clouds from './Clouds';
 
-// Component Parts
-// import Clouds from './Clouds.jsx'
 
 const GenerateSky = () => {
   const skyParameters = React.useMemo(() => {
@@ -50,10 +50,17 @@ const GenerateSky = () => {
 };
 
 function CustomSky() {
+  const { preloadedContent } = React.useContext(PreloadedContext);
+
+  const texture = React.useMemo(() => 
+    preloadedContent?.find(
+      (el) => el.name === 'cloud'
+    ).item
+  , [preloadedContent])
   return (
     <>
       <GenerateSky />
-      {/* <Clouds count={ 20 } size={ 50 } /> */}
+      <Clouds count={ 20 } size={ 50 } texture={ texture } />
     </>
   );
 }
