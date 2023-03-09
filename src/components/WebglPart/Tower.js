@@ -1,16 +1,10 @@
 import React from 'react';
-import { Center, Float, Sparkles } from '@react-three/drei';
+import { Center } from '@react-three/drei';
 import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
+import Grass from './Grass';
+import GroundMaterial from './GroundMaterial';
 
-function Tower() {
-  // Parameters
-  const floatingParams = {
-    speed:  1.4,
-    floatIntensity: 1.2,
-    rotationIntensity:  0.3,
-    floatingRange: [-0.2, 0.2],
-  }
-  
+function Tower({ children }) {
   // Hooks
   const { preloadedContent } = React.useContext(PreloadedContext);
   const [decorMaterial, setDecorMaterial] = React.useState(null);
@@ -31,6 +25,9 @@ function Tower() {
     const towerPart4 = model?.item.scene.children.find(
       (child) => child.name === 'portal'
     );
+    const ground = model?.item.scene.children.find(
+      (child) => child.name === 'ground'
+    );
 
     // largeTexture
     // otherTextures
@@ -44,13 +41,36 @@ function Tower() {
     largeTexture.flipY = false;
     otherTextures.flipY = false;
 
+    const grass1 = preloadedContent?.find(
+      (el) => el.name === 'grassTexture'
+    ).item;
+    const grass2 = preloadedContent?.find(
+      (el) => el.name === 'grassSecondTexture'
+    ).item;
+    const shadowMap = preloadedContent?.find(
+      (el) => el.name === 'shadowMap'
+    ).item;
+    const sandTexture = preloadedContent?.find(
+      (el) => el.name === 'sandTexture'
+    ).item;
+    const groundTexture = preloadedContent?.find(
+      (el) => el.name === 'groundTexture'
+    ).item;
+
+
     return {
+      ground,
+      shadowMap,
       towerPart1,
       towerPart2,
       towerPart3,
       towerPart4,
       largeTexture,
       otherTextures,
+      grass1,
+      grass2,
+      sandTexture,
+      groundTexture
     };
   }, [preloadedContent]);
 
@@ -63,35 +83,47 @@ function Tower() {
       />
 
       <Center disableX disableZ>
-        <Float {...floatingParams}>
-          <group scale={0.45}>
-            <mesh
-              geometry={tower.towerPart1.geometry}
-            >
-              <meshBasicMaterial map={tower.largeTexture} />
-            </mesh>
-            <mesh
-              geometry={tower.towerPart2.geometry}
-              material={ decorMaterial }
-            />
-            <mesh
-              geometry={tower.towerPart3.geometry}
-              material={ decorMaterial }
-            />
+        <group scale={0.45} dispose={ null }>
+          <mesh
+            geometry={tower.towerPart1.geometry}
+          >
+            <meshBasicMaterial map={tower.largeTexture} />
+          </mesh>
+          <mesh
+            geometry={tower.towerPart2.geometry}
+            material={ decorMaterial }
+          />
+          <mesh
+            geometry={tower.towerPart3.geometry}
+            material={ decorMaterial }
+          />
 
-            <mesh
-              geometry={tower.towerPart4.geometry}
-            >
-              <meshBasicMaterial />
-            </mesh>
-          </group>
-        </Float>
-        <Sparkles
-          size={6}
-          scale={[26, 0.1, 26]}
-          position-y={0.3}
-          count={50}
-        />
+          <mesh
+            geometry={tower.towerPart4.geometry}
+          >
+            <meshBasicMaterial />
+          </mesh>
+          <mesh position-y={0.01} rotation-x={-Math.PI * 0.5} >
+              <circleGeometry args={[12.6, 40]}/>
+              <GroundMaterial 
+                uTexture={tower.sandTexture}
+                uTexture_2={tower.groundTexture}
+                uShadow={ tower.shadowMap }
+                toneMapped={ false }
+              />
+          </mesh>
+          <Grass
+            textures={[
+              tower.grass1,
+              tower.grass2,
+              tower.shadowMap
+            ]}
+            grassSampler={ tower.ground }
+            count={40000}
+            radius={ 25 }
+          />
+        </group>
+        { children }
       </Center>
     </>
   );

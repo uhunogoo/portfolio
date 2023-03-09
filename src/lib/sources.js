@@ -85,11 +85,6 @@ export default [
   {
     name: 'preloadTexture',
     type: 'texture',
-    path: `/textures/transition-intro.jpg`,
-  },
-  {
-    name: 'noiseTexture',
-    type: 'texture',
-    path: `/textures/perlin-noise.jpg`,
+    path: `/textures/transition-intro-2.jpg`,
   },
 ];
