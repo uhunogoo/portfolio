@@ -1,0 +1,184 @@
+.works {
+  width: 100%;
+  height: 99.9%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  position: relative;
+}
+
+.works__direction {
+  height: 20%;
+  left: 2%;
+  position: absolute;
+  bottom: 5vw;
+  width: 10%;
+}
+
+.works__arrow {
+  height: 100%;
+  position: relative;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+.works__arrow::after {
+  content: 'scroll';
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  top: 0;
+  transform: translate(7%, -100%) rotate(90deg);
+  transform-origin: bottom left;
+  position: absolute;
+}
+
+.works__arrow svg {
+  height: 100%;
+  width: auto;
+}
+
+.works__arrow .arrow {
+  fill: none;
+  stroke: var(--dark);
+  stroke-width: 4;
+}
+
+.works__titles {
+  height: var(--loading);
+  mix-blend-mode: exclusion;
+  position: absolute;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+.works__titles .work__info {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+}
+
+.works__titles .work__info span {
+  transition: transform 0.3s ease-in-out 0.25s;
+}
+
+.works__titles .work__info:not(.active) span {
+  transform: translateY(100%);
+  transition: transform 0.1s ease-in 0s;
+}
+
+.works__wrap {
+  width: 100%;
+  /* z-index: -1; */
+}
+
+.works__sticky {
+  top: 0;
+  height: 99.9vh;
+  overflow: hidden;
+  position: sticky;
+  position: -webkit-sticky;
+  width: 100%;
+}
+
+.works__picture {
+  height: 100%;
+  margin: auto;
+  padding: 8vh 0;
+  width: 70vw;
+}
+
+@media screen and (min-width: 1100px) {
+  .works__picture {
+      width: 70vw;
+  }
+}
+
+.works__scroller {
+  height: 100%;
+  position: relative;
+  will-change: transform;
+}
+
+.work {
+  height: 100%;
+  left: 0;
+  min-width: 0;
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  width: 100%;
+  /* will-change: transform, opacity; */
+}
+
+.work__link {
+  display: block;
+  position: relative;
+  pointer-events: all;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  width: 110%;
+}
+
+.work__info {
+  grid-area: text;
+  padding-bottom: 1em;
+}
+
+.work__name {
+  color: var(--white);
+  font-family: var(--titleFont);
+  font-size: 0;
+  font-weight: 400;
+  margin: 0;
+  overflow: hidden;
+  text-transform: uppercase;
+
+}
+
+.work__name span {
+  font-size: var(--loading);
+  display: inline-block;
+  line-height: 0.9;
+}
+
+.work__description {
+  color: var(--dark);
+  font-size: var(--textSize);
+  letter-spacing: 0.015em;
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  text-transform: capitalize;
+}
+
+.work__image {
+  cursor: pointer;
+  filter: brightness(0.7);
+  height: 100%;
+  transition: filter 0.3s ease-in-out;
+  width: 100%;
+  will-change: transform;
+}
+
+.work__image:hover {
+  filter: brightness(1);
+}
+
+.work__image picture {
+  display: block;
+  height: 100%;
+  width: 100%;
+  will-change: transform;
+}
+
+.work__image img {
+  height: 100%;
+  object-fit: cover;
+  object-position: 50%;
+  width: 100%;
+}

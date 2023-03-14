@@ -8,6 +8,7 @@ import EnterProvider from '../components/Providers/EnterProvider';
 import LoadingProvider from '../components/Providers/LoadingProvider';
 import PreloadedContentProvider from '../components/Providers/PreloadedContentProvider';
 import MenuProvider from '../components/Providers/MenuProvider';
+import ModalProvider from '../components/Providers/ModalProvider';
 
 // Include custom fonts 
 const Romanica = localFont({ src: '../../public/fonts/Romanica/Romanica.woff2' });
@@ -25,7 +26,9 @@ function MyApp({ Component, pageProps }) {
         <PreloadedContentProvider>
           <EnterProvider>
             <MenuProvider>
-              <Component {...pageProps} className={ applyedClass }/>
+              <ModalProvider>
+                <Component {...pageProps} className={ applyedClass }/>
+              </ModalProvider>
             </MenuProvider>
           </EnterProvider>
         </PreloadedContentProvider>

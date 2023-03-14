@@ -6,15 +6,19 @@ import styles from '../../assets/ui-layer.module.css';
 import { PreloadedContext } from '../Providers/PreloadedContentProvider';
 import { MenuContext } from '../Providers/MenuProvider';
 import { useMousePosition } from '../../lib/useMouse';
+import { ModalContext } from '../Providers/ModalProvider';
 
 function UILayer() {
   const compass = React.useRef();
   const menuBlock = React.useRef();
+  const [ playCount, setPlayCount ] = React.useState( 0 );
   const tl = React.useMemo( () => gsap.timeline({ paused: true }), []);
   const ctx = React.useMemo( () => gsap.context(() => {}), [] );
-  const { menu, setMenu } = React.useContext( MenuContext );
-  const { preloadedContent } = React.useContext( PreloadedContext );
+
   const { enterStatus } = React.useContext(EnterContext);
+  const { menu, setMenu } = React.useContext( MenuContext );
+  const { setModalStatus } = React.useContext( ModalContext );
+  const { preloadedContent } = React.useContext( PreloadedContext );
 
   const buttons = React.useMemo( () => [
     {
@@ -37,7 +41,8 @@ function UILayer() {
     if ( !enterStatus ) return;
     ctx.add('introAnimation', () => {
       const tl = gsap.timeline({
-        delay: 0.8
+        delay: 0.8,
+
       });
       tl.from(menuBlock.current,{ opacity: 0, 
         scale: 1.5, 
@@ -97,11 +102,22 @@ function UILayer() {
   React.useLayoutEffect(() => {
     if ( !enterStatus ) return;
     const isMenuDefault = menu === 'default';
-    tl.play().reversed( !isMenuDefault );
+    const isFirstPlay = playCount === 0;
+    const timescale = isFirstPlay ? 1 : 2; 
+    const delay = isFirstPlay ? 0
+                  : isMenuDefault 
+                  ? 0.4 : 0;
+
+    gsap.delayedCall(delay, () => {
+      tl.play().timeScale( timescale ).reversed( !isMenuDefault );
+    })
+    
+    
+    setPlayCount( playCount + 1 );
   }, [ enterStatus, menu ])
 
   function menuHandler( name ) {
-    console.log( name )
+    setModalStatus(true);
     setMenu( name );
   }
 
