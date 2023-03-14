@@ -87,4 +87,30 @@ export default [
     type: 'texture',
     path: `/textures/transition-intro-2.jpg`,
   },
+  // Audios
+  {
+    name: 'enter',
+    content: true,
+    type: 'audio',
+    path: '/audio/enter-sound.mp3'
+  },
+  {
+    name: 'open',
+    content: true,
+    type: 'audio',
+    path: '/audio/open-sound.mp3'
+  },
+  {
+    name: 'close',
+    content: true,
+    type: 'audio',
+    path: '/audio/close-sound.mp3'
+  },
+  // Images
+  {
+    name: 'mainImage',
+    content: true,
+    type: 'image',
+    path: `/backgrounds/image${formatJPG}`
+  }
 ];

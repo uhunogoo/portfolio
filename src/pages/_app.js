@@ -4,9 +4,10 @@ import '../assets/reset.css';
 import React from 'react';
 import Head from 'next/head'
 import localFont from 'next/font/local'
-import EnterProvider from '../components/EnterProvider/EnterProvider';
-import LoadingProvider from '../components/LoadingProvider/LoadingProvider';
-import PreloadedContentProvider from '../components/PreloadedContentProvider/PreloadedContentProvider';
+import EnterProvider from '../components/Providers/EnterProvider';
+import LoadingProvider from '../components/Providers/LoadingProvider';
+import PreloadedContentProvider from '../components/Providers/PreloadedContentProvider';
+import MenuProvider from '../components/Providers/MenuProvider';
 
 // Include custom fonts 
 const Romanica = localFont({ src: '../../public/fonts/Romanica/Romanica.woff2' });
@@ -23,7 +24,9 @@ function MyApp({ Component, pageProps }) {
       <LoadingProvider>
         <PreloadedContentProvider>
           <EnterProvider>
+            <MenuProvider>
               <Component {...pageProps} className={ applyedClass }/>
+            </MenuProvider>
           </EnterProvider>
         </PreloadedContentProvider>
       </LoadingProvider>

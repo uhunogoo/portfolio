@@ -1,6 +1,6 @@
 import React from 'react';
 import { Center } from '@react-three/drei';
-import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
+import { PreloadedContext } from '../Providers/PreloadedContentProvider';
 import Grass from './Grass';
 import GroundMaterial from './GroundMaterial';
 

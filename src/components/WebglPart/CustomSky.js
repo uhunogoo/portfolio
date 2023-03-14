@@ -1,7 +1,7 @@
 import React from 'react';
 import { BackSide } from 'three';
 import { GradientTexture } from '@react-three/drei';
-import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
+import { PreloadedContext } from '../Providers/PreloadedContentProvider';
 import Clouds from './Clouds';
 
 

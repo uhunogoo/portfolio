@@ -2,16 +2,17 @@ import gsap from 'gsap';
 import React from 'react';
 import Image from 'next/image';
 
-import { EnterContext } from '../EnterProvider/EnterProvider';
-import { LoadingProgressContext } from '../LoadingProvider/LoadingProvider';
+import { EnterContext } from '../Providers/EnterProvider';
+import { LoadingProgressContext } from '../Providers/LoadingProvider';
 
-// console.log( useResources )
 import styles from '../../assets/preload.module.css';
 import Progressbar from './Progressbar';
+import { PreloadedContext } from '../Providers/PreloadedContentProvider';
 
 function Preload() {
   const preloadBlock = React.useRef();
   const [ showPreloader, setShowPreloader ] = React.useState( true );
+  const { preloadedContent } = React.useContext( PreloadedContext );
   const { loadingProgress } = React.useContext( LoadingProgressContext );
   const { enterStatus, setEnterStatus } = React.useContext(EnterContext);
   
@@ -67,6 +68,7 @@ function Preload() {
         duration: 1.3,
         ease: 'power1.inOut'
       }, '<');
+      tl.timeScale(2);
     });
 
     return () => {
@@ -104,14 +106,20 @@ function Preload() {
             </h1>
           </div>
           <Progressbar loadingProgress={ loadingProgress } />
-          <EnterButton enterStatus={ enterStatus } setEnterStatus={ setEnterStatus } />
+          <EnterButton 
+            enterStatus={ enterStatus } 
+            setEnterStatus={ setEnterStatus } 
+            audio={ 
+              preloadedContent?.find(el => el.name === 'enter')
+            }
+          />
         </div> 
       }
     </>
   );
 }
 
-function EnterButton({ enterStatus, setEnterStatus }) {
+function EnterButton({ enterStatus, setEnterStatus, audio = false }) {
   const enterButton = React.useRef();
   const ctx = React.useMemo( () => ( 
     gsap.context(() => {})
@@ -125,6 +133,7 @@ function EnterButton({ enterStatus, setEnterStatus }) {
         duration: 0.4,
         paused: true,
         immediateRender: true,
+        onStart: () => audio?.item.play(),
         onComplete: () => setEnterStatus(!enterStatus)
       });
       return animation;
@@ -148,7 +157,7 @@ function EnterButton({ enterStatus, setEnterStatus }) {
     return () => {
       ctx.revert();
     };
-  }, []);
+  }, [ audio ]);
 
   React.useEffect(() => {
     if (loadingProgress !== 100) return;

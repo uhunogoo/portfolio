@@ -1,7 +1,7 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Float, Hud, OrbitControls, OrthographicCamera, Stats } from '@react-three/drei';
-import { LoadingProgressContext } from '../LoadingProvider/LoadingProvider';
+import { LoadingProgressContext } from '../Providers/LoadingProvider';
 import { useResources } from '../../lib/useResources';
 
 import AnimatedMask from './AnimatedMask';
@@ -70,11 +70,11 @@ function MainScene() {
       <PostEffects />
       <CustomSky />
 
-      {/* <Float {...floatingParams}> */}
+      <Float {...floatingParams}>
         <Tower>
           <Fire count={260} radius={0.5} />
         </Tower>
-      {/* </Float> */}
+      </Float>
 
       {/* <Sparkles
         size={6}

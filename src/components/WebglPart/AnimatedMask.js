@@ -1,10 +1,12 @@
 import React from 'react';
+// import gsap from 'gsap';
+import { extend } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei';
-import { extend, useFrame } from '@react-three/fiber'
-import { PreloadedContext } from '../PreloadedContentProvider/PreloadedContentProvider';
-import { EnterContext } from '../EnterProvider/EnterProvider';
-import gsap from 'gsap';
-import { DoubleSide } from 'three';
+import { PreloadedContext } from '../Providers/PreloadedContentProvider';
+import { EnterContext } from '../Providers/EnterProvider';
+
+import { gsap } from "gsap";
+import { SlowMo } from 'gsap/dist/EasePack';
 
 const ColorShiftMaterial = shaderMaterial(
   {
@@ -49,6 +51,7 @@ const ColorShiftMaterial = shaderMaterial(
 extend({ ColorShiftMaterial });
 
 function AnimatedMask() {
+  gsap.registerPlugin(SlowMo);
   const shader = React.useRef();
   
   const { preloadedContent } = React.useContext(PreloadedContext);
@@ -72,10 +75,13 @@ function AnimatedMask() {
     if (!enterStatus) return;
 
     const ctx = gsap.context(() => {
+      
+
       gsap.to(shader.current, {
         uProgress: 0,
-        duration: 2,
-        ease: 'power1.out'
+        duration: 0.8,
+        delay: 0.2,
+        ease: 'slow(0.1, 0.4)'
       });
     });
 
