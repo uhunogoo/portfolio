@@ -1,10 +1,17 @@
 import React from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { MenuContext } from '../Providers/MenuProvider';
 
+gsap.registerPlugin( ScrollTrigger );
+
 import styles from '../../assets/works.module.css';
+import Image from 'next/image';
 
 function Works() {
-  const [ tl, setTl ] = React.useState( null );
+  const scroller = React.useRef();
+  const worksWrap = React.useRef();
+  const [ progress, setProgress ] = React.useState( 0 );
   const [ openedMenu, setOpenedMenu ] = React.useState( false );
   const { menu } = React.useContext( MenuContext );
 
@@ -66,40 +73,101 @@ function Works() {
 
   return <>
     { openedMenu === 'works' &&
-      <div className={styles.works}>
-        <div className={ styles.works__wrap }>
-          <div className={ styles.works__sticky }>
-            <div className={ styles.works__direction }>
-              <div className={ styles.works__arrow }>
-                <svg viewBox="0 0 78.6 554.7">
-                  <path className={ styles.arrow } d="M6,0v554.6c0,0,3.5-126.6,72.6-126.6"/>
-                </svg>
-              </div>
-            </div>
-            <div className={styles.works__picture }>
-              <div className={styles.works__scroller }>
-                { myWorks.map( (props, i) => {
-                  return (
-                    <WorkBlock key={ props.id } id={ i } {...props} />
-                  )
-                }) }
-              </div>
-            </div>
-          </div>
+      <div ref={ scroller } className={styles.works}>
+        <div ref={worksWrap} className={styles.wroks__wrap}>
+          { myWorks.map( (props, i) => {
+            return (
+              <WorkBlock key={ props.id } scroller={ scroller } id={ i } {...props} />
+            )
+          }) }
         </div>
+        <input
+          type="range"
+          className={styles.progress}
+          min={0}
+          max={100}
+          value={progress}
+          onChange={event => {
+            setProgress(event.target.value);
+          }}
+        />
       </div>
     }
   </>;
 }
 
-function WorkBlock({ id, images, ...props }) {
+function WorkBlock({ id, images, scroller, ...props }) {
+  const image = React.useRef();
+  const wrokBlock = React.useRef();
+  React.useEffect(() => {
+    const ctx = gsap.context(() => {
+      // gsap.set(scroller.current, { transformPerspective: "2000px" });
+      gsap.set(image.current, { 
+        transformOrigin: '100% 50%',
+        transformPerspective: 2400 
+      });
+
+      const animation = gsap.timeline({ defaults: { ease: 'none' } });
+      // animation.fromTo(image.current, { 
+      //   rotationX: '-15deg',
+      //   rotationZ: '-15deg',
+      // }, {
+      //   rotationX: '15deg',
+      //   rotationZ: '15deg',
+      // });
+      animation.to(image.current, {
+        keyframes: {
+          '0%': { 
+            rotationX: '45deg',
+            rotationY: '-15deg',
+            rotationZ: '-15deg',
+            scale: 0.8, 
+            xPercent: 10, 
+          },
+          '50%': { 
+            rotationX: '0deg',
+            rotationY: '0deg', 
+            scale: 1, 
+            xPercent: 0,
+          },
+          '100%': { 
+            rotationX: '45deg',
+            rotationY: '-15deg',
+            rotationZ: '15deg',
+            scale: 0.8, 
+            xPercent: 10, 
+          },
+        }
+      }, 0);
+      ScrollTrigger.create({
+        scroller: scroller.current,
+        trigger: wrokBlock.current,
+        start: "-20% bottom",
+        end: '120% top',
+        // markers: true,
+        animation: animation,
+        scrub: 0.8
+      });
+    });
+
+    return () => {
+      ctx.revert();
+    }
+  //   gsap.set(wrokBlock.current, { xPercent: 100 * id });
+  }, []);
   return (
-    <div className={styles.work }>
+    <div ref={ wrokBlock } className={styles.work }>
       <a className={`${styles.work__link} ${styles.work__image}`} href={ props.link } target="_blank" rel="nofollow noopener">
-        <picture>
+        <Image
+          ref={image}
+          src={images.src[0]}
+          alt={ images.alt }
+          fill={ true }
+        />
+        {/* <picture>
           <source srcSet={ images.src[0] } />
           <img width="1323" height="785" src={ images.src[1] } alt={ images.alt } />
-        </picture>
+        </picture> */}
       </a>
     </div>
   );

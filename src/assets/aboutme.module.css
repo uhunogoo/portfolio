@@ -28,9 +28,8 @@
     .content .decor {
         background: url(/backgrounds/grece.svg) no-repeat center;
         display: block;
-        height: 0;
+        height: 65vmax;
         opacity: 0.025;
-        padding-top: 100%;
         position: absolute;
         pointer-events: none;
         right: 0;

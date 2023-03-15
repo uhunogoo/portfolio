@@ -4,7 +4,7 @@
   --red: #F72C3B;
   --gold: #F3B754;
   --titleFont: 'Romanica', sans-serif;
-  --textSize: max( 20px, 2.5vmin );
+  --textSize: max( 20px, 2.3vmin );
   --loading: 3.75vmin;
   --largeTitle: max( 30px, 5vmin );
 }
