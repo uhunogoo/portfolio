@@ -112,5 +112,29 @@ export default [
     content: true,
     type: 'image',
     path: `/backgrounds/image${formatJPG}`
+  },
+  {
+    name: 'project_1',
+    content: true,
+    type: 'image',
+    path: `/backgrounds/myworks/project-1.jpg`
+  },
+  {
+    name: 'project_2',
+    content: true,
+    type: 'image',
+    path: `/backgrounds/myworks/project-2.jpg`
+  },
+  {
+    name: 'project_3',
+    content: true,
+    type: 'image',
+    path: `/backgrounds/myworks/project-3.jpg`
+  },
+  {
+    name: 'project_4',
+    content: true,
+    type: 'image',
+    path: `/backgrounds/myworks/project-4.jpg`
   }
 ];

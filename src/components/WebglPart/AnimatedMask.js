@@ -7,6 +7,7 @@ import { EnterContext } from '../Providers/EnterProvider';
 
 import { gsap } from "gsap";
 import { SlowMo } from 'gsap/dist/EasePack';
+import { MenuContext } from '../Providers/MenuProvider';
 
 const ColorShiftMaterial = shaderMaterial(
   {
@@ -53,9 +54,12 @@ extend({ ColorShiftMaterial });
 function AnimatedMask() {
   gsap.registerPlugin(SlowMo);
   const shader = React.useRef();
+
+  const [ tl, setTl ] = React.useState( gsap.timeline() );
   
   const { preloadedContent } = React.useContext(PreloadedContext);
   const { enterStatus } = React.useContext(EnterContext);
+  const { menu } = React.useContext(MenuContext);
 
   /**
    * Apply textures and defaults parameters  
@@ -72,23 +76,25 @@ function AnimatedMask() {
    * Animation  
    */
   React.useEffect(() => {
-    if (!enterStatus) return;
-
     const ctx = gsap.context(() => {
-      
-
-      gsap.to(shader.current, {
+      const tl = gsap.timeline({ paused: true });
+      tl.to(shader.current, {
         uProgress: 0,
         duration: 0.8,
         delay: 0.2,
         ease: 'slow(0.1, 0.4)'
       });
+
+      setTl( tl );
     });
 
-    return () => {
-      ctx.revert();
-    }
-  }, [ enterStatus ]);
+    return () => ctx.revert();
+  }, []);
+  React.useEffect(() => {
+    if (!enterStatus) return;
+    const reversed = menu !== 'default';
+    tl.play().reversed( reversed );
+  }, [ enterStatus, menu, tl ]);
 
   return (
     <mesh scale={12}>

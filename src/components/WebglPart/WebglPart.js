@@ -44,10 +44,6 @@ function WebglPart() {
             >
             </OrthographicCamera>
             <AnimatedMask />
-              {/* <mesh>
-                <boxGeometry />
-                <meshBasicMaterial color={'black'}/>
-              </mesh> */}
           </Hud>
         </Canvas>
       )}

@@ -2,27 +2,31 @@ import { gsap } from 'gsap';
 import Image from 'next/image';
 import React from 'react';
 import styles from '../../assets/aboutme.module.css';
+import ContentScroller from '../ContentScroller/ContentScroller';
 import { MenuContext } from '../Providers/MenuProvider';
 
 function AboutMe() {
   const [ tl, setTl ] = React.useState( null );
-  const [ openedMenu, setOpenedMenu ] = React.useState( false );
+  const [ played, setPlayed ] = React.useState( false );
   const { menu } = React.useContext( MenuContext );
   
-  React.useEffect(() => {
-    if (menu === 'default') return;
-    setOpenedMenu( menu );
-  }, [ menu ]);
+  function animationEnd() {
+    gsap.delayedCall(1, () => {
+      setPlayed( true );
+    });
+  }
 
   React.useLayoutEffect( () => {
-    if (openedMenu !== 'about') return;
-
     const ctx = gsap.context( () => {
       gsap.set( '.gsapText span', { y: 100 });
       gsap.set( '.gsapListIcon', { opacity: 0, x: '-1.6rem', scale: 0.1 });
       gsap.set( '.gsapLinks img', { opacity: 0, scale: 0.1 });
 
-		  const tl = gsap.timeline({ paused: true, defaults: { immediateRender: true } });
+		  const tl = gsap.timeline({ 
+        paused: true, 
+        onComplete: animationEnd,
+        defaults: { immediateRender: true } 
+      });
 			tl.from('.gsapImage', {
 				scale: .6,
 				xPercent: -20, 
@@ -72,8 +76,8 @@ function AboutMe() {
 		});
 
 		return () => ctx.revert()
-  }, [ openedMenu ]);
-
+  }, []);
+  
   React.useEffect(() => {
     if (!tl) return;
     const reversed = menu !== 'about' ? true : false;
@@ -86,7 +90,7 @@ function AboutMe() {
   }, [tl, menu])
 
   return <>
-    { openedMenu === 'about' &&
+    <ContentScroller played={ played }>
       <div className={ styles.content }>
         <div className={ styles.content__block }>
           <div className={ styles.content__text }>
@@ -98,13 +102,15 @@ function AboutMe() {
             </p>
           </div>
           <figure className={styles.content__image}>
-            <Image 
-              className="gsapImage"
-              src='/backgrounds/image.webp'
-              alt="Yurii Scherbachenko"
-              width="570" height="856"
-              title="Me"
-            />
+            <div className={styles.content__imageWrap}>
+              <Image 
+                className="gsapImage"
+                src='/backgrounds/image.webp'
+                alt="Yurii Scherbachenko"
+                width="570" height="856"
+                title="Me"
+              />
+            </div>
             <figcaption className={`gsapLinks ${styles.content__links}`}>
               <a href="#" role="link" target="_blank" real="nofollow noopener">
                 <img loading="lazy" src="/backgrounds/icon-1.svg" width="20" height="20" alt="linkedin" />
@@ -175,7 +181,7 @@ function AboutMe() {
         </div>
         <div className={`gsapDecor ${styles.decor}`}></div>
       </div>
-    }
+    </ContentScroller>
   </>;
 }
 

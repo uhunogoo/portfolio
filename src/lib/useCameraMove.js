@@ -1,19 +1,24 @@
 import { useFrame } from '@react-three/fiber'
+import { gsap } from 'gsap'
 
 import React from 'react'
 import { Vector3 } from 'three'
+import { MenuContext } from '../components/Providers/MenuProvider'
 import { useMousePosition } from './useMouse'
 
 
 const parameters = {
   position: new Vector3(0, -0.5, 12),
   cameraPosition: new Vector3(0, 0.75, 1),
-  lookAt: new Vector3(0, 0, -10)
+  lookAt: new Vector3(0, 0, -10),
+  k: 1
 }
 
 export function useCameraMove( cameraEmptyMesh ) {
   const cameraRef = React.useRef();
   const mouse = useMousePosition();
+  const { menu } = React.useContext( MenuContext );
+  const [ ctx ] = React.useState( gsap.context(() => {}) );
   const [ lookAtVector, setLookAtVector ] = React.useState( new Vector3() );
   const [ mouseVector, setMouseVector ] = React.useState( new Vector3() );
 
@@ -23,18 +28,35 @@ export function useCameraMove( cameraEmptyMesh ) {
     newMouseVector.x = mouse.x * 0.6;
     newMouseVector.y = mouse.y * 0.3 * -1;
     setMouseVector( newMouseVector );
-
   }, [ mouse ]);
+  React.useEffect(() => {
+    ctx.add('animateK', (v) => {
+      const animation = gsap.to(parameters, {
+        k: v,
+        duration: 1,
+        ease: 'power1.inOut'
+      });
+      return animation;
+    });
+
+    return () => ctx.revert();
+  }, []);
+  React.useEffect(() => {
+    const k = menu !== 'default' ? 0 : 1;
+    const delay = (menu === 'default') ? 0.6 : 0;
+    gsap.delayedCall(delay, () => {
+      ctx.animateK( k );
+    });
+  }, [menu]);
 
   // Calculate camera postion
   const vectorHandler = React.useCallback(( vector ) => {
     setLookAtVector( lookAtVector.lerp( mouseVector, 0.03 ) );
 
     const finalVector = vector.clone();
+    finalVector.add( lookAtVector.multiplyScalar( parameters.k ) );
     finalVector.applyQuaternion(cameraEmptyMesh.quaternion);
     finalVector.add(cameraEmptyMesh.position);
-
-    finalVector.add( lookAtVector );
 
     return finalVector;
   }, [ mouseVector, cameraEmptyMesh ]);

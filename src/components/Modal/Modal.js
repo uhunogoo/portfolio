@@ -7,13 +7,12 @@ import { PreloadedContext } from '../Providers/PreloadedContentProvider';
 
 import AboutMe from '../AboutMe/AboutMe';
 import CloseButton from './CloseButton.js';
-import Works from '../Works/Works';
+import MyProjects from '../MyProjects/MyProjects';
 
-function Modal({ children }) {
+function Modal({ modalStatus, setModalStatus, children }) {
   
-  const { setMenu } = React.useContext( MenuContext );
   const { preloadedContent } = React.useContext( PreloadedContext );
-  const { modalStatus, setModalStatus } = React.useContext( ModalContext );
+  const { setMenu } = React.useContext( MenuContext );
 
   const audio = React.useMemo(() => {
     return preloadedContent?.find(
@@ -40,10 +39,34 @@ function Modal({ children }) {
 }
 
 function ModalBlock() {
+  const { menu } = React.useContext( MenuContext );
+  const { modalStatus, setModalStatus } = React.useContext( ModalContext );
+  const [ openedMenu, setOpenedMenu ] = React.useState( false );
+
+  React.useEffect(() => {
+  }, []);
+  React.useEffect(() => {
+    if (menu !== 'default') {
+      setOpenedMenu( menu );
+    } else {
+      const timeout = window.setTimeout(() => {
+        setOpenedMenu( false );
+      }, 1000);
+      
+      return () => {
+        window.clearTimeout( timeout );
+      }
+    }
+  }, [ menu ]);
+
   return (
-    <Modal>
-      <AboutMe />
-      <Works />
+    <Modal 
+      modalStatus={ modalStatus } 
+      setModalStatus={ setModalStatus } 
+    >
+      
+      { openedMenu === 'works' && <MyProjects /> }
+      { openedMenu === 'about' && <AboutMe /> }
     </Modal>
   );
 }
