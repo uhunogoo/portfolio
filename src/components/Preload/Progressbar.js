@@ -1,4 +1,4 @@
-import gsap from 'gsap';
+import { gsap } from 'gsap';
 import React from 'react';
 import styles from '../../assets/preload.module.css';
 
@@ -8,7 +8,7 @@ function Progressbar({ loadingProgress }) {
   const [ oldProgress, setOldProgress ] = React.useState( 0 );
  
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       gsap.set(progressBar.current, {
         scaleX: 0,
@@ -19,17 +19,17 @@ function Progressbar({ loadingProgress }) {
       ctx.revert();
     }
   }, []);
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if ( typeof loadingProgress !== 'number' ) return;
 
     const ctx = gsap.context(() => {
       const outAnimation = gsap.to(progressBlock.current, {
         paused: true,
-        y: -20,
-        scale: 0.3,
+        y: -40,
+        scale: 0.1,
         opacity: 0,
         delay: 0.3,
-        ease: 'power1.out',
+        ease: 'power4.out',
         transformOrigin: 'center center'
       });
 

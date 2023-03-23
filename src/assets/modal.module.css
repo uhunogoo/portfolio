@@ -12,13 +12,13 @@
 	cursor: pointer;
 	background: transparent;
 	border: none;
-	height: 2rem;
+	height: 2.5rem;
 	position: absolute;
 	right: 0.65rem;
 	top: 0.65rem;
 	transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
 	transform: scale(0);
-	width: 2rem;
+	width: 2.5rem;
 	z-index: 6;
 	opacity: 0;
 }

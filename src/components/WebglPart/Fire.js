@@ -79,7 +79,7 @@ function Fire({ count = 50, radius = 1 }) {
     }, [])
 
     return <>
-    <group position={[ 1.7, 0.5, 3.65 ]} scale={ 0.35}>
+    <group position={[ 1.7, 0.4, 3.65 ]} scale={ 0.34}>
       <mesh>
         <instancedBufferGeometry instanceCount={ count } ref={ instancedBuffer } >
           <instancedBufferAttribute attach={"attributes-color"} args={[ sparks.color, 3]} />

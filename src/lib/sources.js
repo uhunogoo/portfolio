@@ -111,7 +111,7 @@ export default [
     name: 'mainImage',
     content: true,
     type: 'image',
-    path: `/backgrounds/image${formatJPG}`
+    path: `/backgrounds/image.jpg`
   },
   {
     name: 'project_1',

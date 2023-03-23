@@ -1,11 +1,10 @@
+import { gsap } from 'gsap';
 import React from 'react';
-// import gsap from 'gsap';
 import { extend } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei';
 import { PreloadedContext } from '../Providers/PreloadedContentProvider';
 import { EnterContext } from '../Providers/EnterProvider';
 
-import { gsap } from "gsap";
 import { SlowMo } from 'gsap/dist/EasePack';
 import { MenuContext } from '../Providers/MenuProvider';
 
@@ -75,7 +74,7 @@ function AnimatedMask() {
   /**
    * Animation  
    */
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ paused: true });
       tl.to(shader.current, {
@@ -93,7 +92,10 @@ function AnimatedMask() {
   React.useEffect(() => {
     if (!enterStatus) return;
     const reversed = menu !== 'default';
-    tl.play().reversed( reversed );
+    const delay = !reversed ? 0.6 : 0;
+    gsap.delayedCall(delay, () => {
+      tl.play().reversed( reversed );
+    });
   }, [ enterStatus, menu, tl ]);
 
   return (

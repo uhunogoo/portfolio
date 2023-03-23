@@ -106,7 +106,7 @@ function UILayer() {
     const timescale = isFirstPlay ? 1 : 2; 
     const delay = isFirstPlay ? 0
                   : isMenuDefault 
-                  ? 0.4 : 0;
+                  ? 0.8 : 0;
 
     gsap.delayedCall(delay, () => {
       tl.play().timeScale( timescale ).reversed( !isMenuDefault );

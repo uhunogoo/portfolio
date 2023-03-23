@@ -2,8 +2,8 @@ import React from 'react';
 import { gsap } from 'gsap';
 import { MenuContext } from '../Providers/MenuProvider';
 
-
 import styles from '../../assets/works.module.css';
+
 import ContentScroller from '../ContentScroller/ContentScroller';
 import ProjectBlock from './ProjectBlock';
 
@@ -80,11 +80,13 @@ function MyProjects() {
       tl.from('.gsapTitle span', {
         yPercent: 160,
         opacity: 0,
-      }, 0);
+      }, 0.35);
       setTl( tl );
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+    }
   }, []);
   React.useLayoutEffect(() => {
     if ( !tl ) return;
@@ -97,10 +99,9 @@ function MyProjects() {
   }, [ menu, tl ]);
 
 
-
   return <>
     <ContentScroller played={ played }>
-      <div ref={ scroller } className={ `gsapScroller ${styles.works}` }>
+      <div ref={ scroller } className={ styles.works }>
         <h2 className={`gsapTitle ${styles.content__title}`}><span>My works:</span></h2>
         <div ref={worksWrap} className={ styles.wroks__wrap }>
           { myWorks.map( (props, i) => {

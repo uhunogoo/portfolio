@@ -1,5 +1,5 @@
-import gsap from 'gsap';
 import React from 'react';
+import {gsap} from 'gsap';
 import Image from 'next/image';
 
 import { EnterContext } from '../Providers/EnterProvider';
@@ -16,7 +16,7 @@ function Preload() {
   const { loadingProgress } = React.useContext( LoadingProgressContext );
   const { enterStatus, setEnterStatus } = React.useContext(EnterContext);
   
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (loadingProgress !== 100) return;
     const ctx = gsap.context(() => {
       gsap.to(preloadBlock.current, {
@@ -32,7 +32,7 @@ function Preload() {
     }
   }, [loadingProgress]);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!enterStatus) return;
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector( preloadBlock.current );
@@ -54,7 +54,7 @@ function Preload() {
         transformOrigin: 'center center',
         opacity: 0,
         yPercent: gsap.utils.wrap([-100,100]),
-        ease: 'power4',
+        ease: 'power4.out',
         duration: 0.6
       }, 0);
       tl.to(q('.gsap_title'), {
@@ -68,7 +68,7 @@ function Preload() {
         duration: 1.3,
         ease: 'power1.inOut'
       }, '<');
-      tl.timeScale(2);
+      tl.timeScale(1.1);
     });
 
     return () => {

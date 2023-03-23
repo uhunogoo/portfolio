@@ -31,8 +31,8 @@ export function useResources( setLoadingProgress ) {
       sources.map((source) => {
         manageLoading( source, loaders, setItems );
       });
-    // }, 3000);
-    }, 200);
+    }, 3000);
+    // }, 200);
     
     // When I'm ready to stop the interval, I'd run:
     return () => {

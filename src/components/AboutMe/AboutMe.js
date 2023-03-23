@@ -87,7 +87,7 @@ function AboutMe() {
     gsap.delayedCall(delay, () => {
       tl.play().timeScale( timescale ).reversed( reversed );
     });
-  }, [tl, menu])
+  }, [tl, menu]);
 
   return <>
     <ContentScroller played={ played }>
@@ -105,7 +105,8 @@ function AboutMe() {
             <div className={styles.content__imageWrap}>
               <Image 
                 className="gsapImage"
-                src='/backgrounds/image.webp'
+                src='/backgrounds/image.jpg'
+                quality={100}
                 alt="Yurii Scherbachenko"
                 width="570" height="856"
                 title="Me"

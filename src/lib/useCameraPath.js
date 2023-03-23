@@ -21,7 +21,7 @@ export function useCameraPath() {
     },
     // Works
     {
-      position: [ -2, -1, 3.5 ],
+      position: [ -1.5, -1, 3.5 ],
       rotation: [ 0, Math.PI * 0.35, 0 ]
     },
   ], []); 
@@ -35,21 +35,24 @@ export function useCameraPath() {
     return mesh;
   }, []);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     cameraEmptyMesh.position.y = -0.7;
     cameraEmptyMesh.position.z = 10;
 
-    ctx.add('cameraMove', ({ position, rotation }, timescale)=> {
+    ctx.add('cameraMove', ({ position, rotation })=> {
       const tl = gsap.timeline({
-        defaults: { 
-          duration: 1,
-          ease: 'power1.inOut'
+        paused: true,
+        defaults: {
+            overwrite: true,
+            duration: 1.45,
+            ease: 'power1',
+            ease: 'back(1.4)'
         }
-      });
+      })
       tl.to(cameraEmptyMesh.position, {
         x: position[0],
         y: position[1],
-        z: position[2]
+        z: position[2],
       });
       tl.to(cameraEmptyMesh.rotation, {
         x: rotation[0],
@@ -64,28 +67,17 @@ export function useCameraPath() {
 
   React.useEffect(() => {
     if ( !enterStatus ) return;
-    const ctx = gsap.context(() => {
-      gsap.to( cameraEmptyMesh.position, {
-        z: 5,
-        duration: 2,
-        ease: 'back(1.4)'
-      });
-    });
-    
-    return () => ctx.revert();
-  }, [ enterStatus ]);
-
-  React.useEffect(() => {
-    if ( !enterStatus ) return;
     // base, about, works
     const target = (menu === 'default') ? base : 
                    (menu === 'about') ? about : works;
-    const delay = (menu === 'default') ? 0.6 : 0;
+    
+    const delay = (menu === 'default') ? 0.8 : 0;
     const timescale = (menu === 'default') ? 0.8 : 1;
+    
     gsap.delayedCall(delay, () => {
-      ctx.cameraMove( target, timescale );
+      ctx.cameraMove( target, timescale ).play();
     });
-  }, [ menu ]);
+  }, [ menu, enterStatus ]);
 
   return cameraEmptyMesh;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Float, Hud, OrbitControls, OrthographicCamera, Stats } from '@react-three/drei';
+import { Float, Hud, OrbitControls, OrthographicCamera } from '@react-three/drei';
 import { LoadingProgressContext } from '../Providers/LoadingProvider';
 import { useResources } from '../../lib/useResources';
 
@@ -31,8 +31,8 @@ function WebglPart() {
           }}
           className="webgl"
         >
-          <ActionCamera />
-          <MainScene />
+          <MainScene/>
+
           <Hud renderPriority={2}>
             <OrbitControls />
             <OrthographicCamera
@@ -47,7 +47,6 @@ function WebglPart() {
           </Hud>
         </Canvas>
       )}
-      <Stats />
     </>
   );
 }
@@ -67,6 +66,7 @@ function MainScene() {
       <CustomSky />
 
       <Float {...floatingParams}>
+        <ActionCamera />
         <Tower>
           <Fire count={260} radius={0.5} />
         </Tower>

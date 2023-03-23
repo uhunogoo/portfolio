@@ -8,7 +8,7 @@ function CloseButton({clickAnimation, clearAnimation, ...props}) {
   const [ ctx ] = React.useState( gsap.context(() => {}) );
   const [ tl, setTl ] = React.useState( gsap.timeline({ paused: true }) );
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     ctx.add('inAnimation', () => {
       const tl = gsap.timeline({ delay: 0.4 });
       tl.to( closeButton.current, {

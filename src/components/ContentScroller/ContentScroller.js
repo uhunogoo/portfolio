@@ -2,10 +2,10 @@ import React from 'react';
 import styles from '../../assets/scroller.module.css';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 
-function ContentScroller({ played =false, children }) {
+function ContentScroller({ played = false, children }) {
   return (
-    <ScrollArea.Root type="auto" className={styles.ScrollAreaRoot}>
-      <ScrollArea.Viewport className={styles.ScrollAreaViewport}>
+    <ScrollArea.Root type="auto" className={ styles.ScrollAreaRoot }>
+      <ScrollArea.Viewport className={`gsapScroller ${styles.ScrollAreaViewport}`}>
         { children }
       </ScrollArea.Viewport>
       { played && 
