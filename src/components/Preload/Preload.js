@@ -17,14 +17,36 @@ function Preload() {
   const { enterStatus, setEnterStatus } = React.useContext(EnterContext);
   
   React.useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set('.gsap_decor', {
+        rotate: '180deg',
+        scale: 0.7,
+        opacity: 0
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+  React.useLayoutEffect(() => {
     if (loadingProgress !== 100) return;
     const ctx = gsap.context(() => {
-      gsap.to(preloadBlock.current, {
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: {
+          immediateRender: true,
+          duration: 2
+        }
+      });
+      tl.to(preloadBlock.current, {
         background: 'transparent',
         ease: 'power2',
-        duration: 2,
-        delay: 0.2
       });
+      tl.to('.gsap_decor', {
+        rotate: '0deg',
+        scale: 1,
+        opacity: 1,
+      }, 0);
+      tl.play().delay(0.5);
     });
 
     return () => {
@@ -74,7 +96,7 @@ function Preload() {
     return () => {
       ctx.revert();
     }
-  }, [enterStatus, styles])
+  }, [enterStatus, styles]);
 
   return (
     <>
@@ -86,6 +108,7 @@ function Preload() {
                 <Image
                   src="/backgrounds/grece.svg"
                   alt="grece image"
+                  quality={100}
                   width={500}
                   height={500}
                   priority
