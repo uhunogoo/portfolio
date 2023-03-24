@@ -111,30 +111,30 @@ export default [
     name: 'mainImage',
     content: true,
     type: 'image',
-    path: `/backgrounds/image.jpg`
+    path: `/backgrounds/image${formatJPG}`
   },
   {
     name: 'project_1',
     content: true,
     type: 'image',
-    path: `/backgrounds/myworks/project-1.jpg`
+    path: `/backgrounds/myworks/project-1${formatJPG}`
   },
   {
     name: 'project_2',
     content: true,
     type: 'image',
-    path: `/backgrounds/myworks/project-2.jpg`
+    path: `/backgrounds/myworks/project-2${formatJPG}`
   },
   {
     name: 'project_3',
     content: true,
     type: 'image',
-    path: `/backgrounds/myworks/project-3.jpg`
+    path: `/backgrounds/myworks/project-3${formatJPG}`
   },
   {
     name: 'project_4',
     content: true,
     type: 'image',
-    path: `/backgrounds/myworks/project-4.jpg`
+    path: `/backgrounds/myworks/project-4${formatJPG}`
   }
 ];
