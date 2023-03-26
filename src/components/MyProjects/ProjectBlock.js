@@ -34,11 +34,12 @@ function ProjectBlock({ id, images, name, className, ...props }) {
           src={ images.src }
           alt={ images.alt }
           quality={100}
+          placeholder="empty"
           width="1200" height="400"
           sizes="(max-width: 570px) 570px,
-                 (max-width: 768px) 850px,
-                 (max-width: 1200px) 50vw,
-                 33vw"
+                (max-width: 768px) 850px,
+                (max-width: 1200px) 50vw,
+                33vw"
         />
       </a>
     </BlockType>

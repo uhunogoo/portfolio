@@ -41,10 +41,16 @@
 }
 .wroks__wrap {
   display: grid;
+  gap: 1.2rem;
   grid-template-columns: 1fr;
-  gap: 3rem;
-  margin-top: 3rem;
+  margin-top: 1.2rem;
   justify-items: center;
+}
+@media screen and (min-width: 600px) {
+  .wroks__wrap {
+    gap: 3rem;
+    margin-top: 3rem;
+  }
 }
 @media screen and (min-width: 949.5px) {
   .wroks__wrap {
@@ -54,14 +60,15 @@
 
 
 .work {
+  aspect-ratio: 3/2;
   height: auto;
   position: relative;
   text-align: center;
   width: 100%;
 }
 .work a {
+  height: 100%;
   display: block;
-  background: #000;
   width: 100%;
 }
 .work img {

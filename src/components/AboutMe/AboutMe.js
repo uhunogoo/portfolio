@@ -106,10 +106,11 @@ function AboutMe() {
               <Image 
                 className="gsapImage"
                 src='/backgrounds/image.jpg'
-                quality={100}
-                alt="Yurii Scherbachenko"
                 width="570" height="856"
+                quality={100}
                 title="Me"
+                alt="Yurii Scherbachenko"
+                placeholder="empty"
               />
             </div>
             <figcaption className={`gsapLinks ${styles.content__links}`}>

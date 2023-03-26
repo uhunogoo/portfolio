@@ -12,9 +12,7 @@ module.exports = {
     return config;
   },
   images: {
-    dangerouslyAllowSVG: true,
     formats: ['image/webp'],
-    // loader: 'custom',
   },
   i18n: {
     locales: ['en'],
