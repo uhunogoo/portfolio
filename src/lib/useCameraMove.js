@@ -1,14 +1,14 @@
 import { useFrame } from '@react-three/fiber'
 
-import React from 'react'
-import { Vector3 } from 'three'
-import { useMousePosition } from './useMouse'
+import React from 'react';
+import { Vector3 } from 'three';
+import { useMousePosition } from './useMouse';
 
 
 const parameters = {
-  position: new Vector3(0, -0.5, 12),
+  position: new Vector3(0, -0.5, 2),
   cameraPosition: new Vector3(0, 0.75, 1),
-  lookAt: new Vector3(0, 0, -2)
+  lookAt: new Vector3(0, 0, -3)
 }
 
 export function useCameraMove( cameraEmptyMesh ) {
@@ -46,10 +46,13 @@ export function useCameraMove( cameraEmptyMesh ) {
         cameraEmptyMesh.position.copy(parameters.position);
         setInstance();
     }, []);
+    React.useEffect(() => {
+        cameraEmptyMesh.position.copy(parameters.position);
+        setInstance();
+    }, []);
 
     useFrame((state) => {
         vec.lerp( vecClone.set( mouse.x * 0.45, mouse.y * 0.2 * -1, 0 ), 0.04 );
-
         cameraRef.current.updateProjectionMatrix();
         setInstance();
     });

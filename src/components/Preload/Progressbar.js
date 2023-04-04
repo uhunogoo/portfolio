@@ -8,7 +8,7 @@ function Progressbar({ loadingProgress }) {
   const [ oldProgress, setOldProgress ] = React.useState( 0 );
  
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.set(progressBar.current, {
         scaleX: 0,
@@ -19,7 +19,7 @@ function Progressbar({ loadingProgress }) {
       ctx.revert();
     }
   }, []);
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if ( typeof loadingProgress !== 'number' ) return;
 
     const ctx = gsap.context(() => {

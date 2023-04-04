@@ -16,7 +16,7 @@ function AboutMe() {
     });
   }
 
-  React.useLayoutEffect( () => {
+  React.useEffect( () => {
     const ctx = gsap.context( () => {
       gsap.set( '.gsapText span', { y: 100 });
       gsap.set( '.gsapListIcon', { opacity: 0, x: '-1.6rem', scale: 0.1 });
@@ -131,7 +131,7 @@ function AboutMe() {
             </h2>
             <p className={`gsapText ${styles.animateText}`}>
               <span>
-                html, sass/scss, css, JavaScript(ES6+), Three.js, shaders, GSAP, blender, figma, adobe photoshop, affinity design, vite, webpack, parcel,&nbsp;git
+                html, sass/scss, css, JavaScript(ES6+), React, Next.js, Three.js, shaders, GSAP, blender, figma, adobe photoshop, affinity design, vite, webpack, parcel,&nbsp;git
               </span>
             </p>
             <h2 className={`gsapTitle ${styles.content__title}`}>
@@ -175,6 +175,14 @@ function AboutMe() {
                 <p className={`gsapText ${styles.animateText}`}>
                   <span>
                     TheBookOfShaders
+                  </span>
+                </p>
+              </li>
+              <li>
+                <span className={`gsapListIcon ${styles.icon}`}></span>
+                <p className={`gsapText ${styles.animateText}`}>
+                  <span>
+                    The Joy of React
                   </span>
                 </p>
               </li>

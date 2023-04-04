@@ -8,7 +8,7 @@ import { Instance, Instances } from '@react-three/drei'
 const Cloud = ({ position, scale , size, speed}) => {
   const el = useRef( null )
   
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const ctx = gsap.context(() => {
       const positionZ = gsap.quickTo(el.current.position, 'z', { ease: 'sine1.inOut'});
       const positionY = gsap.quickTo(el.current.position, 'y', { ease: 'sine4.inOut'});

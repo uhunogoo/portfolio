@@ -37,7 +37,7 @@ function UILayer() {
     },
   ], []);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if ( !enterStatus ) return;
     ctx.add('introAnimation', () => {
       const tl = gsap.timeline({
@@ -99,7 +99,7 @@ function UILayer() {
     }
   }, [ enterStatus ]);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if ( !enterStatus ) return;
     const isMenuDefault = menu === 'default';
     const isFirstPlay = playCount === 0;
@@ -157,7 +157,7 @@ function AnimatedDots({ children }) {
   const mouse = useMousePosition();
   const [ctx] = React.useState( gsap.context(() => {}) );
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     ctx.add('moveX', ( x ) => {
       const moveX = gsap.quickTo(dotsBlock.current, 'x', {
         ease: 'power1',
@@ -174,7 +174,7 @@ function AnimatedDots({ children }) {
       ctx.revert();
     }
   }, []);
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     ctx.moveX( - mouse.x * 30 )
   }, [mouse]);
 

@@ -61,7 +61,7 @@ function MyProjects() {
     });
   }
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ 
         paused: true,
@@ -88,7 +88,7 @@ function MyProjects() {
       ctx.revert();
     }
   }, []);
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if ( !tl ) return;
     const reversed = menu === 'default';
     const delay = menu !== 'works' ? 0 : 0.4;

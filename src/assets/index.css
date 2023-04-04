@@ -7,6 +7,7 @@
   --textSize: max( 20px, 2.3vmin );
   --loading: 3.75vmin;
   --largeTitle: max( 30px, 5vmin );
+  --h2: clamp(20px, 1.65vw, var(--textSize));
 }
 
 html,

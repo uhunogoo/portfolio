@@ -48,7 +48,7 @@ function ProjectBlock({ id, images, name, className, ...props }) {
 
 function MobileProjectBlock({ children, className }) {
   const block = React.useRef();
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ paused: true });
@@ -89,7 +89,7 @@ function MobileProjectBlock({ children, className }) {
 function DesctopProjectBlock({ children, className }) {
   const [ tl, setTl ] = React.useState(null);
   const block = React.useRef();
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ paused: true });
       tl.from('.gsapLetter', {

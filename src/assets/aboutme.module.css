@@ -178,7 +178,7 @@
 }
 
 .content__text h2 {
-    font-size: clamp(20px, 1.65vw, var(--smallTitle));
+    font-size: var(--h2);
 }
 
 .content__text p {

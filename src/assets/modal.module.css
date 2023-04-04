@@ -9,21 +9,36 @@
 }
 
 .close_btn {
-	cursor: pointer;
 	background: transparent;
+	box-sizing: content-box;
 	border: none;
-	height: 2.5rem;
+	cursor: pointer;
+	height: var(--h2);
+	padding: 0.3em;
 	position: absolute;
-	right: 0.65rem;
-	top: 0.65rem;
+	right: 1.2rem;
+	top: 2.4rem;
 	transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-	transform: scale(0);
-	width: 2.5rem;
+	width: var(--h2);
 	z-index: 6;
-	opacity: 0;
+}
+@media screen and (min-width: 650.5px) {
+	.close_btn {
+		right: 5vw;
+		top: 5vh;
+	}
+}
+@media screen and (min-width: 1499.5px) {
+	.close_btn {
+		right: 14vw;
+		top: 8vh;
+	}
 }
 .svg_icon {
     pointer-events: none;
+}
+.svg_icon circle {
+	background: url(/backgrouds/traget.svg) no-repeat center;
 }
 
 .square {

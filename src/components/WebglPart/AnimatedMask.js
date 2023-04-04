@@ -74,7 +74,7 @@ function AnimatedMask() {
   /**
    * Animation  
    */
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ paused: true });
       tl.to(shader.current, {

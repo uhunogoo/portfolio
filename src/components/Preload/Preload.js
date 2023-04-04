@@ -16,7 +16,7 @@ function Preload() {
   const { loadingProgress } = React.useContext( LoadingProgressContext );
   const { enterStatus, setEnterStatus } = React.useContext(EnterContext);
   
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.set('.gsap_decor', {
         rotate: '180deg',
@@ -27,7 +27,7 @@ function Preload() {
 
     return () => ctx.revert();
   }, []);
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (loadingProgress !== 100) return;
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -54,7 +54,7 @@ function Preload() {
     }
   }, [loadingProgress]);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (!enterStatus) return;
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector( preloadBlock.current );
